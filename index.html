@@ -1,168 +1,110 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>芙芙的狗的服务器</title>
-    <style>
-        html, body { height: 100%; margin: 0; overflow: hidden; }
-        body {
-            display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            position: relative;
-        }
-        .bubbles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
-        .bubble {
-            position: absolute; bottom: -100px;
-            background: rgba(255, 255, 255, 0.08); border-radius: 50%;
-            box-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
-            animation: rise 10s infinite ease-in;
-        }
-        @keyframes rise {
-            0% { transform: translateY(0) scale(1); opacity: 0.6; }
-            100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
-        }
-        .container {
-            text-align: center; background: rgba(255, 255, 255, 0.08);
-            padding: 50px 70px; border-radius: 24px;
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            z-index: 10; animation: fadeIn 1s ease-out;
-            max-width: 800px; width: 90%;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        h1 {
-            color: #fff; font-size: 2.5em; margin: 0 0 20px 0;
-            text-shadow: 0 0 15px rgba(79, 172, 254, 0.8); letter-spacing: 2px;
-        }
-        .subtitle {
-            color: #a0c4ff; margin-bottom: 35px; font-size: 1.2em; font-weight: 300;
-            min-height: 1.5em; cursor: pointer; user-select: none;
-            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
-        }
-        .subtitle:hover { color: #fff; text-shadow: 0 0 8px rgba(79, 172, 254, 0.6); }
-        .subtitle.fade-out { opacity: 0; transform: translateY(-10px); }
-
-        .big-buttons { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; margin-bottom: 35px; }
-        .btn-big {
-            text-decoration: none; color: #fff; padding: 18px 40px; border-radius: 60px;
-            font-size: 1.4em; font-weight: bold; line-height: 1; letter-spacing: 3px;
-            display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-            width: 100%; max-width: 400px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-        .btn-enter { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 18px rgba(67, 233, 123, 0.45); }
-        .btn-enter:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(67, 233, 123, 0.65); }
-        .btn-book { background: linear-gradient(45deg, #ffd200, #f7971e); box-shadow: 0 4px 18px rgba(255, 210, 0, 0.45); }
-        .btn-book:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(255, 210, 0, 0.65); }
-
-        .buttons { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; }
-        .btn {
-            text-decoration: none; color: #fff; padding: 15px 35px; border-radius: 50px;
-            font-size: 1.15em; font-weight: bold; line-height: 1;
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .icon { display: block; flex-shrink: 0; }
-        .btn-bili { background: linear-gradient(45deg, #fb7299, #f45a85); box-shadow: 0 4px 15px rgba(251, 114, 153, 0.4); }
-        .btn-bili:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(251, 114, 153, 0.6); }
-        .btn-mail { background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4); }
-        .btn-mail:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6); }
-        footer { margin-top: 40px; color: rgba(255, 255, 255, 0.3); font-size: 0.85em; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>芙芙的狗的服务器</title>
+<link rel="icon" href="bilibili.ico">
+<style>
+    html, body { margin: 0; min-height: 100%; }
+    body {
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        position: relative; overflow-x: hidden;
+    }
+    .bubbles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+    .bubble {
+        position: absolute; bottom: -100px; background: rgba(255,255,255,0.08); border-radius: 50%;
+        box-shadow: 0 0 10px rgba(79,172,254,0.3); animation: rise 10s infinite ease-in;
+    }
+    @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: .6; } 100% { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
+    .container {
+        position: relative; z-index: 10; max-width: 760px; margin: 50px auto; padding: 45px 55px;
+        background: rgba(255,255,255,0.08); border-radius: 24px;
+        backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        animation: fadeIn 1s ease-out; text-align: center;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .icon { display: block; flex-shrink: 0; }
+    h1 {
+        color: #fff; font-size: 2.4em; margin: 0 0 10px 0;
+        text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px;
+        display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1;
+    }
+    .subtitle { color: #a0c4ff; margin: 0 0 8px 0; font-weight: 300; }
+    #hitokoto { color: rgba(255,255,255,0.5); font-size: .9em; min-height: 1.4em; margin: 0 0 34px 0; }
+    .btn-big {
+        display: flex; align-items: center; justify-content: center; gap: 12px;
+        text-decoration: none; color: #fff; font-size: 1.25em; font-weight: bold; line-height: 1;
+        padding: 18px 0; border-radius: 50px; margin: 14px 0;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .btn-big:hover { transform: translateY(-4px); }
+    .btn-green { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 18px rgba(67,233,123,0.45); }
+    .btn-green:hover { box-shadow: 0 8px 28px rgba(67,233,123,0.65); }
+    .btn-yellow { background: linear-gradient(45deg, #ffd200, #f7971e); box-shadow: 0 4px 18px rgba(255,210,0,0.4); }
+    .btn-yellow:hover { box-shadow: 0 8px 28px rgba(255,210,0,0.6); }
+    .btn-blue { background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45); }
+    .btn-blue:hover { box-shadow: 0 8px 28px rgba(79,172,254,0.65); }
+    .links { margin-top: 30px; display: flex; justify-content: center; gap: 26px; flex-wrap: wrap; }
+    .links a { color: #a0c4ff; text-decoration: none; font-size: .9em; display: inline-flex; align-items: center; gap: 6px; line-height: 1; }
+    .links a:hover { color: #fff; }
+    footer { margin-top: 36px; color: rgba(255,255,255,0.3); font-size: .85em; }
+</style>
 </head>
 <body>
-    <div class="bubbles">
-        <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
-        <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s;"></div>
-        <div class="bubble" style="width: 60px; height: 60px; left: 35%; animation-duration: 12s; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 80px; height: 80px; left: 50%; animation-duration: 15s; animation-delay: 0s;"></div>
-        <div class="bubble" style="width: 35px; height: 35px; left: 65%; animation-duration: 7s; animation-delay: 3s;"></div>
-        <div class="bubble" style="width: 50px; height: 50px; left: 80%; animation-duration: 10s; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 25px; height: 25px; left: 90%; animation-duration: 6s; animation-delay: 4s;"></div>
+<div class="bubbles">
+    <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
+    <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s;"></div>
+    <div class="bubble" style="width: 60px; height: 60px; left: 35%; animation-duration: 12s; animation-delay: 2s;"></div>
+    <div class="bubble" style="width: 80px; height: 80px; left: 50%; animation-duration: 15s;"></div>
+    <div class="bubble" style="width: 35px; height: 35px; left: 65%; animation-duration: 7s; animation-delay: 3s;"></div>
+    <div class="bubble" style="width: 50px; height: 50px; left: 80%; animation-duration: 10s; animation-delay: 2s;"></div>
+    <div class="bubble" style="width: 25px; height: 25px; left: 90%; animation-duration: 6s; animation-delay: 4s;"></div>
+</div>
+
+<div class="container">
+    <h1>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+        芙芙的狗的服务器
+    </h1>
+    <p class="subtitle">欢迎来到芙芙的狗的服务器</p>
+    <p id="hitokoto">正在连接世界树...</p>
+
+    <a href="enter/quick_start.html" class="btn-big btn-green">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+        进入服务器
+    </a>
+    <a href="handbook.html" class="btn-big btn-yellow">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        指令手册
+    </a>
+    <a href="status.html" class="btn-big btn-blue">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        状态检测
+    </a>
+
+    <div class="links">
+        <!-- ⚠️ 把下面这行的 href="#" 换回你原来的 B站 主页链接 -->
+        <a href="https://space.bilibili.com/1275382346">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            B站主页
+        </a>
+        <a href="mailto:wu__20111229@outlook.com">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            联系邮箱
+        </a>
     </div>
 
-    <div class="container">
-        <h1>欢迎来到芙芙的狗的服务器</h1>
-        <p class="subtitle" id="hitokoto" title="点击切换一言">正在连接世界树...</p>
+    <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
+</div>
 
-        <div class="big-buttons">
-            <a href="enter/quick_start.html" class="btn-big btn-enter">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                  <polyline points="10 17 15 12 10 7"></polyline>
-                  <line x1="15" y1="12" x2="3" y2="12"></line>
-                </svg>
-                进入服务器
-            </a>
-            <a href="handbook.html" class="btn-big btn-book">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                指令手册
-            </a>
-        </div>
-
-        <div class="buttons">
-            <a href="https://space.bilibili.com/1275382346" target="_blank" class="btn btn-bili">
-                <img class="icon" src="bilibili.ico" alt="" width="24" height="24">
-                B站主页
-            </a>
-            <a href="mailto:wu__20111229@outlook.com" class="btn btn-mail">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-                联系邮箱
-            </a>
-        </div>
-        <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
-    </div>
-
-    <script>
-        const fallbackQuotes = [
-            "世界即舞台，而你是最特别的观众。", "万物皆有裂痕，那是光照进来的地方。",
-            "我们都在阴沟里，但仍有人仰望星空。", "所有命运赠送的礼物，早已在暗中标好了价格。",
-            "那些听不见音乐的人，以为跳舞的人疯了。", "真正的发现之旅，不在于寻找新风景，而在于拥有新眼光。",
-            "深水静流，越是深邃的思想，越是不起波澜。", "人们总是仰望星空，却忘了脚下也有倒影。",
-            "孤独是王者的宿命，也是观众的狂欢。", "面具戴久了，就会长在脸上。",
-            "在黑暗中跳舞，是为了让灵魂不被吞噬。", "每一滴水，都包含着整片海洋的记忆。",
-            "我们不是在扮演别人，而是在寻找自己。", "哪怕世界沉没，我也要在水面上开出花来。",
-            "命运的丝线，总是交织在最意想不到的地方。", "聚光灯下，没有秘密。",
-            "水能载舟，亦能覆舟，更能映照人心。", "最深沉的爱，往往以最冷酷的面目示人。",
-            "喜剧的内核，往往是悲剧的倒影。", "在时间的洪流中，我们都是随波逐流的演员。"
-        ];
-
-        const el = document.getElementById('hitokoto');
-        let timer;
-
-        async function showQuote() {
-            el.classList.add('fade-out');
-            setTimeout(async () => {
-                let text = "";
-                try {
-                    const response = await fetch('https://v1.hitokoto.cn/?c=k');
-                    if (!response.ok) throw new Error('Network error');
-                    const data = await response.json();
-                    text = data.hitokoto;
-                } catch (error) {
-                    text = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
-                }
-                el.textContent = `「${text}」`;
-                el.classList.remove('fade-out');
-            }, 600);
-        }
-
-        function resetTimer() { clearInterval(timer); timer = setInterval(showQuote, 5000); }
-        el.addEventListener('click', () => { showQuote(); resetTimer(); });
-        showQuote(); resetTimer();
-    </script>
+<script>
+    fetch('https://v1.hitokoto.cn/').then(r => r.json()).then(d => {
+        document.getElementById('hitokoto').textContent = d.hitokoto + (d.from ? ' —— ' + d.from : '');
+    }).catch(() => {});
+</script>
 </body>
 </html>
