@@ -54,13 +54,6 @@
     .btn-submit:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(142,45,226,0.65); }
     .btn-submit:disabled { opacity: .5; cursor: wait; transform: none; }
     footer { margin-top: 32px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
-    .notice-link {
-        display: block; text-decoration: none; color: #fff; text-align: center;
-        padding: 15px 0; border-radius: 50px; font-weight: bold; line-height: 1; margin-top: 16px;
-        background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45);
-        transition: all 0.3s;
-    }
-    .notice-link:hover { transform: translateY(-4px); }
     #overlay {
         position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50;
         display: none; align-items: center; justify-content: center;
@@ -118,18 +111,12 @@
     </h1>
     <p class="subtitle">领取你的提瓦特身份证 · 芙芙的狗 专属</p>
 
-    <div id="httpsNotice" style="display:none;">
-        <p style="color:#ffe9a8; text-align:center; font-size:.9em;">在线建号需要直连游戏服务器，<br>请点击下方按钮前往注册页：</p>
-        <a class="notice-link" href="http://192.168.1.114:18082/enter/signup.html">局域网朋友 · 点我注册</a>
-        <a class="notice-link" href="http://[240e:371:26:2b10:e2b2:3f25:d6f8:e18]:18082/enter/signup.html">外网朋友 · 点我注册</a>
-    </div>
-
     <form id="form" autocomplete="off">
         <label>用户名</label>
-        <input id="username" maxlength="16" placeholder="2-16 位中英文 / 数字 / 下划线">
+        <input id="username" maxlength="16" placeholder="2-16 位英文 / 数字 / 下划线">
         <div class="hint">登录游戏时用的名字，创建后不可修改</div>
         <label>UID</label>
-        <input id="uid" maxlength="9" placeholder="1 或 2 开头的 9 位数字，如 100000007">
+        <input id="uid" maxlength="10" placeholder="1-1000000000 之间任意数字，如 100000007">
         <div class="hint">游戏内显示的唯一编号，自己挑一个吉利号，先到先得</div>
         <button type="submit" id="submitBtn" class="btn-submit">
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
@@ -147,7 +134,7 @@
         <div class="kv"><span>用户名</span><b id="rUser"></b></div>
         <div class="kv"><span>UID</span><b id="rUid"></b></div>
         <div class="kv"><span>密码</span><b id="rPwd"></b></div>
-        <p class="note">请截图保存以防忘记账号。</p>
+        <p class="note">本服未开启密码校验，登录时输入用户名即可。<br>密码为服主赠送的仪式感纪念品，请截图保存以防忘记账号。</p>
         <div class="modal-btns">
             <button class="mb-copy" id="copyBtn">复制账号信息</button>
             <button class="mb-close" id="closeBtn">关闭</button>
@@ -157,8 +144,7 @@
 <div id="toast"></div>
 
 <script>
-    const API_BASE = (location.port === '18082') ? '' : 'https://apidogoffurinagi.fucku.top';
-
+    const API_BASE = 'https://apidogoffurinagi.fucku.top';
     const $ = id => document.getElementById(id);
 
     function toast(msg, green) {
@@ -180,7 +166,8 @@
         const u = $('username').value.trim();
         const uidStr = $('uid').value.trim();
         if (!/^[A-Za-z0-9_]{2,16}$/.test(u)) { toast('用户名需为 2-16 位英文/数字/下划线'); return; }
-        if (!/^[0-9]{1,10}$/.test(uidStr)) { toast('填写UID'); return; }
+        const uidNum = parseInt(uidStr, 10);
+        if (!/^\d{1,10}$/.test(uidStr) || uidNum < 1 || uidNum > 1000000000) { toast('UID 需为 1-1000000000 之间的数字'); return; }
 
         const btn = $('submitBtn');
         btn.disabled = true;
@@ -188,7 +175,7 @@
             const res = await fetch(API_BASE + '/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, uid: parseInt(uidStr) })
+                body: JSON.stringify({ username: u, uid: uidNum })
             });
             const data = await res.json();
             if (data.ok) {
@@ -200,7 +187,7 @@
                 toast(data.msg || '创建失败');
             }
         } catch (err) {
-            toast('连接服务器失败');
+            toast('连不上服务器，请确认游戏服务已启动');
         }
         btn.disabled = false;
     });
