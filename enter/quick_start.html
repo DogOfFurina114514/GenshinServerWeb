@@ -46,15 +46,22 @@
     }
     .step-head h2 { color: #fff; margin: 0; font-size: 1.2em; line-height: 1; }
     .step p { color: #cfe3ff; margin: 6px 0; font-size: .95em; }
-    .addr {
-        display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.3);
-        border: 1px solid rgba(79,172,254,0.35); border-radius: 12px; padding: 12px 16px; margin: 10px 0;
-        flex-wrap: wrap;
+    .btn-center { text-align: center; margin: 20px 0; }
+    .btn-big-dl {
+        text-decoration: none; color: #fff; padding: 16px 40px; border-radius: 50px;
+        font-size: 1.2em; font-weight: bold; line-height: 1;
+        display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
-    .addr .tag { color: #43e97b; font-weight: bold; font-size: .85em; min-width: 60px; }
-    .addr code { color: #7ee8fa; font-family: Consolas, monospace; font-size: .9em; flex: 1; word-break: break-all; }
-    .copy { cursor: pointer; background: rgba(67,233,123,0.2); border: 1px solid rgba(67,233,123,0.5); color: #43e97b; border-radius: 20px; padding: 6px 16px; font-size: .8em; line-height: 1; flex-shrink: 0; }
-    .copy:hover { background: rgba(67,233,123,0.4); color: #fff; }
+    .btn-green { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 18px rgba(67, 233, 123, 0.45); }
+    .btn-green:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(67, 233, 123, 0.65); }
+    .btn-blue { background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79, 172, 254, 0.45); }
+    .btn-blue:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(79, 172, 254, 0.65); }
+    .todo {
+        color: rgba(255,255,255,0.45); border: 1px dashed rgba(255,255,255,0.25);
+        border-radius: 12px; padding: 16px; text-align: center; font-size: .9em;
+    }
     .tips {
         background: rgba(255,210,0,0.08); border: 1px solid rgba(255,210,0,0.35);
         border-radius: 16px; padding: 18px 24px; margin-top: 26px;
@@ -62,24 +69,6 @@
     .tips h3 { color: #ffd200; margin: 0 0 10px 0; line-height: 1; font-size: 1.05em; }
     .tips li { color: #ffe9a8; font-size: .9em; margin: 6px 0; }
     footer { margin-top: 36px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
-    #toast {
-        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
-        background: rgba(67,233,123,0.95); color: #063; padding: 10px 24px; border-radius: 40px;
-        transition: .3s; opacity: 0; z-index: 99; font-weight: bold;
-    }
-    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-    /* 新增的绿色下载按钮样式 */
-    .btn-download {
-        text-decoration: none; color: #fff; padding: 16px 40px; border-radius: 50px;
-        font-size: 1.2em; font-weight: bold; line-height: 1;
-        display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        background: linear-gradient(45deg, #43e97b, #38f9d7); 
-        box-shadow: 0 4px 18px rgba(67, 233, 123, 0.45);
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-    .btn-download:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(67, 233, 123, 0.65); }
 </style>
 </head>
 <body>
@@ -107,13 +96,9 @@
     <div class="step">
         <div class="step-head"><span class="num">1</span><h2>准备客户端</h2></div>
         <p>必须使用 <b>原神 4.0.0</b> 版本客户端（版本不对进不去，请勿使用最新版）。</p>
-        <div style="text-align: center; margin: 20px 0;">
-            <a href="https://autopatchcn.yuanshen.com/client_app/download/pc_zip/20230804185703_R1La3H9xIH1hBiHJ/YuanShen_4.0.0.zip" target="_blank" class="btn-download">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
+        <div class="btn-center">
+            <a href="https://autopatchcn.yuanshen.com/client_app/download/pc_zip/20230804185703_R1La3H9xIH1hBiHJ/YuanShen_4.0.0.zip" target="_blank" class="btn-big-dl btn-green">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 下载原神 4.0.0 客户端
             </a>
         </div>
@@ -121,27 +106,20 @@
     </div>
 
     <div class="step">
-        <div class="step-head"><span class="num">2</span><h2>复制连接地址</h2></div>
-        <p>按你和服主的网络关系，二选一：</p>
-        <div class="addr">
-            <span class="tag">局域网</span>
-            <code>http://192.168.1.114:18081</code>
-            <span class="copy" data-copy="http://192.168.1.114:18081">复制</span>
+        <div class="step-head"><span class="num">2</span><h2>安装补丁</h2></div>
+        <p>点击蓝色按钮下载补丁包 <b>RSAPatch.zip</b>。</p>
+        <div class="btn-center">
+            <a href="/download/RSAPatch.zip" download class="btn-big-dl btn-blue">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                下载 RSAPatch 补丁
+            </a>
         </div>
-        <p style="font-size:.8em; color:rgba(255,255,255,.4); margin:0;">和服主同一个 WiFi / 局域网时用这个</p>
-        <div class="addr">
-            <span class="tag">外网</span>
-            <code>http://[240e:371:26:2b10:e2b2:3f25:d6f8:e18]:18081</code>
-            <span class="copy" data-copy="http://[240e:371:26:2b10:e2b2:3f25:d6f8:e18]:18081">复制</span>
-        </div>
-        <p style="font-size:.8em; color:rgba(255,255,255,.4); margin:0;">异地朋友用这个（手机流量一般可直接连）。若工具要求分开填：IP 为方括号里的 IPv6 地址，端口为 18081</p>
+        <p style="font-size:.85em; color:rgba(255,255,255,.5); text-align:center; margin:0;">下载后解压，把里面的文件复制到<b>游戏目录</b>（YuanShen.exe 所在文件夹），<b>覆盖</b>原文件即可。</p>
     </div>
 
     <div class="step">
-        <div class="step-head"><span class="num">3</span><h2>打补丁 / 连接</h2></div>
-        <p>打开服主提供的<b>补丁器 / 登录器</b>（或 Fiddler 连接脚本）。</p>
-        <p>把第 2 步复制的地址粘贴进去 → 一键补丁 → 启动游戏。</p>
-        <p>工具获取方式：联系服主，或看服主置顶说明。</p>
+        <div class="step-head"><span class="num">3</span><h2>启动代理</h2></div>
+        <p class="todo">代理启动教程即将更新，敬请期待…</p>
     </div>
 
     <div class="step">
@@ -154,33 +132,14 @@
         <h3>连不上？按顺序检查</h3>
         <ul>
             <li>客户端是不是 4.0 版本？版本不对会直接报错或黑屏。</li>
-            <li>外网朋友：你的网络支持 IPv6 吗？（手机流量基本都支持，部分宽带不支持）</li>
+            <li>RSAPatch 补丁有没有正确覆盖到游戏目录？</li>
+            <li>代理工具启动了吗？</li>
             <li>服主的服务开着吗？网页打得开说明服务在线。</li>
-            <li>地址有没有复制完整？方括号和端口都不能少。</li>
             <li>以上都对还是不行 → 截图报错找服主。</li>
         </ul>
     </div>
 
     <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
 </div>
-<div id="toast">已复制</div>
-
-<script>
-    document.querySelectorAll('.copy').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const t = btn.dataset.copy;
-            if (navigator.clipboard) { navigator.clipboard.writeText(t); }
-            else {
-                const ta = document.createElement('textarea');
-                ta.value = t; document.body.appendChild(ta); ta.select();
-                document.execCommand('copy'); ta.remove();
-            }
-            const toast = document.getElementById('toast');
-            toast.textContent = '已复制连接地址';
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 1500);
-        });
-    });
-</script>
 </body>
 </html>
