@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>芙芙的狗的服务器</title>
+    <!-- 网页图标设置 -->
+    <link rel="icon" href="icon.ico" type="image/x-icon">
     <style>
         html, body { height: 100%; margin: 0; overflow: hidden; }
         body {
@@ -79,118 +81,3 @@
         footer { margin-top: 40px; color: rgba(255, 255, 255, 0.3); font-size: 0.85em; }
     </style>
 </head>
-<body>
-    <div class="bubbles">
-        <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
-        <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s;"></div>
-        <div class="bubble" style="width: 60px; height: 60px; left: 35%; animation-duration: 12s; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 80px; height: 80px; left: 50%; animation-duration: 15s; animation-delay: 0s;"></div>
-        <div class="bubble" style="width: 35px; height: 35px; left: 65%; animation-duration: 7s; animation-delay: 3s;"></div>
-        <div class="bubble" style="width: 50px; height: 50px; left: 80%; animation-duration: 10s; animation-delay: 2s;"></div>
-        <div class="bubble" style="width: 25px; height: 25px; left: 90%; animation-duration: 6s; animation-delay: 4s;"></div>
-    </div>
-
-    <div class="container">
-        <h1>欢迎来到芙芙的狗的服务器</h1>
-        <p class="subtitle" id="hitokoto" title="点击切换一言">正在连接世界树...</p>
-
-        <div class="big-buttons">
-            <a href="enter/quick_start.html" class="btn-big btn-enter">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                  <polyline points="10 17 15 12 10 7"></polyline>
-                  <line x1="15" y1="12" x2="3" y2="12"></line>
-                </svg>
-                进入服务器
-            </a>
-            <a href="handbook.html" class="btn-big btn-book">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                指令手册
-            </a>
-            <a href="status.html" class="btn-big btn-status">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                </svg>
-                状态检测
-            </a>
-        </div>
-
-        <div class="buttons">
-            <a href="https://space.bilibili.com/1275382346" target="_blank" class="btn btn-bili">
-                <img class="icon" src="bilibili.ico" alt="" width="24" height="24">
-                B站主页
-            </a>
-            <a href="mailto:wu__20111229@outlook.com" class="btn btn-mail">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-                联系邮箱
-            </a>
-        </div>
-        <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
-    </div>
-
-    <script>
-        const fallbackQuotes = [
-            "世界即舞台，而你是最特别的观众。", "万物皆有裂痕，那是光照进来的地方。",
-            "我们都在阴沟里，但仍有人仰望星空。", "所有命运赠送的礼物，早已在暗中标好了价格。",
-            "那些听不见音乐的人，以为跳舞的人疯了。", "真正的发现之旅，不在于寻找新风景，而在于拥有新眼光。",
-            "深水静流，越是深邃的思想，越是不起波澜。", "人们总是仰望星空，却忘了脚下也有倒影。",
-            "孤独是王者的宿命，也是观众的狂欢。", "面具戴久了，就会长在脸上。",
-            "在黑暗中跳舞，是为了让灵魂不被吞噬。", "每一滴水，都包含着整片海洋的记忆。",
-            "我们不是在扮演别人，而是在寻找自己。", "哪怕世界沉没，我也要在水面上开出花来。",
-            "命运的丝线，总是交织在最意想不到的地方。", "聚光灯下，没有秘密。",
-            "水能载舟，亦能覆舟，更能映照人心。", "最深沉的爱，往往以最冷酷的面目示人。",
-            "喜剧的内核，往往是悲剧的倒影。", "在时间的洪流中，我们都是随波逐流的演员。"
-        ];
-
-        const el = document.getElementById('hitokoto');
-        let timer;
-
-        async function fetchAndShow() {
-            let text = "";
-            try {
-                const response = await fetch('https://v1.hitokoto.cn/?c=k');
-                if (!response.ok) throw new Error('Network error');
-                const data = await response.json();
-                text = data.hitokoto;
-            } catch (error) {
-                text = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
-            }
-            
-            el.classList.add('fade-out');
-            setTimeout(() => {
-                el.textContent = `「${text}」`;
-                el.classList.remove('fade-out');
-            }, 600);
-        }
-
-        function showQuote() {
-            el.classList.add('fade-out');
-            setTimeout(async () => {
-                let text = "";
-                try {
-                    const response = await fetch('https://v1.hitokoto.cn/?c=k');
-                    if (!response.ok) throw new Error('Network error');
-                    const data = await response.json();
-                    text = data.hitokoto;
-                } catch (error) {
-                    text = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)];
-                }
-                el.textContent = `「${text}」`;
-                el.classList.remove('fade-out');
-            }, 600);
-        }
-
-        function resetTimer() { clearInterval(timer); timer = setInterval(showQuote, 5000); }
-        el.addEventListener('click', () => { showQuote(); resetTimer(); });
-        
-        fetchAndShow(); 
-        resetTimer();
-    </script>
-</body>
-</html>
