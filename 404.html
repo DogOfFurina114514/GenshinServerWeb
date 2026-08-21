@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 芙芙的狗的服务器</title>
+    <style>
+        html, body { height: 100%; margin: 0; overflow: hidden; }
+        body {
+            display: flex; justify-content: center; align-items: center;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; position: relative;
+        }
+        .bubbles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+        .bubble {
+            position: absolute; bottom: -100px; background: rgba(255, 255, 255, 0.08); border-radius: 50%;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.3); animation: rise 10s infinite ease-in;
+        }
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0.6; }
+            100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+        }
+        .container {
+            text-align: center; background: rgba(255, 255, 255, 0.08); padding: 50px 70px; border-radius: 24px;
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 10; animation: fadeIn 1s ease-out; max-width: 800px; width: 90%;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .code {
+            font-size: 7em; font-weight: 800; color: #fff; margin: 0; letter-spacing: 10px;
+            text-shadow: 0 0 30px rgba(79, 172, 254, 0.9); animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        h1 { color: #fff; font-size: 1.8em; margin: 10px 0 15px 0; text-shadow: 0 0 15px rgba(79, 172, 254, 0.8); letter-spacing: 2px; }
+        .subtitle {
+            color: #a0c4ff; margin-bottom: 40px; font-size: 1.1em; font-weight: 300; min-height: 1.5em;
+            cursor: pointer; user-select: none; transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+        }
+        .subtitle.fade-out { opacity: 0; transform: translateY(-10px); }
+        .btn {
+            text-decoration: none; color: #fff; padding: 14px 32px; border-radius: 50px;
+            font-size: 1.05em; font-weight: bold; line-height: 1;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6); }
+        .icon { display: block; flex-shrink: 0; }
+        footer { margin-top: 40px; color: rgba(255, 255, 255, 0.3); font-size: 0.85em; }
+    </style>
+</head>
+<body>
+    <div class="bubbles">
+        <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
+        <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s;"></div>
+        <div class="bubble" style="width: 60px; height: 60px; left: 35%; animation-duration: 12s; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 80px; height: 80px; left: 50%; animation-duration: 15s; animation-delay: 0s;"></div>
+        <div class="bubble" style="width: 35px; height: 35px; left: 65%; animation-duration: 7s; animation-delay: 3s;"></div>
+        <div class="bubble" style="width: 50px; height: 50px; left: 80%; animation-duration: 10s; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 25px; height: 25px; left: 90%; animation-duration: 6s; animation-delay: 4s;"></div>
+    </div>
+
+    <div class="container">
+        <p class="code">404</p>
+        <h1>页面迷失在深海了</h1>
+        <p class="subtitle" id="msg" title="点击换一句">「你寻找的页面，已沉入海底。」</p>
+
+        <a href="index.html" class="btn">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            返回主页
+        </a>
+
+        <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
+    </div>
+
+    <script>
+        const msgs = [
+            "你寻找的页面，已沉入海底。", "派蒙找遍了整个提瓦特，也没找到这个页面！",
+            "这个页面被愚人众执行官拿走了。", "水神宣判：该页面无罪，只是不存在。",
+            "它或许溶解在了原始胎海之水里。", "你访问的页面正在欧庇克莱歌剧院演出，暂不见客。",
+            "那维莱特说：不存在的页面，也应被赦免。", "前方的海域没有锚点，请返回港湾。",
+            "气泡上升，页面下沉，这就是深海的法则。", "别慌，我会带你回家的。"
+        ];
+        const el = document.getElementById('msg'); let timer;
+        function show() {
+            el.classList.add('fade-out');
+            setTimeout(() => {
+                el.textContent = '「' + msgs[Math.floor(Math.random() * msgs.length)] + '」';
+                el.classList.remove('fade-out');
+            }, 600);
+        }
+        function resetTimer() { clearInterval(timer); timer = setInterval(show, 5000); }
+        el.addEventListener('click', () => { show(); resetTimer(); });
+        show(); resetTimer();
+    </script>
+</body>
+</html>
