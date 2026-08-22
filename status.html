@@ -59,6 +59,7 @@
         transition: .3s; font-family: inherit;
     }
     .btn-refresh:hover { transform: translateY(-3px); }
+    .btn-refresh:disabled { opacity: .5; cursor: wait; transform: none; }
     .note { color: rgba(255,255,255,0.4); font-size: .8em; text-align: center; margin-top: 16px; }
     footer { margin-top: 32px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
 </style>
@@ -85,7 +86,7 @@
     </h1>
     <p class="subtitle">GitHub Actions 探针 · 每 5 分钟自动巡检 · DogOfFurina 专属</p>
 
-    <div class="banner" id="banner">正在读取最新状态…</div>
+    <div class="banner" id="banner">正在读取…</div>
 
     <div class="srow"><span class="dot" id="dApi"></span><span class="sname">API 服务器（网页 / 注册）</span><b id="vApi">检测中…</b></div>
     <div class="srow"><span class="dot" id="dDispatch"></span><span class="sname">Dispatch 服务器（18081）</span><b id="vDispatch">检测中…</b></div>
@@ -95,49 +96,105 @@
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
         立即刷新
     </button>
-    <p class="note">数据由 GitHub 服务器每 5 分钟独立探测，不受本地网络影响。</p>
+    <p class="note">点「立即刷新」= 插队触发一次即时检测</p>
 
     <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
 </div>
 
 <script>
-    function setRow(d, v, ok) {
-        document.getElementById(d).className = 'dot ' + (ok ? 'ok' : 'bad');
-        document.getElementById(v).textContent = ok ? '在线' : '离线';
+    const GH_OWNER = 'DogOfFurina114514';
+    const GH_REPO = 'GenshinServerWeb';
+    const GH_WORKFLOW = 'status-check.yml';
+    const GH_TOKEN = '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';
+
+    const $ = id => document.getElementById(id);
+    let shownTime = null;
+    let checking = false;
+
+    function applyRow(d, v, ok) {
+        $(d).className = 'dot ' + (ok ? 'ok' : 'bad');
+        $(v).textContent = ok ? '在线' : '离线';
     }
 
-    async function check() {
-        const banner = document.getElementById('banner');
-        banner.className = 'banner';
-        banner.textContent = '正在读取最新状态…';
-        ['dApi','dDispatch','dGame'].forEach(id => document.getElementById(id).className = 'dot');
-        ['vApi','vDispatch','vGame'].forEach(id => document.getElementById(id).textContent = '检测中…');
+    function renderData(d) {
+        applyRow('dApi', 'vApi', !!d.api);
+        applyRow('dDispatch', 'vDispatch', !!d.dispatch);
+        applyRow('dGame', 'vGame', !!d.game);
+        const banner = $('banner');
+        if (d.api && d.dispatch && d.game) {
+            banner.className = 'banner ok';
+            banner.textContent = '✅ 一切正常，提瓦特营业中（数据 ' + d.time + '）';
+        } else {
+            banner.className = 'banner bad';
+            banner.textContent = '⚠️ 服务异常：请检查下方离线项（数据 ' + d.time + '）';
+        }
+        shownTime = d.time;
+    }
+
+    async function loadStatus() {
+        try {
+            const res = await fetch('status.json?t=' + Date.now(), { cache: 'no-store' });
+            return await res.json();
+        } catch (e) { return null; }
+    }
+
+    // 进页面：直接显示上次检测好的数据
+    (async () => {
+        const d = await loadStatus();
+        if (d) renderData(d);
+        else { $('banner').className = 'banner bad'; $('banner').textContent = '⚠️ 无法读取状态文件'; }
+    })();
+
+    // 后台静默：每 30 秒对比时间戳，巡检一完成就无感刷新页面
+    setInterval(async () => {
+        if (checking) return;
+        const d = await loadStatus();
+        if (d && d.time !== shownTime) renderData(d);
+    }, 30000);
+
+    // 手动：插队触发 Action，圆点颜色不动，只改右边文字
+    async function manualCheck() {
+        if (checking) return;
+        checking = true;
+        const btn = $('refreshBtn');
+        btn.disabled = true;
+        ['vApi', 'vDispatch', 'vGame'].forEach(id => $(id).textContent = '检测中…');
+        $('banner').className = 'banner';
+        $('banner').textContent = '⏳ 已通知 GitHub 立即检测…';
 
         try {
-            // 读取同目录下的 status.json，加时间戳防浏览器缓存
-            const res = await fetch('status.json?t=' + Date.now(), { cache: 'no-store' });
-            const d = await res.json();
-            
-            setRow('dApi', 'vApi', !!d.api);
-            setRow('dDispatch', 'vDispatch', !!d.dispatch);
-            setRow('dGame', 'vGame', !!d.game);
+            await fetch('https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/actions/workflows/' + GH_WORKFLOW + '/dispatches', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + GH_TOKEN,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ref: 'main' })
+            });
+        } catch (e) {}
 
-            if (d.api && d.dispatch && d.game) {
-                banner.className = 'banner ok';
-                banner.textContent = `✅ 一切正常，提瓦特营业中（数据更新于 ${d.time}）`;
-            } else {
-                banner.className = 'banner bad';
-                banner.textContent = `⚠️ 服务异常：请检查下方离线项（数据更新于 ${d.time}）`;
-            }
-        } catch (e) {
-            banner.className = 'banner bad';
-            banner.textContent = '⚠️ 无法读取状态文件，请检查 GitHub Actions 是否运行成功';
+        const oldTime = shownTime;
+        const deadline = Date.now() + 180000;
+        let updated = null;
+        while (Date.now() < deadline) {
+            await new Promise(r => setTimeout(r, 5000));
+            const d = await loadStatus();
+            if (d && d.time !== oldTime) { updated = d; break; }
+        }
+
+        checking = false;
+        btn.disabled = false;
+        if (updated) { renderData(updated); }
+        else {
+            const d = await loadStatus();
+            if (d) renderData(d);
+            $('banner').className = 'banner bad';
+            $('banner').textContent = '⚠️ Failed to fetch';
         }
     }
 
-    document.getElementById('refreshBtn').addEventListener('click', check);
-    check();
-    setInterval(check, 30000); // 网页每 30 秒刷新一次显示
+    $('refreshBtn').addEventListener('click', manualCheck);
 </script>
 </body>
 </html>
