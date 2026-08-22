@@ -80,23 +80,41 @@
 
     <script>
         const msgs = [
-            "你寻找的页面，已沉入海底。", "派蒙找遍了整个提瓦特，也没找到这个页面！",
-            "这个页面被愚人众执行官拿走了。", "水神宣判：该页面无罪，只是不存在。",
-            "它或许溶解在了原始胎海之水里。", "你访问的页面正在欧庇克莱歌剧院演出，暂不见客。",
-            "那维莱特说：不存在的页面，也应被赦免。", "前方的海域没有锚点，请返回港湾。",
-            "气泡上升，页面下沉，这就是深海的法则。", "别慌，我会带你回家的。"
+            "你寻找的页面，已沉入海底。",
+            "派蒙找遍了整个提瓦特，也没找到这个页面！",
+            "这个页面被愚人众执行官拿走了。",
+            "它或许溶解在了原始胎海之水里。",
+            "你访问的页面正在欧庇克莱歌剧院演出，暂不见客。",
+            "前方的海域没有锚点，请返回港湾。",
+            "别慌，我会带你回家的。"
         ];
-        const el = document.getElementById('msg'); let timer;
+        
+        const el = document.getElementById('msg'); 
+        let timer;
+        let lastMsg = "你寻找的页面，已沉入海底。"; // 记住上一句
+
+        function getMsg() {
+            // 把上一句从池子里踢出去，保证绝不连重
+            let pool = msgs.filter(m => m !== lastMsg);
+            if (pool.length === 0) pool = msgs;
+            const pick = pool[Math.floor(Math.random() * pool.length)];
+            lastMsg = pick;
+            return pick;
+        }
+
         function show() {
             el.classList.add('fade-out');
             setTimeout(() => {
-                el.textContent = '「' + msgs[Math.floor(Math.random() * msgs.length)] + '」';
+                el.textContent = '「' + getMsg() + '」';
                 el.classList.remove('fade-out');
             }, 600);
         }
+
         function resetTimer() { clearInterval(timer); timer = setInterval(show, 5000); }
         el.addEventListener('click', () => { show(); resetTimer(); });
-        show(); resetTimer();
+        
+        show(); 
+        resetTimer();
     </script>
 </body>
 </html>
