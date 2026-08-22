@@ -156,7 +156,7 @@
         async function fetchAndShow() {
             let text = "";
             try {
-                const response = await fetch('https://v1.hitokoto.cn/?c=k');
+                const response = fetch('https://v1.hitokoto.cn/?c=k');
                 if (!response.ok) throw new Error('Network error');
                 const data = await response.json();
                 text = data.hitokoto;
