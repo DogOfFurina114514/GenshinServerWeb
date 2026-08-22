@@ -83,9 +83,9 @@
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
         服务器状态
     </h1>
-    <p class="subtitle">实时检测 · 每 30 秒自动刷新 · DogOfFurina 专属</p>
+    <p class="subtitle">GitHub Actions 探针 · 每 5 分钟自动巡检 · DogOfFurina 专属</p>
 
-    <div class="banner" id="banner">正在检测…</div>
+    <div class="banner" id="banner">正在读取最新状态…</div>
 
     <div class="srow"><span class="dot" id="dApi"></span><span class="sname">API 服务器（网页 / 注册）</span><b id="vApi">检测中…</b></div>
     <div class="srow"><span class="dot" id="dDispatch"></span><span class="sname">Dispatch 服务器（18081）</span><b id="vDispatch">检测中…</b></div>
@@ -95,76 +95,49 @@
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
         立即刷新
     </button>
-    <p class="note">服务显示离线？一般是游戏没启动或隧道掉了，找服主。</p>
+    <p class="note">数据由 GitHub 服务器每 5 分钟独立探测，不受本地网络影响。</p>
 
     <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
 </div>
 
 <script>
-    const API = 'https://apidogoffurinagi.fucku.top';
-    const DISPATCH = 'http://47.107.155.180:18081/';
-    const GAME = 'http://47.107.155.180:22102/';
-
-    function setRow(d, v, ok, extra) {
+    function setRow(d, v, ok) {
         document.getElementById(d).className = 'dot ' + (ok ? 'ok' : 'bad');
-        document.getElementById(v).textContent = ok ? ('在线' + (extra ? ' · ' + extra : '')) : '离线';
-    }
-
-    async function checkApi() {
-        const t0 = performance.now();
-        try {
-            const ctrl = new AbortController();
-            const to = setTimeout(() => ctrl.abort(), 4000);
-            const res = await fetch(API + '/api/ping', { signal: ctrl.signal, cache: 'no-store' });
-            const data = await res.json();
-            clearTimeout(to);
-            if (data.ok) { setRow('dApi', 'vApi', true, Math.round(performance.now() - t0) + 'ms'); return true; }
-        } catch (e) {}
-        setRow('dApi', 'vApi', false);
-        return false;
-    }
-
-    async function checkTcp(url) {
-        try {
-            const ctrl = new AbortController();
-            const to = setTimeout(() => ctrl.abort(), 4000);
-            await fetch(url, { mode: 'no-cors', signal: ctrl.signal, cache: 'no-store' });
-            clearTimeout(to);
-            return true;
-        } catch (e) {
-            clearTimeout(to);
-            return false;
-        }
+        document.getElementById(v).textContent = ok ? '在线' : '离线';
     }
 
     async function check() {
         const banner = document.getElementById('banner');
         banner.className = 'banner';
-        banner.textContent = '正在检测…';
+        banner.textContent = '正在读取最新状态…';
         ['dApi','dDispatch','dGame'].forEach(id => document.getElementById(id).className = 'dot');
         ['vApi','vDispatch','vGame'].forEach(id => document.getElementById(id).textContent = '检测中…');
 
-        const [apiOk, dispatchOk, gameOk] = await Promise.all([
-            checkApi(),
-            checkTcp(DISPATCH),
-            checkTcp(GAME)
-        ]);
+        try {
+            // 读取同目录下的 status.json，加时间戳防浏览器缓存
+            const res = await fetch('status.json?t=' + Date.now(), { cache: 'no-store' });
+            const d = await res.json();
+            
+            setRow('dApi', 'vApi', !!d.api);
+            setRow('dDispatch', 'vDispatch', !!d.dispatch);
+            setRow('dGame', 'vGame', !!d.game);
 
-        setRow('dDispatch', 'vDispatch', dispatchOk);
-        setRow('dGame', 'vGame', gameOk);
-
-        if (apiOk && dispatchOk && gameOk) {
-            banner.className = 'banner ok';
-            banner.textContent = '✅ 一切正常，提瓦特营业中';
-        } else {
+            if (d.api && d.dispatch && d.game) {
+                banner.className = 'banner ok';
+                banner.textContent = `✅ 一切正常，提瓦特营业中（数据更新于 ${d.time}）`;
+            } else {
+                banner.className = 'banner bad';
+                banner.textContent = `⚠️ 服务异常：请检查下方离线项（数据更新于 ${d.time}）`;
+            }
+        } catch (e) {
             banner.className = 'banner bad';
-            banner.textContent = '⚠️ 服务异常：请检查下方离线项';
+            banner.textContent = '⚠️ 无法读取状态文件，请检查 GitHub Actions 是否运行成功';
         }
     }
 
     document.getElementById('refreshBtn').addEventListener('click', check);
     check();
-    setInterval(check, 30000);
+    setInterval(check, 30000); // 网页每 30 秒刷新一次显示
 </script>
 </body>
 </html>
