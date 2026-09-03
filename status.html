@@ -65,6 +65,32 @@
 </style>
 </head>
 <body>
+<!-- ===== 右上角登录/注册（按登录状态自动切换） ===== -->
+<style>
+    .top-auth{position:fixed;top:20px;right:24px;z-index:999;display:flex;gap:12px;}
+    .btn-auth{text-decoration:none;padding:10px 26px;border-radius:50px;font-size:.95em;font-weight:bold;line-height:1;transition:all .3s;font-family:'Segoe UI','Microsoft YaHei',sans-serif;}
+    .btn-auth-reg{color:#4facfe;border:2px solid #4facfe;background:rgba(79,172,254,0.08);}
+    .btn-auth-reg:hover{background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px);}
+    .btn-auth-login{color:#fff;background:linear-gradient(45deg,#4facfe,#00f2fe);box-shadow:0 4px 15px rgba(79,172,254,0.4);}
+    .btn-auth-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6);}
+</style>
+<div class="top-auth" id="topAuth" style="visibility:hidden">
+    <a href="dashboard/login.html?mode=register" class="btn-auth btn-auth-reg">注册</a>
+    <a href="dashboard/login.html" class="btn-auth btn-auth-login">登录</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+    var sbx = window.supabase.createClient('https://kusbgdswjbaqpczfelnv.supabase.co', 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go');
+    sbx.auth.getSession().then(function (r) {
+        var box = document.getElementById('topAuth');
+        if (r.data.session) {
+            box.innerHTML = '<a href="dashboard/index.html" class="btn-auth btn-auth-login">进入控制台</a>';
+        }
+        box.style.visibility = 'visible';
+    }).catch(function () { document.getElementById('topAuth').style.visibility = 'visible'; });
+})();
+</script>
 <div class="bubbles">
     <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
     <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s;"></div>
