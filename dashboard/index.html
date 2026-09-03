@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人中心 - 芙芙的狗的服务器</title>
+<link rel="icon" href="/icon.ico" type="image/x-icon">
+<style>
+    html, body { margin: 0; min-height: 100%; }
+    body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; position: relative; overflow-x: hidden; }
+    .bubbles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+    .bubble { position: absolute; bottom: -100px; background: rgba(255,255,255,0.08); border-radius: 50%; box-shadow: 0 0 10px rgba(79,172,254,0.3); animation: rise 10s infinite ease-in; }
+    @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: .6; } 100% { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
+    .container { position: relative; z-index: 10; max-width: 600px; margin: 60px auto; padding: 40px 50px; background: rgba(255,255,255,0.08); border-radius: 24px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); animation: fadeIn 1s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .back { color: #a0c4ff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: .95em; line-height: 1; }
+    .back:hover { color: #fff; }
+    .icon { display: block; flex-shrink: 0; }
+    h1 { color: #fff; text-align: center; font-size: 2em; margin: 10px 0 8px 0; text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1; }
+    .subtitle { color: #a0c4ff; text-align: center; margin: 0 0 24px 0; font-weight: 300; }
+    .warn-banner { display: none; align-items: center; gap: 12px; background: rgba(255,210,0,0.12); border: 1px solid rgba(255,210,0,0.5); border-radius: 16px; padding: 14px 20px; margin-bottom: 16px; }
+    .warn-banner.show { display: flex; }
+    .warn-banner .warn-text { flex: 1; color: #ffe9a8; font-size: .88em; line-height: 1.5; }
+    .warn-banner .warn-text b { color: #ffd200; }
+    .btn-action { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 18px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .88em; white-space: nowrap; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
+    .btn-action:hover { transform: translateY(-2px); }
+    .info-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+    .info-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .info-label { color: #a0c4ff; font-size: .9em; }
+    .info-value { color: #fff; font-size: .95em; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: .8em; font-weight: bold; }
+    .badge-ok { background: rgba(67,233,123,0.15); color: #43e97b; border: 1px solid rgba(67,233,123,0.4); }
+    .badge-wait { background: rgba(255,210,0,0.15); color: #ffd200; border: 1px solid rgba(255,210,0,0.4); }
+    .create-section { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; margin-top: 20px; }
+    .create-section h3 { color: #fff; margin: 0 0 16px 0; font-size: 1.1em; line-height: 1; }
+    label { color: #cfe3ff; font-size: .88em; display: block; margin: 12px 0 6px 4px; }
+    input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 12px; color: #fff; padding: 12px 16px; font-size: .95em; outline: none; transition: .3s; }
+    input:focus { border-color: #4facfe; box-shadow: 0 0 8px rgba(79,172,254,0.3); }
+    input::placeholder { color: rgba(160,196,255,0.4); }
+    .btn-create { width: 100%; margin-top: 18px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(45deg, #8e2de2, #a970ff); box-shadow: 0 4px 18px rgba(142,45,226,0.45); transition: all 0.3s; font-family: inherit; }
+    .btn-create:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(142,45,226,0.65); }
+    .btn-create:disabled { opacity: .5; cursor: wait; transform: none; }
+    .lock-msg { color: rgba(255,255,255,0.5); text-align: center; font-size: .9em; padding: 20px 0; }
+    .btn-logout { width: 100%; margin-top: 24px; border: 1px solid rgba(255,110,110,0.4); cursor: pointer; color: #ff8080; background: rgba(255,110,110,0.08); padding: 12px 0; border-radius: 50px; font-size: .95em; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; }
+    .btn-logout:hover { background: rgba(255,110,110,0.2); }
+    footer { margin-top: 32px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
+    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+    #overlay.show { display: flex; }
+    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); animation: fadeIn .5s ease-out; }
+    .modal h2 { margin: 0 0 6px 0; font-size: 1.5em; line-height: 1; }
+    .modal h2.gold { color: #ffd200; text-shadow: 0 0 12px rgba(255,210,0,0.6); }
+    .modal h2.green { color: #43e97b; text-shadow: 0 0 12px rgba(67,233,123,0.6); }
+    .modal .sub { color: #a0c4ff; font-size: .85em; margin-bottom: 20px; }
+    .code-box { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255,210,0,0.5); border-radius: 16px; padding: 18px; margin: 16px 0; font-family: Consolas, monospace; font-size: 1.8em; color: #ffd200; letter-spacing: 4px; user-select: all; text-shadow: 0 0 8px rgba(255,210,0,0.4); }
+    .modal .steps { text-align: left; color: #cfe3ff; font-size: .88em; line-height: 1.9; margin: 16px 0; }
+    .modal .steps b { color: #ffd200; }
+    .modal-btns { display: flex; gap: 12px; margin-top: 20px; }
+    .modal-btns button { flex: 1; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 40px; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; }
+    .modal-btns button:hover { transform: translateY(-3px); }
+    .mb-verify { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 14px rgba(67,233,123,0.4); }
+    .mb-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25) !important; }
+    .mb-copy { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 14px rgba(67,233,123,0.4); }
+    .mb-verify:disabled { opacity: .5; cursor: wait; transform: none; }
+    #modal-msg { margin-top: 12px; font-size: .85em; min-height: 1.2em; }
+    #modal-msg.err { color: #ff8080; }
+    #modal-msg.ok { color: #43e97b; }
+    .kv { display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px 18px; margin: 10px 0; }
+    .kv span { color: #a0c4ff; font-size: .9em; }
+    .kv b { color: #fff; font-family: Consolas, monospace; font-size: .95em; }
+    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(67,233,123,0.95); color: #063; padding: 10px 24px; border-radius: 40px; transition: .3s; opacity: 0; z-index: 99; font-weight: bold; }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+<div class="bubbles">
+    <div class="bubble" style="width:40px;height:40px;left:10%;animation-duration:8s"></div>
+    <div class="bubble" style="width:20px;height:20px;left:20%;animation-duration:5s;animation-delay:1s"></div>
+    <div class="bubble" style="width:60px;height:60px;left:35%;animation-duration:12s;animation-delay:2s"></div>
+    <div class="bubble" style="width:80px;height:80px;left:50%;animation-duration:15s"></div>
+    <div class="bubble" style="width:35px;height:35px;left:65%;animation-duration:7s;animation-delay:3s"></div>
+    <div class="bubble" style="width:50px;height:50px;left:80%;animation-duration:10s;animation-delay:2s"></div>
+</div>
+
+<div class="container">
+    <a href="../index.html" class="back">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        返回主页
+    </a>
+    <h1>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        个人中心
+    </h1>
+    <p class="subtitle">管理你的网站账号 · 芙芙的狗 专属</p>
+
+    <!-- 横幅1：邮箱未验证 -->
+    <div class="warn-banner" id="email-banner">
+        <div class="warn-text">⚠️ <b>邮箱未验证</b>！请去邮箱点击验证链接。<br>剩余时间：<b id="email-remain">...</b>，逾期账号将被删除。</div>
+        <button class="btn-action" onclick="resendEmail()">重发验证邮件</button>
+    </div>
+
+    <!-- 横幅2：UID未验证 -->
+    <div class="warn-banner" id="uid-banner">
+        <div class="warn-text">⚠️ <b>官服身份未验证</b>！请修改游戏内个性签名完成验证。<br>剩余时间：<b id="uid-remain">...</b>，逾期账号将被删除。</div>
+        <button class="btn-action" onclick="openUidModal()">去验证</button>
+    </div>
+
+    <!-- 用户信息 -->
+    <div class="info-card">
+        <div class="info-row"><span class="info-label">邮箱</span><span class="info-value" id="user-email">加载中...</span></div>
+        <div class="info-row"><span class="info-label">邮箱状态</span><span class="info-value" id="email-status">检测中...</span></div>
+        <div class="info-row"><span class="info-label">官服 UID</span><span class="info-value" id="user-uid">-</span></div>
+        <div class="info-row"><span class="info-label">UID 状态</span><span class="info-value" id="uid-status">检测中...</span></div>
+    </div>
+
+    <!-- 创建游戏账号 -->
+    <div class="create-section">
+        <h3>🎮 创建游戏账号</h3>
+        <div id="create-locked" class="lock-msg">🔒 完成「邮箱 + 官服 UID」双重验证后解锁此功能</div>
+        <div id="create-form" style="display:none">
+            <label>游戏用户名</label>
+            <input id="game-username" maxlength="16" placeholder="2-16 位英文 / 数字 / 下划线">
+            <label>游戏 UID</label>
+            <input id="game-uid" maxlength="10" placeholder="1~1000000000 之间任意数字">
+            <button class="btn-create" id="btn-create" onclick="createGameAccount()">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                立即创建
+            </button>
+        </div>
+    </div>
+
+    <button class="btn-logout" onclick="doLogout()">退出登录</button>
+    <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
+</div>
+
+<!-- 弹窗 -->
+<div id="overlay">
+    <!-- UID 验证弹窗 -->
+    <div class="modal" id="modal-verify" style="display:none">
+        <h2 class="gold">⚡ 身份验证</h2>
+        <p class="sub">请在 <b>7 天内</b>完成以下操作</p>
+        <div class="code-box" id="modal-code">----------</div>
+        <div class="steps">
+            ① 打开原神官服，进入<b>个人资料</b><br>
+            ② 将你的<b>个性签名</b>修改为上方的验证码<br>
+            ③ <b>等待 3~5 分钟</b>（数据同步需要时间）<br>
+            ④ 回到此页面，点击下方「我已修改，验证」
+        </div>
+        <div class="modal-btns">
+            <button class="mb-verify" id="btn-do-verify" onclick="doVerify()">我已修改，验证</button>
+            <button class="mb-close" onclick="closeModal()">稍后再说</button>
+        </div>
+        <p id="modal-msg"></p>
+    </div>
+    <!-- 创建成功弹窗 -->
+    <div class="modal" id="modal-success" style="display:none">
+        <h2 class="green">🎉 创建成功</h2>
+        <p class="sub">你的提瓦特身份证已签发</p>
+        <div class="kv"><span>用户名</span><b id="r-user"></b></div>
+        <div class="kv"><span>UID</span><b id="r-uid"></b></div>
+        <div class="kv"><span>密码</span><b id="r-pwd"></b></div>
+        <p style="color:rgba(255,255,255,0.45);font-size:.78em;margin:14px 0 0 0">请截图保存以防忘记</p>
+        <div class="modal-btns">
+            <button class="mb-copy" onclick="copyInfo()">复制账号信息</button>
+            <button class="mb-close" onclick="closeModal()">关闭</button>
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ⚠️ 只需要替换 ANON_KEY（填你的 Publishable key，sb_publishable_ 开头）
+const SUPABASE_URL = 'https://kusbgdswjbaqpczfelnv.supabase.co';
+const SUPABASE_ANON_KEY = '在这里粘贴你的_Publishable_key';
+// 你的 Edge Function 后端地址
+const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-api';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = id => document.getElementById(id);
+let currentToken = '';
+let currentUser = null;
+
+// ===== 页面初始化 =====
+(async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
+    currentToken = session.access_token;
+    currentUser = session.user;
+    $('user-email').textContent = currentUser.email;
+
+    // 1. 邮箱状态
+    if (!currentUser.email_confirmed_at) {
+        $('email-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
+        $('email-banner').classList.add('show');
+    } else {
+        $('email-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
+    }
+
+    // 2. UID 状态
+    try {
+        const res = await fetch(API_BASE + '/verify-status', { headers: { 'Authorization': 'Bearer ' + currentToken } });
+        const d = await res.json();
+
+        if (d.expired) { alert(d.msg); await supabase.auth.signOut(); window.location.href = 'login.html'; return; }
+
+        if (d.hasRecord) {
+            $('user-uid').textContent = d.genshin_uid || '-';
+            $('email-remain').textContent = d.emailRemain || '-';
+            $('uid-remain').textContent = d.uidRemain || '-';
+
+            if (d.uidVerified) {
+                $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
+                if (currentUser.email_confirmed_at) {
+                    $('create-locked').style.display = 'none';
+                    $('create-form').style.display = '';
+                }
+            } else {
+                $('uid-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
+                if (currentUser.email_confirmed_at) {
+                    $('uid-banner').classList.add('show');
+                    if (!sessionStorage.getItem('uidModalShown')) {
+                        sessionStorage.setItem('uidModalShown', '1');
+                        openUidModal();
+                    }
+                }
+            }
+        }
+    } catch (e) { console.error(e); toast('后端连接失败，请稍后刷新'); }
+})();
+
+// ===== 重发邮箱验证 =====
+async function resendEmail() {
+    const { error } = await supabase.auth.resend({ type: 'signup', email: currentUser.email });
+    toast(error ? '发送失败：' + error.message : '验证邮件已重新发送！');
+}
+
+// ===== UID 验证弹窗 =====
+function openUidModal() {
+    $('modal-verify').style.display = '';
+    $('modal-success').style.display = 'none';
+    $('modal-msg').textContent = '';
+    $('overlay').classList.add('show');
+    fetch(API_BASE + '/get-code?user_id=' + encodeURIComponent(currentUser.id))
+        .then(r => r.json())
+        .then(d => { if (d.ok && d.code) $('modal-code').textContent = d.code; })
+        .catch(() => { $('modal-msg').textContent = '获取验证码失败，请稍后重试'; $('modal-msg').className = 'err'; });
+}
+
+async function doVerify() {
+    const btn = $('btn-do-verify'); btn.disabled = true;
+    $('modal-msg').textContent = '正在查询官服签名（约需几秒）...';
+    $('modal-msg').className = '';
+    try {
+        const res = await fetch(API_BASE + '/verify', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
+        const r = await res.json();
+        if (r.ok) {
+            sessionStorage.removeItem('uidModalShown');
+            $('modal-msg').textContent = '🎉 ' + r.msg;
+            $('modal-msg').className = 'ok';
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            $('modal-msg').textContent = r.msg;
+            $('modal-msg').className = 'err';
+        }
+    } catch (e) {
+        $('modal-msg').textContent = '网络错误，请稍后重试';
+        $('modal-msg').className = 'err';
+    }
+    btn.disabled = false;
+}
+
+// ===== 创建游戏账号 =====
+async function createGameAccount() {
+    const username = $('game-username').value.trim();
+    const uid = $('game-uid').value.trim();
+    if (!/^[A-Za-z0-9_]{2,16}$/.test(username)) { toast('用户名需为 2-16 位英文/数字/下划线'); return; }
+    const uidNum = parseInt(uid, 10);
+    if (!/^\d{1,10}$/.test(uid) || uidNum < 1 || uidNum > 1000000000) { toast('UID 需为 1~1000000000 的数字'); return; }
+
+    $('btn-create').disabled = true;
+    try {
+        const res = await fetch(API_BASE + '/create-account', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+            body: JSON.stringify({ username: username, uid: uidNum })
+        });
+        const d = await res.json();
+        if (d.ok) {
+            $('r-user').textContent = username;
+            $('r-uid').textContent = uid;
+            $('r-pwd').textContent = rndPwd();
+            $('modal-verify').style.display = 'none';
+            $('modal-success').style.display = '';
+            $('overlay').classList.add('show');
+        } else {
+            toast(d.msg || '创建失败');
+        }
+    } catch (e) { toast('服务器连接失败，请联系服主'); }
+    $('btn-create').disabled = false;
+}
+
+function rndPwd() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; let p = ''; for (let i = 0; i < 10; i++) p += c[Math.floor(Math.random() * c.length)]; return p; }
+function copyInfo() {
+    const t = '芙芙的狗的服务器 账号信息\n用户名：' + $('r-user').textContent + '\nUID：' + $('r-uid').textContent + '\n密码：' + $('r-pwd').textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    else { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    toast('已复制，请妥善保存');
+}
+function closeModal() { $('overlay').classList.remove('show'); }
+async function doLogout() { await supabase.auth.signOut(); window.location.href = 'login.html'; }
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+</script>
+</body>
+</html>
