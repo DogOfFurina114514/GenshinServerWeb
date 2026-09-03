@@ -140,7 +140,7 @@
 const SUPABASE_URL = 'https://kusbgdswjbaqpczfelnv.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
 let lastRegEmail = '';
 
@@ -155,7 +155,7 @@ if (new URLSearchParams(location.search).get('mode') === 'register') showRegiste
 // ===== 重发验证邮件 =====
 async function resendEmail(email) {
     if (!email) { $('modal-msg').textContent = '请先填写邮箱'; $('modal-msg').className = 'err'; return; }
-    const { error } = await supabase.auth.resend({ type: 'signup', email: email.trim() });
+    const { error } = await sb.auth.resend({ type: 'signup', email: email.trim() });
     if (error) {
         $('modal-msg').textContent = '发送失败：' + error.message; $('modal-msg').className = 'err';
     } else {
@@ -169,7 +169,7 @@ async function doLogin() {
     const email = $('login-email').value.trim(), pwd = $('login-pwd').value;
     if (!email || !pwd) return msg('请填写邮箱和密码', 'err');
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password: pwd });
+    const { error } = await sb.auth.signInWithPassword({ email, password: pwd });
     if (error) {
         if (String(error.message).toLowerCase().includes('not confirmed')) {
             $('email-banner').classList.add('show');
@@ -188,7 +188,7 @@ async function doRegister() {
     if (!/^[1-4]\d{8}$/.test(uid)) return msg('官服 UID 应为 1~4 开头的 9 位数字', 'err');
 
     msg('正在注册并发送验证邮件...', '');
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await sb.auth.signUp({
         email: email,
         password: pwd,
         options: { data: { genshin_uid: uid } }
@@ -212,7 +212,7 @@ async function doRegister() {
 
 // 邮箱验证链接跳回来时自动进入个人中心
 (async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
     if (session) window.location.href = 'index.html';
 })();
 </script>
