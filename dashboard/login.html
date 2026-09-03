@@ -105,7 +105,7 @@
         <label>密码</label>
         <input id="reg-pwd" type="password" placeholder="至少 6 位" autocomplete="new-password">
         <label>官服 UID</label>
-        <input id="reg-uid" type="text" maxlength="10" placeholder="9 位数字（官服）">
+        <input id="reg-uid" type="text" maxlength="10" placeholder="1~4 开头的 9 位数字（官服）">
         <div class="hint">用于验证身份。注册后需完成「邮箱验证 + 游戏签名验证」，任一验证 7 天内未完成将删号。</div>
         <button class="btn-submit btn-register" onclick="doRegister()">注 册</button>
         <div class="divider">已有账号？</div>
@@ -139,7 +139,7 @@
 <script>
 // ⚠️ 只需要替换 ANON_KEY（填你的 Publishable key，sb_publishable_ 开头）
 const SUPABASE_URL = 'https://kusbgdswjbaqpczfelnv.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go';
+const SUPABASE_ANON_KEY = '在这里粘贴你的_Publishable_key';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
@@ -149,6 +149,9 @@ function msg(t, c) { $('msg').textContent = t; $('msg').className = c || ''; }
 function showRegister() { $('login-form').style.display = 'none'; $('register-form').style.display = ''; $('email-banner').classList.remove('show'); msg(''); }
 function showLogin() { $('register-form').style.display = 'none'; $('login-form').style.display = ''; msg(''); }
 function closeModal() { $('overlay').classList.remove('show'); showLogin(); }
+
+// 从主页点「注册」进来时，直接显示注册表单
+if (new URLSearchParams(location.search).get('mode') === 'register') showRegister();
 
 // ===== 重发验证邮件 =====
 async function resendEmail(email) {
