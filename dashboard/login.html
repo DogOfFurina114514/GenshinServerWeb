@@ -81,13 +81,11 @@
     </h1>
     <p class="subtitle">登录 / 注册网站账号 · 芙芙的狗 专属</p>
 
-    <!-- 邮箱未验证横幅（登录被拦截时显示） -->
     <div class="warn-banner" id="email-banner">
         <div class="warn-text">⚠️ <b>邮箱未验证</b>！请查收验证邮件并点击链接。<br><b>7 天内</b>未验证账号将被自动删除。</div>
         <button class="btn-action" onclick="resendEmail($('login-email').value)">重发验证邮件</button>
     </div>
 
-    <!-- 登录表单 -->
     <div id="login-form">
         <label>邮箱</label>
         <input id="login-email" type="email" placeholder="your@email.com" autocomplete="email">
@@ -98,7 +96,6 @@
         <button class="btn-submit btn-register" onclick="showRegister()">注册新账号</button>
     </div>
 
-    <!-- 注册表单 -->
     <div id="register-form" style="display:none">
         <label>邮箱</label>
         <input id="reg-email" type="email" placeholder="your@email.com" autocomplete="email">
@@ -116,7 +113,6 @@
     <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
 </div>
 
-<!-- 注册成功后的邮箱验证弹窗 -->
 <div id="overlay">
     <div class="modal">
         <h2>📮 邮箱验证</h2>
@@ -149,10 +145,8 @@ function showRegister() { $('login-form').style.display = 'none'; $('register-fo
 function showLogin() { $('register-form').style.display = 'none'; $('login-form').style.display = ''; msg(''); }
 function closeModal() { $('overlay').classList.remove('show'); showLogin(); }
 
-// 从主页点「注册」进来时，直接显示注册表单
 if (new URLSearchParams(location.search).get('mode') === 'register') showRegister();
 
-// ===== 重发验证邮件 =====
 async function resendEmail(email) {
     if (!email) { $('modal-msg').textContent = '请先填写邮箱'; $('modal-msg').className = 'err'; return; }
     const { error } = await sb.auth.resend({ type: 'signup', email: email.trim() });
@@ -164,7 +158,6 @@ async function resendEmail(email) {
     }
 }
 
-// ===== 登录 =====
 async function doLogin() {
     const email = $('login-email').value.trim(), pwd = $('login-pwd').value;
     if (!email || !pwd) return msg('请填写邮箱和密码', 'err');
@@ -180,10 +173,10 @@ async function doLogin() {
     window.location.href = 'index.html';
 }
 
-// ===== 注册 =====
 async function doRegister() {
     const email = $('reg-email').value.trim(), pwd = $('reg-pwd').value, uid = $('reg-uid').value.trim();
     if (!email || !pwd) return msg('请填写邮箱和密码', 'err');
+    if (email.toLowerCase().endsWith('@admin.server')) return msg('管理员后缀邮箱禁止公开注册，请联系服主', 'err');
     if (pwd.length < 6) return msg('密码至少 6 位', 'err');
     if (!/^[1-4]\d{8}$/.test(uid)) return msg('官服 UID 应为 1~4 开头的 9 位数字', 'err');
 
@@ -210,7 +203,6 @@ async function doRegister() {
     $('overlay').classList.add('show');
 }
 
-// 邮箱验证链接跳回来时自动进入个人中心
 (async () => {
     const { data: { session } } = await sb.auth.getSession();
     if (session) window.location.href = 'index.html';
