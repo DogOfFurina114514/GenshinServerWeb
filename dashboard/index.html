@@ -176,14 +176,14 @@ const SUPABASE_ANON_KEY = '在这里粘贴你的_Publishable_key';
 // 你的 Edge Function 后端地址
 const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-api';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
 let currentToken = '';
 let currentUser = null;
 
 // ===== 页面初始化 =====
 (async function init() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
     currentToken = session.access_token;
     currentUser = session.user;
@@ -202,7 +202,7 @@ let currentUser = null;
         const res = await fetch(API_BASE + '/verify-status', { headers: { 'Authorization': 'Bearer ' + currentToken } });
         const d = await res.json();
 
-        if (d.expired) { alert(d.msg); await supabase.auth.signOut(); window.location.href = 'login.html'; return; }
+        if (d.expired) { alert(d.msg); await sb.auth.signOut(); window.location.href = 'login.html'; return; }
 
         if (d.hasRecord) {
             $('user-uid').textContent = d.genshin_uid || '-';
@@ -231,7 +231,7 @@ let currentUser = null;
 
 // ===== 重发邮箱验证 =====
 async function resendEmail() {
-    const { error } = await supabase.auth.resend({ type: 'signup', email: currentUser.email });
+    const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email });
     toast(error ? '发送失败：' + error.message : '验证邮件已重新发送！');
 }
 
@@ -308,7 +308,7 @@ function copyInfo() {
     toast('已复制，请妥善保存');
 }
 function closeModal() { $('overlay').classList.remove('show'); }
-async function doLogout() { await supabase.auth.signOut(); window.location.href = 'login.html'; }
+async function doLogout() { await sb.auth.signOut(); window.location.href = 'login.html'; }
 function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 </script>
 </body>
