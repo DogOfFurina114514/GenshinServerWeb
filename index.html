@@ -80,22 +80,37 @@
         .btn-mail { background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4); }
         .btn-mail:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6); }
         footer { margin-top: 40px; color: rgba(255, 255, 255, 0.3); font-size: 0.85em; }
-
-        /* 右上角登录/注册按钮 */
-        .top-auth { position: fixed; top: 20px; right: 24px; z-index: 20; display: flex; gap: 12px; }
-        .btn-auth { text-decoration: none; padding: 10px 26px; border-radius: 50px; font-size: .95em; font-weight: bold; line-height: 1; transition: all .3s; }
-        .btn-auth-reg { color: #4facfe; border: 2px solid #4facfe; background: rgba(79,172,254,0.08); }
-        .btn-auth-reg:hover { background: rgba(79,172,254,0.25); color: #fff; transform: translateY(-2px); }
-        .btn-auth-login { color: #fff; background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 15px rgba(79,172,254,0.4); }
-        .btn-auth-login:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(79,172,254,0.6); }
     </style>
 </head>
 <body>
-    <!-- 右上角：注册（蓝边框，靠左） + 登录（蓝色实心，靠右） -->
-    <div class="top-auth">
+
+    <!-- ===== 动态检测登录状态的右上角按钮组件 ===== -->
+    <style>
+        .top-auth{position:fixed;top:20px;right:24px;z-index:999;display:flex;gap:12px;}
+        .btn-auth{text-decoration:none;padding:10px 26px;border-radius:50px;font-size:.95em;font-weight:bold;line-height:1;transition:all .3s;font-family:'Segoe UI','Microsoft YaHei',sans-serif;}
+        .btn-auth-reg{color:#4facfe;border:2px solid #4facfe;background:rgba(79,172,254,0.08);}
+        .btn-auth-reg:hover{background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px);}
+        .btn-auth-login{color:#fff;background:linear-gradient(45deg,#4facfe,#00f2fe);box-shadow:0 4px 15px rgba(79,172,254,0.4);}
+        .btn-auth-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6);}
+    </style>
+    <div class="top-auth" id="topAuth" style="visibility:hidden">
         <a href="dashboard/login.html?mode=register" class="btn-auth btn-auth-reg">注册</a>
         <a href="dashboard/login.html" class="btn-auth btn-auth-login">登录</a>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    (function () {
+        var sbx = window.supabase.createClient('https://kusbgdswjbaqpczfelnv.supabase.co', 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go');
+        sbx.auth.getSession().then(function (r) {
+            var box = document.getElementById('topAuth');
+            if (r.data.session) {
+                box.innerHTML = '<a href="dashboard/index.html" class="btn-auth btn-auth-login">进入控制台</a>';
+            }
+            box.style.visibility = 'visible';
+        }).catch(function () { document.getElementById('topAuth').style.visibility = 'visible'; });
+    })();
+    </script>
+    <!-- ========================================== -->
 
     <div class="bubbles">
         <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
@@ -170,7 +185,6 @@
 		let lastText = '';
 
 		async function getQuote() {
-			// 网络一言：和上一条重复就自动重抽，最多 3 次
 			for (let i = 0; i < 3; i++) {
 				try {
 					const response = await fetch('https://v1.hitokoto.cn/?c=k&t=' + Date.now());
@@ -182,7 +196,6 @@
 					}
 				} catch (e) { break; }
 			}
-			// 备用一言：排除上一条，保证不连重
 			let pool = fallbackQuotes.filter(q => q !== lastText);
 			if (pool.length === 0) pool = fallbackQuotes;
 			const pick = pool[Math.floor(Math.random() * pool.length)];
@@ -202,7 +215,6 @@
 		function resetTimer() { clearInterval(timer); timer = setInterval(showQuote, 5000); }
 		el.addEventListener('click', () => { showQuote(); resetTimer(); });
 
-		// 首次进入：先显示「正在连接世界树...」，拿到句子后再淡出切换
 		(async () => {
 			const text = await getQuote();
 			el.classList.add('fade-out');
