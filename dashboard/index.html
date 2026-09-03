@@ -3,56 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>个人中心 - 芙芙的狗的服务器</title>
+<title>账户中心 - 芙芙的狗的服务器</title>
 <link rel="icon" href="/icon.ico" type="image/x-icon">
 <style>
-    html, body { margin: 0; min-height: 100%; }
-    body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; position: relative; overflow-x: hidden; }
-    .bubbles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
-    .bubble { position: absolute; bottom: -100px; background: rgba(255,255,255,0.08); border-radius: 50%; box-shadow: 0 0 10px rgba(79,172,254,0.3); animation: rise 10s infinite ease-in; }
-    @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: .6; } 100% { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
-    .container { position: relative; z-index: 10; max-width: 600px; margin: 60px auto; padding: 40px 50px; background: rgba(255,255,255,0.08); border-radius: 24px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); animation: fadeIn 1s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .back { color: #a0c4ff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: .95em; line-height: 1; }
-    .back:hover { color: #fff; }
-    .icon { display: block; flex-shrink: 0; }
-    h1 { color: #fff; text-align: center; font-size: 2em; margin: 10px 0 8px 0; text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1; }
-    .subtitle { color: #a0c4ff; text-align: center; margin: 0 0 24px 0; font-weight: 300; }
-    .warn-banner { display: none; align-items: center; gap: 12px; background: rgba(255,210,0,0.12); border: 1px solid rgba(255,210,0,0.5); border-radius: 16px; padding: 14px 20px; margin-bottom: 16px; }
-    .warn-banner.show { display: flex; }
-    .warn-banner .warn-text { flex: 1; color: #ffe9a8; font-size: .88em; line-height: 1.5; }
-    .warn-banner .warn-text b { color: #ffd200; }
-    .btn-action { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 18px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .88em; white-space: nowrap; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
-    .btn-action:hover { transform: translateY(-2px); }
-    .info-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; }
-    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
-    .info-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .info-label { color: #a0c4ff; font-size: .9em; }
-    .info-value { color: #fff; font-size: .95em; }
+    html, body { height: 100%; margin: 0; }
+    body { background: #0d1b24; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; color: #eaf4ff; overflow: hidden; }
+    .layout { display: flex; height: 100vh; }
+
+    /* ===== 左侧导航栏 ===== */
+    .sidebar { width: 230px; flex-shrink: 0; background: #12222e; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; padding: 18px 14px; gap: 12px; }
+    .side-title { text-align: center; font-size: 1.15em; font-weight: bold; letter-spacing: 2px; color: #fff; padding: 14px 0; border: 1px solid rgba(79,172,254,0.5); border-radius: 14px; background: rgba(79,172,254,0.12); text-shadow: 0 0 10px rgba(79,172,254,0.6); }
+    .nav { display: flex; flex-direction: column; gap: 10px; flex: 1; margin-top: 8px; }
+    .nav-btn { display: block; width: 100%; text-align: center; text-decoration: none; color: #cfe3ff; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 13px 0; font-size: .95em; font-family: inherit; cursor: pointer; transition: .25s; }
+    .nav-btn:hover { background: rgba(79,172,254,0.18); color: #fff; transform: translateY(-2px); }
+    .nav-btn.active { background: linear-gradient(45deg, #4facfe, #00f2fe); color: #fff; font-weight: bold; border-color: transparent; box-shadow: 0 4px 14px rgba(79,172,254,0.4); }
+    .side-bottom { display: flex; flex-direction: column; gap: 10px; }
+    .nav-btn.logout { color: #ff8080; border-color: rgba(255,110,110,0.4); background: rgba(255,110,110,0.08); }
+    .nav-btn.logout:hover { background: rgba(255,110,110,0.2); color: #fff; }
+
+    /* ===== 右侧主区域 ===== */
+    .main { flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 18px 22px; overflow-y: auto; }
+    /* 通知栏：有通知才显示，没通知内容自动延伸 */
+    .notice { display: none; align-items: center; gap: 12px; flex-wrap: wrap; background: rgba(255,210,0,0.12); border: 1px solid rgba(255,210,0,0.5); border-radius: 14px; padding: 12px 18px; color: #ffe9a8; font-size: .9em; }
+    .notice.show { display: flex; }
+    .notice b { color: #ffd200; }
+    .notice .nbtn { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 8px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .85em; transition: .3s; }
+    .notice .nbtn:hover { transform: translateY(-2px); }
+
+    .page { flex: 1; }
+    .card { background: #162833; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px 26px; }
+    .card.empty { display: flex; align-items: center; justify-content: center; min-height: 300px; color: rgba(255,255,255,0.4); font-size: 1em; }
+    .card-head { display: flex; align-items: center; gap: 16px; }
+    .avatar { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(45deg, #4facfe, #00f2fe); display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; color: #fff; flex-shrink: 0; box-shadow: 0 4px 14px rgba(79,172,254,0.4); }
+    .uname { font-size: 1.15em; font-weight: bold; color: #fff; word-break: break-all; }
+    .btn-edit { margin-left: auto; background: rgba(79,172,254,0.15); border: 1px solid rgba(79,172,254,0.5); color: #a0c4ff; padding: 9px 26px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: .9em; transition: .25s; }
+    .btn-edit:hover { background: rgba(79,172,254,0.35); color: #fff; }
+    .info-box { margin-top: 20px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px 20px; }
+    .info-title { color: #a0c4ff; font-size: .9em; margin-bottom: 6px; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: .95em; }
+    .info-row:last-of-type { border-bottom: none; }
+    .info-row span { color: #a0c4ff; }
+    .info-row b { color: #fff; font-weight: 600; }
     .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: .8em; font-weight: bold; }
     .badge-ok { background: rgba(67,233,123,0.15); color: #43e97b; border: 1px solid rgba(67,233,123,0.4); }
     .badge-wait { background: rgba(255,210,0,0.15); color: #ffd200; border: 1px solid rgba(255,210,0,0.4); }
-    .create-section { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; margin-top: 20px; }
-    .create-section h3 { color: #fff; margin: 0 0 16px 0; font-size: 1.1em; line-height: 1; }
+    .card-actions { display: flex; gap: 12px; margin-top: 14px; }
+    .btn-verify { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 22px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .9em; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
+    .btn-verify:hover { transform: translateY(-2px); }
+
+    .card-title { color: #fff; font-size: 1.1em; font-weight: bold; margin-bottom: 16px; }
     label { color: #cfe3ff; font-size: .88em; display: block; margin: 12px 0 6px 4px; }
     input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 12px; color: #fff; padding: 12px 16px; font-size: .95em; outline: none; transition: .3s; }
     input:focus { border-color: #4facfe; box-shadow: 0 0 8px rgba(79,172,254,0.3); }
     input::placeholder { color: rgba(160,196,255,0.4); }
-    .btn-create { width: 100%; margin-top: 18px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(45deg, #8e2de2, #a970ff); box-shadow: 0 4px 18px rgba(142,45,226,0.45); transition: all 0.3s; font-family: inherit; }
+    .btn-create { width: 100%; margin-top: 18px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; background: linear-gradient(45deg, #8e2de2, #a970ff); box-shadow: 0 4px 18px rgba(142,45,226,0.45); transition: all 0.3s; font-family: inherit; }
     .btn-create:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(142,45,226,0.65); }
     .btn-create:disabled { opacity: .5; cursor: wait; transform: none; }
-    .lock-msg { color: rgba(255,255,255,0.5); text-align: center; font-size: .9em; padding: 20px 0; }
-    .btn-logout { width: 100%; margin-top: 24px; border: 1px solid rgba(255,110,110,0.4); cursor: pointer; color: #ff8080; background: rgba(255,110,110,0.08); padding: 12px 0; border-radius: 50px; font-size: .95em; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; }
-    .btn-logout:hover { background: rgba(255,110,110,0.2); }
-    footer { margin-top: 32px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
+    .lock-msg { color: rgba(255,255,255,0.5); text-align: center; font-size: .9em; padding: 30px 0; }
+
+    /* ===== 弹窗 ===== */
     #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
     #overlay.show { display: flex; }
-    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); animation: fadeIn .5s ease-out; }
+    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); }
     .modal h2 { margin: 0 0 6px 0; font-size: 1.5em; line-height: 1; }
     .modal h2.gold { color: #ffd200; text-shadow: 0 0 12px rgba(255,210,0,0.6); }
     .modal h2.green { color: #43e97b; text-shadow: 0 0 12px rgba(67,233,123,0.6); }
     .modal .sub { color: #a0c4ff; font-size: .85em; margin-bottom: 20px; }
-    .code-box { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255,210,0,0.5); border-radius: 16px; padding: 18px; margin: 16px 0; font-family: Consolas, monospace; font-size: 1.8em; color: #ffd200; letter-spacing: 4px; user-select: all; text-shadow: 0 0 8px rgba(255,210,0,0.4); }
+    .code-box { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255,210,0,0.5); border-radius: 16px; padding: 18px; margin: 16px 0; font-family: Consolas, monospace; font-size: 1.8em; color: #ffd200; letter-spacing: 4px; user-select: all; }
     .modal .steps { text-align: left; color: #cfe3ff; font-size: .88em; line-height: 1.9; margin: 16px 0; }
     .modal .steps b { color: #ffd200; }
     .modal-btns { display: flex; gap: 12px; margin-top: 20px; }
@@ -70,65 +87,91 @@
     .kv b { color: #fff; font-family: Consolas, monospace; font-size: .95em; }
     #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(67,233,123,0.95); color: #063; padding: 10px 24px; border-radius: 40px; transition: .3s; opacity: 0; z-index: 99; font-weight: bold; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    @media (max-width: 760px) {
+        .layout { flex-direction: column; }
+        .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; align-items: center; }
+        .side-title { padding: 8px 16px; }
+        .nav { flex-direction: row; flex-wrap: wrap; margin-top: 0; }
+        .nav-btn { width: auto; padding: 9px 14px; }
+        .side-bottom { flex-direction: row; }
+        body { overflow: auto; }
+        .layout { height: auto; min-height: 100vh; }
+    }
 </style>
 </head>
 <body>
-<div class="bubbles">
-    <div class="bubble" style="width:40px;height:40px;left:10%;animation-duration:8s"></div>
-    <div class="bubble" style="width:20px;height:20px;left:20%;animation-duration:5s;animation-delay:1s"></div>
-    <div class="bubble" style="width:60px;height:60px;left:35%;animation-duration:12s;animation-delay:2s"></div>
-    <div class="bubble" style="width:80px;height:80px;left:50%;animation-duration:15s"></div>
-    <div class="bubble" style="width:35px;height:35px;left:65%;animation-duration:7s;animation-delay:3s"></div>
-    <div class="bubble" style="width:50px;height:50px;left:80%;animation-duration:10s;animation-delay:2s"></div>
-</div>
-
-<div class="container">
-    <a href="../index.html" class="back">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        返回主页
-    </a>
-    <h1>
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        个人中心
-    </h1>
-    <p class="subtitle">管理你的网站账号 · 芙芙的狗 专属</p>
-
-    <div class="warn-banner" id="email-banner">
-        <div class="warn-text">⚠️ <b>邮箱未验证</b>！请去邮箱点击验证链接。<br>剩余时间：<b id="email-remain">...</b>，逾期账号将被删除。</div>
-        <button class="btn-action" onclick="resendEmail()">重发验证邮件</button>
-    </div>
-
-    <div class="warn-banner" id="uid-banner">
-        <div class="warn-text">⚠️ <b>官服身份未验证</b>！请修改游戏内个性签名完成验证。<br>剩余时间：<b id="uid-remain">...</b>，逾期账号将被删除。</div>
-        <button class="btn-action" onclick="openUidModal()">去验证</button>
-    </div>
-
-    <div class="info-card">
-        <div class="info-row"><span class="info-label">邮箱</span><span class="info-value" id="user-email">加载中...</span></div>
-        <div class="info-row"><span class="info-label">邮箱状态</span><span class="info-value" id="email-status">检测中...</span></div>
-        <div class="info-row"><span class="info-label">官服 UID</span><span class="info-value" id="user-uid">-</span></div>
-        <div class="info-row"><span class="info-label">UID 状态</span><span class="info-value" id="uid-status">检测中...</span></div>
-    </div>
-
-    <div class="create-section">
-        <h3>🎮 创建游戏账号</h3>
-        <div id="create-locked" class="lock-msg">🔒 完成「邮箱 + 官服 UID」双重验证后解锁此功能</div>
-        <div id="create-form" style="display:none">
-            <label>游戏用户名</label>
-            <input id="game-username" maxlength="16" placeholder="2-16 位英文 / 数字 / 下划线">
-            <label>游戏 UID</label>
-            <input id="game-uid" maxlength="10" placeholder="1~1000000000 之间任意数字">
-            <button class="btn-create" id="btn-create" onclick="createGameAccount()">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                立即创建
-            </button>
+<div class="layout">
+    <!-- 左侧导航 -->
+    <aside class="sidebar">
+        <div class="side-title">账户中心</div>
+        <div class="nav">
+            <button class="nav-btn active" onclick="showPage('profile', this)">个人信息</button>
+            <button class="nav-btn" onclick="showPage('security', this)">安全设置</button>
+            <button class="nav-btn" onclick="showPage('create', this)">创建服务器账号</button>
+            <button class="nav-btn" onclick="showPage('more', this)">更多设置</button>
         </div>
-    </div>
+        <div class="side-bottom">
+            <button class="nav-btn logout" onclick="doLogout()">退出登录</button>
+            <a class="nav-btn" href="../index.html">返回主页</a>
+        </div>
+    </aside>
 
-    <button class="btn-logout" onclick="doLogout()">退出登录</button>
-    <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
+    <!-- 右侧主区域 -->
+    <main class="main">
+        <!-- 通知栏：有通知才显示 -->
+        <div class="notice" id="notice"></div>
+
+        <!-- 个人信息页 -->
+        <section class="page" id="page-profile">
+            <div class="card">
+                <div class="card-head">
+                    <div class="avatar" id="avatar">?</div>
+                    <div class="uname" id="user-email">加载中...</div>
+                    <button class="btn-edit" onclick="toast('该功能暂未开放')">修改</button>
+                </div>
+                <div class="info-box">
+                    <div class="info-title">账号信息</div>
+                    <div class="info-row"><span>邮箱状态</span><b id="email-status">检测中...</b></div>
+                    <div class="info-row"><span>官服 UID</span><b id="user-uid">-</b></div>
+                    <div class="info-row"><span>UID 状态</span><b id="uid-status">检测中...</b></div>
+                    <div class="info-row" id="row-remain" style="display:none"><span>剩余验证时间</span><b id="uid-remain">-</b></div>
+                    <div class="card-actions">
+                        <button class="btn-verify" id="btn-resend" style="display:none" onclick="resendEmail()">重发验证邮件</button>
+                        <button class="btn-verify" id="btn-open-verify" style="display:none" onclick="openUidModal()">去验证 UID</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 安全设置页（空，待后续） -->
+        <section class="page" id="page-security" hidden>
+            <div class="card empty">🚧 该页面正在建设中，敬请期待</div>
+        </section>
+
+        <!-- 创建服务器账号页 -->
+        <section class="page" id="page-create" hidden>
+            <div class="card">
+                <div class="card-title">🎮 创建服务器账号</div>
+                <div id="create-locked" class="lock-msg">🔒 完成「邮箱 + 官服 UID」双重验证后解锁此功能</div>
+                <div id="create-form" style="display:none">
+                    <label>游戏用户名</label>
+                    <input id="game-username" maxlength="16" placeholder="2-16 位英文 / 数字 / 下划线">
+                    <label>游戏 UID</label>
+                    <input id="game-uid" maxlength="10" placeholder="1~1000000000 之间任意数字">
+                    <button class="btn-create" id="btn-create" onclick="createGameAccount()">立即创建</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 更多设置页（空，待后续） -->
+        <section class="page" id="page-more" hidden>
+            <div class="card empty">🚧 该页面正在建设中，敬请期待</div>
+        </section>
+    </main>
 </div>
 
+<!-- UID 验证弹窗 -->
 <div id="overlay">
     <div class="modal" id="modal-verify" style="display:none">
         <h2 class="gold">⚡ 身份验证</h2>
@@ -163,8 +206,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ⚠️ 替换成你自己的 Publishable key（sb_publishable_ 开头）
 const SUPABASE_URL = 'https://kusbgdswjbaqpczfelnv.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go';
+const SUPABASE_ANON_KEY = '在这里粘贴你的_Publishable_key';
 const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-api';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -172,18 +216,29 @@ const $ = id => document.getElementById(id);
 let currentToken = '';
 let currentUser = null;
 
+// ===== 页面切换 =====
+function showPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.hidden = true);
+    $('page-' + name).hidden = false;
+    document.querySelectorAll('.nav .nav-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+}
+
+// ===== 初始化 =====
 (async function init() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
     currentToken = session.access_token;
     currentUser = session.user;
 
-    // 管理员识别：以 @admin.server 结尾；服主 = dogoffurina@admin.server
     const adminMail = currentUser.email.toLowerCase().endsWith('@admin.server');
     const isOwner = currentUser.email.toLowerCase() === 'dogoffurina@admin.server';
-    $('user-email').textContent = currentUser.email + (isOwner ? ' 👑' : adminMail ? ' 🛡️' : '');
 
-    // ===== 管理员：直接全权限，豁免一切验证 =====
+    // 头像 + 用户名
+    $('avatar').textContent = isOwner ? '👑' : adminMail ? '🛡️' : currentUser.email.charAt(0).toUpperCase();
+    $('user-email').textContent = currentUser.email + (isOwner ? '（服主）' : adminMail ? '（管理员）' : '');
+
+    // ===== 管理员：全权限，无通知 =====
     if (adminMail) {
         $('email-status').innerHTML = '<span class="badge badge-ok">✓ ' + (isOwner ? '服主' : '管理员') + '</span>';
         $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 豁免验证</span>';
@@ -193,10 +248,13 @@ let currentUser = null;
         return;
     }
 
-    // ===== 普通玩家流程 =====
+    // ===== 普通玩家 =====
+    const notices = [];
+
     if (!currentUser.email_confirmed_at) {
         $('email-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
-        $('email-banner').classList.add('show');
+        $('btn-resend').style.display = '';
+        notices.push('⚠️ <b>邮箱未验证</b>！7 天内未验证账号将被删除 <button class="nbtn" onclick="resendEmail()">重发验证邮件</button>');
     } else {
         $('email-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
     }
@@ -209,8 +267,6 @@ let currentUser = null;
 
         if (d.hasRecord) {
             $('user-uid').textContent = d.genshin_uid || '-';
-            $('email-remain').textContent = d.emailRemain || '-';
-            $('uid-remain').textContent = d.uidRemain || '-';
 
             if (d.uidVerified) {
                 $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
@@ -220,8 +276,11 @@ let currentUser = null;
                 }
             } else {
                 $('uid-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
+                $('uid-remain').textContent = d.uidRemain || '-';
+                $('row-remain').style.display = '';
                 if (currentUser.email_confirmed_at) {
-                    $('uid-banner').classList.add('show');
+                    $('btn-open-verify').style.display = '';
+                    notices.push('⚠️ <b>官服身份未验证</b>！剩余 ' + (d.uidRemain || '7天') + '，逾期删号 <button class="nbtn" onclick="openUidModal()">去验证</button>');
                     if (!sessionStorage.getItem('uidModalShown')) {
                         sessionStorage.setItem('uidModalShown', '1');
                         openUidModal();
@@ -230,8 +289,15 @@ let currentUser = null;
             }
         }
     } catch (e) { console.error(e); toast('后端连接失败，请稍后刷新'); }
+
+    // 通知栏：有通知才显示
+    if (notices.length) {
+        $('notice').innerHTML = notices.join('<span style="opacity:.4">｜</span>');
+        $('notice').classList.add('show');
+    }
 })();
 
+// ===== 功能函数 =====
 async function resendEmail() {
     const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email });
     toast(error ? '发送失败：' + error.message : '验证邮件已重新发送！');
