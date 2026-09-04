@@ -423,7 +423,7 @@ async function doAuthVerify() {
             const { error } = await sb.auth.verifyOtp({ email: currentUser.email, token: code, type: 'reauthentication' });
             if (error) throw error;
         } else if (authMethod === 'uid') {
-            const res = await fetch(API_BASE + '/verify', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
+            const res = await fetch(API_BASE + '/verify-secondary', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
             const r = await res.json();
             if (!r.ok) throw new Error(r.msg);
         } else {
