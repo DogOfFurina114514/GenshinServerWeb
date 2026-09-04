@@ -286,7 +286,7 @@
 
     <div class="modal" id="modal-verify" style="display:none">
         <h2 class="gold">⚡ 身份验证</h2>
-        <p class="sub">请在 <b>7 天内</b>完成以下操作（每次打开本弹窗验证码都会更新）</p>
+        <p class="sub">请在 <b>7 天内</b>完成以下操作</p>
         <div class="code-box" id="modal-code">----------</div>
         <div class="steps">① 打开原神官服，进入<b>个人资料</b><br>② 将你的<b>个性签名</b>修改为上方的验证码<br>③ <b>等待 3~5 分钟</b><br>④ 点击下方「我已修改，验证」</div>
         <div class="modal-btns">
@@ -387,12 +387,27 @@ function updateAuthInput() {
         area.innerHTML = '<button class="btn-sm primary" onclick="sendReauthCode()">发送 6 位验证码到 ' + currentUser.email + '</button>' +
                          '<input id="auth-code" maxlength="6" placeholder="输入 6 位验证码" style="margin-top:10px">';
     } else if (authMethod === 'uid') {
-        area.innerHTML = '<p class="note">将用你注册时的官服 UID 进行签名验证（需改游戏内签名）。</p>';
+        // 二次验证：每次轮换新码，并直接显示出来告诉你怎么改
+        area.innerHTML = '<div class="code-box" id="auth-uid-code" style="font-size:1.2em;letter-spacing:3px;margin:8px 0">加载中...</div>' +
+                         '<p class="note" style="text-align:left;line-height:1.8">① 打开原神官服 → 个人资料 → 把<b style="color:#ffd200">个性签名</b>改成上方新验证码<br>② 等待 3~5 分钟后点「验证」<br>③ 每次打开都会换新码，请用最新的</p>';
+        fetchRotateCode();
     } else {
         area.innerHTML = '<input id="auth-code" maxlength="6" placeholder="输入 Authenticator 6 位验证码">';
     }
 }
 
+// 调用后端轮换接口，把新验证码显示在弹窗里
+async function fetchRotateCode() {
+    try {
+        const res = await fetch(API_BASE + '/rotate-code', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
+        const d = await res.json();
+        const box = $('auth-uid-code');
+        if (box) box.textContent = d.ok ? d.code : '获取失败';
+    } catch (e) {
+        const box = $('auth-uid-code');
+        if (box) box.textContent = '获取失败';
+    }
+}
 async function sendReauthCode() {
     const { error } = await sb.auth.reauthenticate();
     toast(error ? '发送失败：' + error.message : '✅ 验证码已发送，请查收邮箱');
