@@ -7,57 +7,31 @@
 <link rel="icon" href="icon.ico" type="image/x-icon">
 <style>
     html, body { margin: 0; min-height: 100%; }
-    body {
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-        font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        position: relative; overflow-x: hidden;
-    }
+    body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; position: relative; overflow-x: hidden; }
     .bubbles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
-    .bubble {
-        position: absolute; bottom: -100px; background: rgba(255,255,255,0.08); border-radius: 50%;
-        box-shadow: 0 0 10px rgba(79,172,254,0.3); animation: rise 10s infinite ease-in;
-    }
+    .bubble { position: absolute; bottom: -100px; background: rgba(255,255,255,0.08); border-radius: 50%; box-shadow: 0 0 10px rgba(79,172,254,0.3); animation: rise 10s infinite ease-in; }
     @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: .6; } 100% { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
-    .container {
-        position: relative; z-index: 10; max-width: 640px; margin: 60px auto; padding: 40px 50px;
-        background: rgba(255,255,255,0.08); border-radius: 24px;
-        backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-        animation: fadeIn 1s ease-out;
-    }
+    .container { position: relative; z-index: 10; max-width: 640px; margin: 60px auto; padding: 40px 50px; background: rgba(255,255,255,0.08); border-radius: 24px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); animation: fadeIn 1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .back { color: #a0c4ff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: .95em; line-height: 1; }
     .back:hover { color: #fff; }
-    .icon { display: block; flex-shrink: 0; }
-    h1 {
-        color: #fff; text-align: center; font-size: 2em; margin: 10px 0 8px 0;
-        text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px;
-        display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1;
-    }
+    h1 { color: #fff; text-align: center; font-size: 2em; margin: 10px 0 8px 0; text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1; }
     .subtitle { color: #a0c4ff; text-align: center; margin: 0 0 28px 0; font-weight: 300; }
-    .banner {
-        text-align: center; border-radius: 16px; padding: 16px; font-weight: bold; line-height: 1;
-        margin-bottom: 22px; font-size: 1.1em; transition: .3s;
-        background: rgba(255,255,255,0.1); color: #cfe3ff;
-    }
+    .rt { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: .85em; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+    .rt i { width: 10px; height: 10px; border-radius: 50%; background: #ffd200; display: inline-block; }
+    .rt.on { color: #43e97b; }
+    .rt.on i { background: #43e97b; box-shadow: 0 0 10px #43e97b; animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .6; } }
+    .banner { text-align: center; border-radius: 16px; padding: 16px; font-weight: bold; line-height: 1; margin-bottom: 22px; font-size: 1.1em; transition: .3s; background: rgba(255,255,255,0.1); color: #cfe3ff; }
     .banner.ok { background: rgba(67,233,123,0.15); border: 1px solid rgba(67,233,123,0.5); color: #43e97b; text-shadow: 0 0 10px rgba(67,233,123,0.5); }
     .banner.bad { background: rgba(255,110,110,0.12); border: 1px solid rgba(255,110,110,0.5); color: #ff8080; }
-    .srow {
-        display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.05);
-        border-radius: 12px; padding: 14px 18px; margin: 10px 0;
-    }
-    .dot { width: 12px; height: 12px; border-radius: 50%; background: #888; flex-shrink: 0; }
+    .srow { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 14px 18px; margin: 10px 0; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: #888; flex-shrink: 0; transition: .3s; }
     .dot.ok { background: #43e97b; box-shadow: 0 0 10px rgba(67,233,123,0.8); }
     .dot.bad { background: #ff6e6e; box-shadow: 0 0 10px rgba(255,110,110,0.8); }
     .sname { color: #eaf4ff; flex: 1; font-size: .95em; }
     .srow b { color: #a0c4ff; font-family: Consolas, monospace; font-size: .9em; }
-    .btn-refresh {
-        width: 100%; margin-top: 22px; border: none; cursor: pointer; color: #fff;
-        padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; line-height: 1;
-        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-        background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45);
-        transition: .3s; font-family: inherit;
-    }
+    .btn-refresh { width: 100%; margin-top: 22px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45); transition: .3s; font-family: inherit; }
     .btn-refresh:hover { transform: translateY(-3px); }
     .btn-refresh:disabled { opacity: .5; cursor: wait; transform: none; }
     .note { color: rgba(255,255,255,0.4); font-size: .8em; text-align: center; margin-top: 16px; }
@@ -77,49 +51,26 @@
     .fly-2{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) .2s backwards;}
 </style>
 <div class="top-auth" id="topAuth" style="visibility:hidden"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function () {
     var pre = location.pathname.indexOf('/enter/') !== -1 ? '../' : '';
-
-    // 归一化当前页路径（根路径 / 视为 /index.html）
-    var cur = location.pathname;
-    if (cur === '/' || cur === '') cur = '/index.html';
-    if (cur.charAt(cur.length - 1) === '/') cur += 'index.html';
-
-    // 四个“站内页”：只有它们之间互切才不播放动画
+    var cur = location.pathname; if (cur === '/' || cur === '') cur = '/index.html'; if (cur.charAt(cur.length - 1) === '/') cur += 'index.html';
     var FOUR = ['/index.html', '/handbook.html', '/status.html', '/enter/quick_start.html'];
     var last = sessionStorage.getItem('topauth_last') || '';
     var internal = FOUR.indexOf(cur) !== -1 && FOUR.indexOf(last) !== -1 && last !== cur;
     sessionStorage.setItem('topauth_last', cur);
+    function paint(session) {
+        var box = document.getElementById('topAuth');
+        var a1 = internal ? '' : ' fly-1', a2 = internal ? '' : ' fly-2';
+        box.innerHTML = session
+            ? '<a href="' + pre + 'dashboard/index.html" class="btn-auth btn-auth-login' + a1 + '">进入控制台</a>'
+            : '<a href="' + pre + 'dashboard/login.html?mode=register" class="btn-auth btn-auth-reg' + a1 + '">注册</a><a href="' + pre + 'dashboard/login.html" class="btn-auth btn-auth-login' + a2 + '">登录</a>';
+        box.style.visibility = 'visible';
+    }
+    if (window.supabase) window.supabase.createClient('https://kusbgdswjbaqpczfelnv.supabase.co', 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go').auth.getSession().then(function (r) { paint(!!r.data.session); }).catch(function () { paint(false); });
+})();
+</script>
 
-    var sbx = window.supabase.createClient('https://kusbgdswjbaqpczfelnv.supabase.co', 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go');
-    sbx.auth.getSession().then(function (r) {
-        var box = document.getElementById('topAuth');
-        var a1 = internal ? '' : ' fly-1';   // 第一个飞的（注册 / 进入控制台）
-        var a2 = internal ? '' : ' fly-2';   // 0.2 秒后飞的（登录）
-        if (r.data.session) {
-            box.innerHTML = '<a href="' + pre + 'dashboard/index.html" class="btn-auth btn-auth-login' + a1 + '">进入控制台</a>';
-        } else {
-            box.innerHTML =
-                '<a href="' + pre + 'dashboard/login.html?mode=register" class="btn-auth btn-auth-reg' + a1 + '">注册</a>' +
-                '<a href="' + pre + 'dashboard/login.html" class="btn-auth btn-auth-login' + a2 + '">登录</a>';
-        }
-        box.style.visibility = 'visible';
-    }).catch(function () { document.getElementById('topAuth').style.visibility = 'visible'; });
-})();
-</script>
-(function () {
-    var sbx = window.supabase.createClient('https://kusbgdswjbaqpczfelnv.supabase.co', 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go');
-    sbx.auth.getSession().then(function (r) {
-        var box = document.getElementById('topAuth');
-        if (r.data.session) {
-            box.innerHTML = '<a href="dashboard/index.html" class="btn-auth btn-auth-login">进入控制台</a>';
-        }
-        box.style.visibility = 'visible';
-    }).catch(function () { document.getElementById('topAuth').style.visibility = 'visible'; });
-})();
-</script>
 <div class="bubbles">
     <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-duration: 8s;"></div>
     <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-duration: 5s; animation-delay: 1s;"></div>
@@ -130,126 +81,122 @@
 </div>
 
 <div class="container">
-    <a href="index.html" class="back">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        返回主页
-    </a>
+    <a href="index.html" class="back">← 返回主页</a>
+    <h1>服务器状态</h1>
+    <p class="subtitle">Supabase 驱动 · 进入页面自动检测</p>
 
-    <h1>
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-        服务器状态
-    </h1>
-    <p class="subtitle">GitHub Actions 探针 · 每 5 分钟自动巡检 · DogOfFurina 专属</p>
-
-    <div class="banner" id="banner">正在读取…</div>
+    <div class="rt" id="rt"><i></i><span>实时通道连接中...</span></div>
+    <div class="banner" id="banner">⏳ 正在检测服务状态…</div>
 
     <div class="srow"><span class="dot" id="dApi"></span><span class="sname">API 服务器（注册）</span><b id="vApi">检测中…</b></div>
-    <div class="srow"><span class="dot" id="dDispatch"></span><span class="sname">登陆服务器</span><b id="vDispatch">检测中…</b></div>
-    <div class="srow"><span class="dot" id="dGame"></span><span class="sname">游戏服务器</span><b id="vGame">检测中…</b></div>
+    <div class="srow"><span class="dot" id="dDispatch"></span><span class="sname">登陆服务器 (Dispatch)</span><b id="vDispatch">检测中…</b></div>
+    <div class="srow"><span class="dot" id="dGame"></span><span class="sname">游戏服务器 (Game)</span><b id="vGame">检测中…</b></div>
 
     <button class="btn-refresh" id="refreshBtn">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
         立即刷新
     </button>
-    <p class="note">点「立即刷新」= 插队触发一次即时检测</p>
-
+    <p class="note">进入页面自动检测 · 点按钮立即重新检测（检测时灯不变，完成后才变色）</p>
     <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const GH_OWNER = 'DogOfFurina114514';
-    const GH_REPO = 'GenshinServerWeb';
-    const GH_WORKFLOW = 'status-check.yml';
-    const GH_TOKEN = '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';
+const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-api';
+const sb = window.supabase.createClient('https://kusbgdswjbaqpczfelnv.supabase.co', 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go');
+const $ = id => document.getElementById(id);
+const NAMES = ['api', 'dispatch', 'game'];
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+let checking = false;
 
-    const $ = id => document.getElementById(id);
-    let shownTime = null;
-    let checking = false;
+// 灯变绿/变红 + 文字变 在线/离线
+function applyRow(name, ok) {
+    const dot = $('d' + cap(name));
+    const val = $('v' + cap(name));
+    if (!dot || !val) return;
+    dot.className = 'dot ' + (ok ? 'ok' : 'bad');
+    val.textContent = ok ? '在线' : '离线';
+    updateBanner();
+}
 
-    function applyRow(d, v, ok) {
-        $(d).className = 'dot ' + (ok ? 'ok' : 'bad');
-        $(v).textContent = ok ? '在线' : '离线';
+// 根据三个灯的状态更新顶部横幅
+function updateBanner() {
+    const states = NAMES.map(n => {
+        const d = $('d' + cap(n));
+        return d.classList.contains('ok') ? 1 : d.classList.contains('bad') ? 0 : -1;
+    });
+    if (states.includes(-1)) return;   // 还有灯在检测中，横幅不动
+    const banner = $('banner');
+    if (states.every(s => s === 1)) {
+        banner.className = 'banner ok';
+        banner.textContent = '✅ 一切正常，提瓦特营业中';
+    } else {
+        banner.className = 'banner bad';
+        banner.textContent = '⚠️ 服务异常：请检查下方离线项';
     }
+}
 
-    function renderData(d) {
-        applyRow('dApi', 'vApi', !!d.api);
-        applyRow('dDispatch', 'vDispatch', !!d.dispatch);
-        applyRow('dGame', 'vGame', !!d.game);
-        const banner = $('banner');
-        if (d.api && d.dispatch && d.game) {
-            banner.className = 'banner ok';
-            banner.textContent = '✅ 一切正常，提瓦特营业中（数据 ' + d.time + '）';
-        } else {
-            banner.className = 'banner bad';
-            banner.textContent = '⚠️ 服务异常：请检查下方离线项（数据 ' + d.time + '）';
-        }
-        shownTime = d.time;
+// 进入页面：灯全部灰色 + 文字“检测中…”
+function setGray() {
+    NAMES.forEach(n => {
+        $('d' + cap(n)).className = 'dot';          // 灰色灯
+        $('v' + cap(n)).textContent = '检测中…';
+    });
+    $('banner').className = 'banner';
+    $('banner').textContent = '⏳ 正在检测服务状态…';
+}
+
+// 手动刷新：灯不变，只把文字改成“检测中…”
+function setTextChecking() {
+    NAMES.forEach(n => { $('v' + cap(n)).textContent = '检测中…'; });
+    $('banner').className = 'banner';
+    $('banner').textContent = '⏳ 正在检测服务状态…';
+}
+
+// 执行一次检测：mode = 'init'（进页面）或 'manual'（点按钮）
+async function runCheck(mode) {
+    if (checking) return;
+    checking = true;
+    if (mode === 'init') setGray(); else setTextChecking();
+    try {
+        const res = await fetch(API_BASE + '/status');
+        const d = await res.json();
+        if (d.ok && d.services) {
+            d.services.forEach(s => applyRow(s.name, s.ok));   // 检测完成，灯才变色
+        } else { throw new Error(); }
+    } catch (e) {
+        NAMES.forEach(n => applyRow(n, false));
+        $('banner').className = 'banner bad';
+        $('banner').textContent = '⚠️ 检测失败：无法连接后端';
     }
+    checking = false;
+}
 
-    async function loadStatus() {
-        try {
-            const res = await fetch('status.json?t=' + Date.now(), { cache: 'no-store' });
-            return await res.json();
-        } catch (e) { return null; }
-    }
+// 实时订阅：其他页面/标签页触发的检测也会同步过来
+sb.channel('status_rt')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'server_status' }, function (p) {
+        if (p.new && !checking) applyRow(p.new.name, p.new.ok);
+    })
+    .subscribe(function (state) {
+        const rt = $('rt');
+        if (state === 'SUBSCRIBED') { rt.classList.add('on'); rt.querySelector('span').textContent = '实时通道已连接'; }
+        else { rt.classList.remove('on'); rt.querySelector('span').textContent = '实时通道连接中...'; }
+    });
 
-    // 进页面：直接显示上次检测好的数据
-    (async () => {
-        const d = await loadStatus();
-        if (d) renderData(d);
-        else { $('banner').className = 'banner bad'; $('banner').textContent = '⚠️ 无法读取状态文件'; }
-    })();
+// 点「立即刷新」：按钮变灰 + 显示检测中，灯不变，完成后才变
+$('refreshBtn').addEventListener('click', async function () {
+    if (checking) return;
+    const btn = $('refreshBtn');
+    const oldHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '⏳ 检测中…';
+    await runCheck('manual');
+    btn.innerHTML = oldHtml;
+    btn.disabled = false;
+});
 
-    // 后台静默：每 30 秒对比时间戳，巡检一完成就无感刷新页面
-    setInterval(async () => {
-        if (checking) return;
-        const d = await loadStatus();
-        if (d && d.time !== shownTime) renderData(d);
-    }, 30000);
-
-    // 手动：插队触发 Action，圆点颜色不动，只改右边文字
-    async function manualCheck() {
-        if (checking) return;
-        checking = true;
-        const btn = $('refreshBtn');
-        btn.disabled = true;
-        ['vApi', 'vDispatch', 'vGame'].forEach(id => $(id).textContent = '检测中…');
-        $('banner').className = 'banner';
-        $('banner').textContent = '⏳ 已通知 GitHub 立即检测…';
-
-        try {
-            await fetch('https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/actions/workflows/' + GH_WORKFLOW + '/dispatches', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + GH_TOKEN,
-                    'Accept': 'application/vnd.github+json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ ref: 'main' })
-            });
-        } catch (e) {}
-
-        const oldTime = shownTime;
-        const deadline = Date.now() + 180000;
-        let updated = null;
-        while (Date.now() < deadline) {
-            await new Promise(r => setTimeout(r, 5000));
-            const d = await loadStatus();
-            if (d && d.time !== oldTime) { updated = d; break; }
-        }
-
-        checking = false;
-        btn.disabled = false;
-        if (updated) { renderData(updated); }
-        else {
-            const d = await loadStatus();
-            if (d) renderData(d);
-            $('banner').className = 'banner bad';
-            $('banner').textContent = '⚠️ Failed to fetch';
-        }
-    }
-
-    $('refreshBtn').addEventListener('click', manualCheck);
+// 进入页面立刻开始检测（灯灰色 → 完成后变色）
+runCheck('init');
 </script>
 </body>
 </html>
