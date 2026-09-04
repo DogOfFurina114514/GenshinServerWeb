@@ -9,7 +9,7 @@
     html, body { height: 100%; margin: 0; }
     body { background: #0d1b24; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; color: #eaf4ff; overflow: hidden; }
     .layout { display: flex; height: 100vh; }
-    .sidebar { width: 230px; flex-shrink: 0; background: #12222e; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; padding: 18px 14px; gap: 12px; }
+    .sidebar { width: 230px; flex-shrink: 0; background: #12222e; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; padding: 18px 14px; gap: 12px; overflow-y: auto; }
     .side-title { text-align: center; font-size: 1.15em; font-weight: bold; letter-spacing: 2px; color: #fff; padding: 14px 0; border: 1px solid rgba(79,172,254,0.5); border-radius: 14px; background: rgba(79,172,254,0.12); text-shadow: 0 0 10px rgba(79,172,254,0.6); }
     .nav { display: flex; flex-direction: column; gap: 10px; flex: 1; margin-top: 8px; }
     .nav-btn { display: block; width: 100%; text-align: center; text-decoration: none; color: #cfe3ff; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 13px 0; font-size: .95em; font-family: inherit; cursor: pointer; transition: .25s; }
@@ -25,7 +25,7 @@
     .notice .nbtn { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 8px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .85em; transition: .3s; }
     .notice .nbtn:hover { transform: translateY(-2px); }
     .page { flex: 1; }
-    .card { background: #162833; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px 26px; }
+    .card { background: #162833; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px 26px; margin-bottom: 16px; }
     .card.empty { display: flex; align-items: center; justify-content: center; min-height: 300px; color: rgba(255,255,255,0.4); font-size: 1em; }
     .card-head { display: flex; align-items: center; gap: 16px; }
     .avatar { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(45deg, #4facfe, #00f2fe); display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; color: #fff; flex-shrink: 0; box-shadow: 0 4px 14px rgba(79,172,254,0.4); overflow: hidden; position: relative; }
@@ -54,43 +54,62 @@
     .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: .8em; font-weight: bold; }
     .badge-ok { background: rgba(67,233,123,0.15); color: #43e97b; border: 1px solid rgba(67,233,123,0.4); }
     .badge-wait { background: rgba(255,210,0,0.15); color: #ffd200; border: 1px solid rgba(255,210,0,0.4); }
-    .card-actions { display: flex; gap: 12px; margin-top: 14px; }
+    .badge-bad { background: rgba(255,110,110,0.15); color: #ff8080; border: 1px solid rgba(255,110,110,0.4); }
+    .card-actions { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
     .btn-verify { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 22px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .9em; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
     .btn-verify:hover { transform: translateY(-2px); }
     .card-title { color: #fff; font-size: 1.1em; font-weight: bold; margin-bottom: 16px; }
     label { color: #cfe3ff; font-size: .88em; display: block; margin: 12px 0 6px 4px; }
-    input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 12px; color: #fff; padding: 12px 16px; font-size: .95em; outline: none; transition: .3s; }
-    input:focus { border-color: #4facfe; box-shadow: 0 0 8px rgba(79,172,254,0.3); }
-    input::placeholder { color: rgba(160,196,255,0.4); }
+    input, textarea, select { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 12px; color: #fff; padding: 12px 16px; font-size: .95em; outline: none; transition: .3s; font-family: inherit; }
+    input:focus, textarea:focus { border-color: #4facfe; box-shadow: 0 0 8px rgba(79,172,254,0.3); }
+    input::placeholder, textarea::placeholder { color: rgba(160,196,255,0.4); }
+    textarea { min-height: 100px; resize: vertical; }
     .btn-create { width: 100%; margin-top: 18px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; background: linear-gradient(45deg, #8e2de2, #a970ff); box-shadow: 0 4px 18px rgba(142,45,226,0.45); transition: all 0.3s; font-family: inherit; }
     .btn-create:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(142,45,226,0.65); }
     .btn-create:disabled { opacity: .5; cursor: wait; transform: none; }
     .lock-msg { color: rgba(255,255,255,0.5); text-align: center; font-size: .9em; padding: 30px 0; }
-    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+    .note { color: rgba(255,255,255,0.4); font-size: .8em; margin-top: 8px; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; overflow-x: auto; }
+    .tab { padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: .9em; background: rgba(255,255,255,0.05); color: #a0c4ff; transition: .2s; white-space: nowrap; }
+    .tab.active { background: linear-gradient(45deg, #4facfe, #00f2fe); color: #fff; font-weight: bold; }
+    .appeal-item { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
+    .appeal-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: .9em; }
+    .appeal-content { color: #cfe3ff; font-size: .9em; margin: 10px 0; white-space: pre-wrap; }
+    .appeal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .btn-sm { padding: 6px 14px; border-radius: 20px; font-size: .8em; border: none; cursor: pointer; font-family: inherit; transition: .2s; text-decoration: none; }
+    .btn-sm:hover { transform: translateY(-1px); }
+    .btn-sm.primary { background: #4facfe; color: #fff; }
+    .btn-sm.success { background: #43e97b; color: #063; }
+    .btn-sm.danger { background: #ff6e6e; color: #fff; }
+    .btn-sm.warn { background: #ffd200; color: #333; }
+    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
     #overlay.show { display: flex; }
-    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); }
-    .modal h2 { margin: 0 0 6px 0; font-size: 1.5em; line-height: 1; }
-    .modal h2.gold { color: #ffd200; text-shadow: 0 0 12px rgba(255,210,0,0.6); }
-    .modal h2.green { color: #43e97b; text-shadow: 0 0 12px rgba(67,233,123,0.6); }
-    .modal .sub { color: #a0c4ff; font-size: .85em; margin-bottom: 20px; }
-    .code-box { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255,210,0,0.5); border-radius: 16px; padding: 18px; margin: 16px 0; font-family: Consolas, monospace; font-size: 1.8em; color: #ffd200; letter-spacing: 4px; user-select: all; }
-    .modal .steps { text-align: left; color: #cfe3ff; font-size: .88em; line-height: 1.9; margin: 16px 0; }
+    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 30px 36px; max-width: 480px; width: 90%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); max-height: 90vh; overflow-y: auto; }
+    .modal h2 { margin: 0 0 10px 0; font-size: 1.4em; line-height: 1; }
+    .modal h2.gold { color: #ffd200; }
+    .modal h2.green { color: #43e97b; }
+    .modal .sub { color: #a0c4ff; font-size: .85em; margin-bottom: 16px; }
+    .code-box { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255,210,0,0.5); border-radius: 16px; padding: 16px; margin: 12px 0; font-family: Consolas, monospace; font-size: 1.6em; color: #ffd200; letter-spacing: 4px; user-select: all; }
+    .modal .steps { text-align: left; color: #cfe3ff; font-size: .85em; line-height: 1.8; margin: 12px 0; }
     .modal .steps b { color: #ffd200; }
-    .modal-btns { display: flex; gap: 12px; margin-top: 20px; }
-    .modal-btns button { flex: 1; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 40px; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; }
-    .modal-btns button:hover { transform: translateY(-3px); }
-    .mb-verify { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 14px rgba(67,233,123,0.4); }
+    .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
+    .modal-btns button { flex: 1; border: none; cursor: pointer; color: #fff; padding: 12px 0; border-radius: 40px; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; font-size: .95em; }
+    .modal-btns button:hover { transform: translateY(-2px); }
+    .mb-verify { background: linear-gradient(45deg, #43e97b, #38f9d7); }
     .mb-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25) !important; }
-    .mb-copy { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 14px rgba(67,233,123,0.4); }
+    .mb-copy { background: linear-gradient(45deg, #43e97b, #38f9d7); }
     .mb-verify:disabled { opacity: .5; cursor: wait; transform: none; }
-    #modal-msg { margin-top: 12px; font-size: .85em; min-height: 1.2em; }
-    #modal-msg.err { color: #ff8080; }
-    #modal-msg.ok { color: #43e97b; }
-    .kv { display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px 18px; margin: 10px 0; }
+    #modal-msg, #modal-auth-msg, #modal-new-email-msg { margin-top: 10px; font-size: .85em; min-height: 1.2em; }
+    .err { color: #ff8080 !important; }
+    .ok { color: #43e97b !important; }
+    .kv { display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px 18px; margin: 8px 0; }
     .kv span { color: #a0c4ff; font-size: .9em; }
     .kv b { color: #fff; font-family: Consolas, monospace; font-size: .95em; }
     #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(67,233,123,0.95); color: #063; padding: 10px 24px; border-radius: 40px; transition: .3s; opacity: 0; z-index: 99; font-weight: bold; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .radio-group { display: flex; gap: 12px; margin: 10px 0; flex-wrap: wrap; justify-content: center; }
+    .radio-group label { display: flex; align-items: center; gap: 6px; cursor: pointer; background: rgba(255,255,255,0.05); padding: 8px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: .85em; margin: 0; }
+    .radio-group input { width: auto; margin: 0; }
     @media (max-width: 760px) {
         .layout { flex-direction: column; height: auto; min-height: 100vh; }
         body { overflow: auto; }
@@ -110,6 +129,8 @@
             <button class="nav-btn active" onclick="showPage('profile', this)">个人信息</button>
             <button class="nav-btn" onclick="showPage('security', this)">安全设置</button>
             <button class="nav-btn" onclick="showPage('create', this)">创建服务器账号</button>
+            <button class="nav-btn" onclick="showPage('appeal', this)">申诉中心</button>
+            <button class="nav-btn" id="nav-admin" style="display:none" onclick="showPage('admin', this)">申诉管理</button>
             <button class="nav-btn" onclick="showPage('more', this)">更多设置</button>
         </div>
         <div class="side-bottom">
@@ -121,16 +142,13 @@
     <main class="main">
         <div class="notice" id="notice"></div>
 
-        <!-- 个人信息页 -->
+        <!-- 个人信息 -->
         <section class="page" id="page-profile">
             <div class="card">
                 <div class="card-head">
                     <div class="avatar" id="avatar" onclick="onAvatarClick()">?</div>
                     <div class="uname-wrap">
-                        <div class="uname">
-                            <span id="name-text">加载中...</span>
-                            <input id="nick-input" maxlength="16" placeholder="2-16 个字符">
-                        </div>
+                        <div class="uname"><span id="name-text">加载中...</span><input id="nick-input" maxlength="16" placeholder="2-16 个字符"></div>
                         <div class="uemail" id="user-email">...</div>
                     </div>
                     <div class="head-btns">
@@ -138,12 +156,7 @@
                         <button class="btn-edit" id="btn-edit" onclick="toggleEdit()">编辑</button>
                     </div>
                 </div>
-
-                <div class="edit-tip" id="edit-tip">
-                    ✏️ 编辑中
-                    <button class="mini-btn" onclick="resetAvatar()">恢复默认头像</button>
-                </div>
-
+                <div class="edit-tip" id="edit-tip">✏️ 编辑中：点击头像上传自定义头像 · 邮箱不可修改<button class="mini-btn" onclick="resetAvatar()">恢复默认头像</button></div>
                 <div class="info-box">
                     <div class="info-title">账号信息</div>
                     <div class="info-row"><span>邮箱</span><b id="info-email">-</b></div>
@@ -159,10 +172,41 @@
             </div>
         </section>
 
+        <!-- 安全设置 -->
         <section class="page" id="page-security" hidden>
-            <div class="card empty">🚧 该页面正在建设中，敬请期待</div>
+            <div class="card">
+                <div class="card-title">📧 修改邮箱</div>
+                <div class="info-row" style="padding:0;border:none;margin-bottom:10px"><span>当前邮箱</span><b id="sec-current-email">-</b></div>
+                <button class="btn-create" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="startChangeEmail()">开始修改邮箱</button>
+                <div class="note">已验证的账号需先通过「邮箱验证码 / UID / MFA」二次验证；修改后新邮箱需输入验证码确认。</div>
+            </div>
+            <div class="card">
+                <div class="card-title">🔑 修改密码</div>
+                <label>新密码</label>
+                <input id="sec-new-pwd" type="password" placeholder="至少 6 位" autocomplete="new-password">
+                <label>确认新密码</label>
+                <input id="sec-confirm-pwd" type="password" placeholder="再次输入新密码" autocomplete="new-password">
+                <button class="btn-create" style="background:linear-gradient(45deg,#43e97b,#38f9d7)" onclick="startChangePassword()">修改密码</button>
+            </div>
+            <div class="card">
+                <div class="card-title">🛡️ 两步验证 (MFA)</div>
+                <div class="info-row" style="padding:0;border:none;margin-bottom:10px"><span>当前状态</span><b id="mfa-status">检测中...</b></div>
+                <div id="mfa-enroll-box" style="display:none">
+                    <p style="color:#a0c4ff;font-size:.9em;margin:10px 0">使用 Authenticator 扫描下方二维码：</p>
+                    <div style="text-align:center;background:#fff;padding:16px;border-radius:12px;display:inline-block;margin:10px 0;width:100%;box-sizing:border-box"><img id="mfa-qr" src="" alt="QR" style="width:180px;height:180px"></div>
+                    <label>输入验证器上的 6 位数字</label>
+                    <input id="mfa-code" maxlength="6" placeholder="123456">
+                    <button class="btn-create" style="background:linear-gradient(45deg,#8e2de2,#a970ff)" onclick="verifyMfa()">确认绑定</button>
+                    <button class="btn-cancel" style="width:100%;margin-top:10px" onclick="cancelMfa()">取消</button>
+                </div>
+                <div id="mfa-actions" style="display:none;margin-top:12px">
+                    <button class="btn-create" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="startEnrollMfa()">绑定验证器</button>
+                    <button class="btn-create" id="btn-unenroll-mfa" style="background:linear-gradient(45deg,#ff6e6e,#ff8080);margin-top:10px" onclick="unenrollMfa()">解绑验证器</button>
+                </div>
+            </div>
         </section>
 
+        <!-- 创建服务器账号 -->
         <section class="page" id="page-create" hidden>
             <div class="card">
                 <div class="card-title">🎮 创建服务器账号</div>
@@ -177,38 +221,114 @@
             </div>
         </section>
 
-        <section class="page" id="page-more" hidden>
-            <div class="card empty">🚧 该页面正在建设中，敬请期待</div>
+        <!-- 申诉中心 -->
+        <section class="page" id="page-appeal" hidden>
+            <div class="card">
+                <div class="card-title">📝 提交人工申诉</div>
+                <p class="note">当你的邮箱、UID、MFA 均不可用时，可提交表单由管理员人工处理。</p>
+                <label>联系邮箱</label>
+                <input id="appeal-email" type="email" placeholder="用于接收处理结果">
+                <label>申诉正文</label>
+                <textarea id="appeal-content" placeholder="详细描述你的问题，并提供能证明你是账号主人的信息"></textarea>
+                <label>附件证据 (可选，单张图片)</label>
+                <input id="appeal-file" type="file" accept="image/*">
+                <button class="btn-create" onclick="submitAppeal()">提交申诉</button>
+            </div>
+            <div class="card">
+                <div class="card-title">📋 我的申诉记录</div>
+                <div id="my-appeals-list"><p class="note">暂无记录</p></div>
+            </div>
         </section>
+
+        <!-- 申诉管理（管理员） -->
+        <section class="page" id="page-admin" hidden>
+            <div class="card">
+                <div class="card-title">⚖️ 申诉审批面板</div>
+                <div class="tabs">
+                    <div class="tab active" onclick="filterAppeals('all', this)">全部</div>
+                    <div class="tab" onclick="filterAppeals('pending', this)">未受理</div>
+                    <div class="tab" onclick="filterAppeals('processing', this)">受理中</div>
+                    <div class="tab" onclick="filterAppeals('completed', this)">已完成</div>
+                    <div class="tab" onclick="filterAppeals('rejected', this)">已拒绝</div>
+                </div>
+                <div id="admin-appeals-list"><p class="note">加载中...</p></div>
+            </div>
+        </section>
+
+        <section class="page" id="page-more" hidden><div class="card empty">🚧 该页面正在建设中</div></section>
     </main>
 </div>
 
 <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPicked(event)">
 
 <div id="overlay">
+    <!-- 二次验证弹窗 -->
+    <div class="modal" id="modal-auth" style="display:none">
+        <h2 class="gold">🔐 身份验证</h2>
+        <p class="sub">为了安全，进行此操作前需验证你的身份，请选择一种方式：</p>
+        <div class="radio-group" id="auth-methods"></div>
+        <div id="auth-input-area" style="margin-top:16px"></div>
+        <div class="modal-btns">
+            <button class="mb-verify" id="btn-do-auth" onclick="doAuthVerify()">验证</button>
+            <button class="mb-close" onclick="closeModal()">取消</button>
+        </div>
+        <p id="modal-auth-msg"></p>
+    </div>
+
+    <!-- 新邮箱验证码弹窗 -->
+    <div class="modal" id="modal-new-email" style="display:none">
+        <h2 class="gold">📧 验证新邮箱</h2>
+        <p class="sub">验证码已发送至 <b id="new-email-display"></b></p>
+        <label>输入 6 位验证码</label>
+        <input id="new-email-code" maxlength="6" placeholder="123456">
+        <div class="modal-btns">
+            <button class="mb-verify" onclick="verifyNewEmail()">确认修改</button>
+            <button class="mb-close" onclick="closeModal()">取消</button>
+        </div>
+        <p id="modal-new-email-msg"></p>
+    </div>
+
+    <!-- UID 验证弹窗 -->
     <div class="modal" id="modal-verify" style="display:none">
         <h2 class="gold">⚡ 身份验证</h2>
         <p class="sub">请在 <b>7 天内</b>完成以下操作</p>
         <div class="code-box" id="modal-code">----------</div>
-        <div class="steps">
-            ① 打开原神官服，进入<b>个人资料</b><br>
-            ② 将你的<b>个性签名</b>修改为上方的验证码<br>
-            ③ <b>等待 3~5 分钟</b>（数据同步需要时间）<br>
-            ④ 回到此页面，点击下方「我已修改，验证」
-        </div>
+        <div class="steps">① 打开原神官服，进入<b>个人资料</b><br>② 将你的<b>个性签名</b>修改为上方的验证码<br>③ <b>等待 3~5 分钟</b><br>④ 点击下方「我已修改，验证」</div>
         <div class="modal-btns">
             <button class="mb-verify" id="btn-do-verify" onclick="doVerify()">我已修改，验证</button>
             <button class="mb-close" onclick="closeModal()">稍后再说</button>
         </div>
         <p id="modal-msg"></p>
     </div>
+
+    <!-- 拒绝通知弹窗 -->
+    <div class="modal" id="modal-reject-notice" style="display:none">
+        <h2 style="color:#ff8080">⚠️ 申诉被拒绝</h2>
+        <p class="sub">管理员拒绝了你 <b id="reject-date"></b> 提交的申诉</p>
+        <div style="background:rgba(255,110,110,0.1);padding:12px;border-radius:12px;text-align:left;color:#ff8080;margin:16px 0"><b>拒绝理由：</b><br><span id="reject-reason"></span></div>
+        <div class="modal-btns">
+            <button class="mb-verify" style="background:linear-gradient(45deg,#ff6e6e,#ff8080)" onclick="escalateToOwner()">直接提交给服主</button>
+            <button class="mb-close" onclick="ackReject(false)">我知道了</button>
+        </div>
+    </div>
+
+    <!-- 管理员拒绝理由弹窗 -->
+    <div class="modal" id="modal-admin-reject" style="display:none">
+        <h2 style="color:#ff8080">拒绝申诉</h2>
+        <label>请输入拒绝理由（将展示给用户）</label>
+        <textarea id="admin-reject-reason" placeholder="例如：提供的证据不足以证明账号归属..."></textarea>
+        <div class="modal-btns">
+            <button class="mb-verify" style="background:linear-gradient(45deg,#ff6e6e,#ff8080)" onclick="confirmReject()">确认拒绝</button>
+            <button class="mb-close" onclick="closeModal()">取消</button>
+        </div>
+    </div>
+
+    <!-- 创建成功弹窗 -->
     <div class="modal" id="modal-success" style="display:none">
         <h2 class="green">🎉 创建成功</h2>
-        <p class="sub">你的提瓦特身份证已签发</p>
         <div class="kv"><span>用户名</span><b id="r-user"></b></div>
         <div class="kv"><span>UID</span><b id="r-uid"></b></div>
         <div class="kv"><span>密码</span><b id="r-pwd"></b></div>
-        <p style="color:rgba(255,255,255,0.45);font-size:.78em;margin:14px 0 0 0">请截图保存以防忘记</p>
         <div class="modal-btns">
             <button class="mb-copy" onclick="copyInfo()">复制账号信息</button>
             <button class="mb-close" onclick="closeModal()">关闭</button>
@@ -222,256 +342,441 @@
 const SUPABASE_URL = 'https://kusbgdswjbaqpczfelnv.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go';
 const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-api';
+const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
-let currentToken = '';
-let currentUser = null;
-let editing = false;
-let pendingAvatar = null;   // null=未改动；''=恢复默认；dataURL=新头像
+let currentToken = '', currentUser = null, editing = false, pendingAvatar = null;
+let emailUnconfirmed = false, uidPending = false, currentFactorId = '';
+let pendingNewEmail = '', authMethod = '', pendingRejectId = '', afterAuthCallback = null;
+let allAppeals = [], currentFilter = 'all';
 
+function fmtRemain(ms) { if (ms <= 0) return '已过期'; return Math.floor(ms / 86400000) + '天' + Math.floor((ms % 86400000) / 3600000) + '小时'; }
 function showPage(name, btn) {
     document.querySelectorAll('.page').forEach(p => p.hidden = true);
     $('page-' + name).hidden = false;
     document.querySelectorAll('.nav .nav-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
+    if (name === 'appeal') loadMyAppeals();
+    if (name === 'admin') loadAdminAppeals();
 }
 
-// ===== 头像 / 昵称渲染 =====
-function defaultAvatar(user) {
-    const e = user.email.toLowerCase();
-    if (e === 'dogoffurina@admin.server') return '👑';
-    if (e.endsWith('@admin.server')) return '🛡️';
-    return user.email.charAt(0).toUpperCase();
+// ================= 二次验证（Supabase 原生 Reauthentication） =================
+async function requireReauth(callback) {
+    const isAdmin = currentUser.email.toLowerCase().endsWith('@admin.server');
+    const emailOk = !!currentUser.email_confirmed_at;
+    let uidOk = false;
+    if (!isAdmin) {
+        const { data: rec } = await sb.from('verify_records').select('verified').eq('user_id', currentUser.id).maybeSingle();
+        uidOk = !!(rec && rec.verified);
+    }
+    // 都未验证过 → 直接放行
+    if (!emailOk && !uidOk && !isAdmin) { callback(); return; }
+
+    afterAuthCallback = callback;
+    let html = '';
+    if (emailOk) html += '<label><input type="radio" name="auth-m" value="email" checked> 邮箱验证码</label>';
+    if (uidOk) html += '<label><input type="radio" name="auth-m" value="uid"> 官服 UID 验证</label>';
+    const { data: mfaData } = await sb.auth.mfa.listFactors();
+    if (mfaData && mfaData.totp && mfaData.totp.length) html += '<label><input type="radio" name="auth-m" value="mfa"> MFA 验证码</label>';
+    $('auth-methods').innerHTML = html;
+    document.querySelectorAll('input[name="auth-m"]').forEach(r => r.addEventListener('change', updateAuthInput));
+    updateAuthInput();
+    $('modal-auth').style.display = '';
+    $('modal-auth-msg').textContent = '';
+    $('overlay').classList.add('show');
 }
-function paintAvatar(str, user) {
-    const box = $('avatar');
-    if (str && (str.indexOf('data:') === 0 || /^https?:\/\//.test(str))) {
-        box.innerHTML = '<img src="' + str + '" alt="">';
-    } else if (str) {
-        box.innerHTML = ''; box.textContent = str;
+
+function updateAuthInput() {
+    const sel = document.querySelector('input[name="auth-m"]:checked');
+    if (!sel) return;
+    authMethod = sel.value;
+    const area = $('auth-input-area');
+    if (authMethod === 'email') {
+        area.innerHTML = '<button class="btn-sm primary" onclick="sendReauthCode()">发送 6 位验证码到 ' + currentUser.email + '</button>' +
+                         '<input id="auth-code" maxlength="6" placeholder="输入 6 位验证码" style="margin-top:10px">';
+    } else if (authMethod === 'uid') {
+        area.innerHTML = '<p class="note">将用你注册时的官服 UID 进行签名验证（需改游戏内签名）。</p>';
     } else {
-        box.innerHTML = ''; box.textContent = defaultAvatar(user);
+        area.innerHTML = '<input id="auth-code" maxlength="6" placeholder="输入 Authenticator 6 位验证码">';
     }
 }
+
+async function sendReauthCode() {
+    const { error } = await sb.auth.reauthenticate();
+    toast(error ? '发送失败：' + error.message : '✅ 验证码已发送，请查收邮箱');
+}
+
+async function doAuthVerify() {
+    const btn = $('btn-do-auth'); btn.disabled = true;
+    $('modal-auth-msg').textContent = '验证中...'; $('modal-auth-msg').className = '';
+    try {
+        if (authMethod === 'email') {
+            const code = ($('auth-code') ? $('auth-code').value : '').trim();
+            if (!/^\d{6}$/.test(code)) throw new Error('请输入 6 位数字');
+            const { error } = await sb.auth.verifyOtp({ email: currentUser.email, token: code, type: 'reauthentication' });
+            if (error) throw error;
+        } else if (authMethod === 'uid') {
+            const res = await fetch(API_BASE + '/verify', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
+            const r = await res.json();
+            if (!r.ok) throw new Error(r.msg);
+        } else {
+            const code = ($('auth-code') ? $('auth-code').value : '').trim();
+            const { data: factors } = await sb.auth.mfa.listFactors();
+            const { data: ch } = await sb.auth.mfa.challenge({ factorId: factors.totp[0].id });
+            const { error } = await sb.auth.mfa.verify({ factorId: factors.totp[0].id, challengeId: ch.id, code });
+            if (error) throw error;
+        }
+        closeModal();
+        const cb = afterAuthCallback; afterAuthCallback = null;
+        if (cb) cb();
+    } catch (e) {
+        $('modal-auth-msg').textContent = '验证失败：' + e.message;
+        $('modal-auth-msg').className = 'err';
+    }
+    btn.disabled = false;
+}
+
+function startChangeEmail() { requireReauth(promptNewEmail); }
+function startChangePassword() { requireReauth(doChangePassword); }
+
+function promptNewEmail() {
+    const newEmail = prompt('身份验证通过！\n请输入你的新邮箱地址：');
+    if (!newEmail || !newEmail.includes('@')) return;
+    if (newEmail.toLowerCase().endsWith('@admin.server')) { toast('管理员后缀禁止使用'); return; }
+    pendingNewEmail = newEmail.trim();
+    sb.auth.updateUser({ email: pendingNewEmail }).then(function (r) {
+        if (r.error) { toast('发起修改失败：' + r.error.message); return; }
+        $('new-email-display').textContent = pendingNewEmail;
+        $('new-email-code').value = '';
+        $('modal-new-email').style.display = '';
+        $('modal-new-email-msg').textContent = '';
+        $('overlay').classList.add('show');
+    });
+}
+
+async function verifyNewEmail() {
+    const code = $('new-email-code').value.trim();
+    if (!/^\d{6}$/.test(code)) { $('modal-new-email-msg').textContent = '请输入 6 位数字'; $('modal-new-email-msg').className = 'err'; return; }
+    const { error } = await sb.auth.verifyOtp({ email: pendingNewEmail, token: code, type: 'email_change' });
+    if (error) { $('modal-new-email-msg').textContent = '验证码错误：' + error.message; $('modal-new-email-msg').className = 'err'; return; }
+    toast('✅ 邮箱修改成功！');
+    closeModal();
+    setTimeout(function () { location.reload(); }, 1000);
+}
+
+function doChangePassword() {
+    const p1 = $('sec-new-pwd').value, p2 = $('sec-confirm-pwd').value;
+    if (p1.length < 6) return toast('密码至少 6 位');
+    if (p1 !== p2) return toast('两次密码不一致');
+    sb.auth.updateUser({ password: p1 }).then(function (r) {
+        if (r.error) return toast('修改失败：' + r.error.message);
+        toast('✅ 密码修改成功！');
+        $('sec-new-pwd').value = ''; $('sec-confirm-pwd').value = '';
+    });
+}
+
+// ================= MFA =================
+async function checkMfaStatus() {
+    const { data } = await sb.auth.mfa.listFactors();
+    const totp = data && data.totp;
+    $('mfa-enroll-box').style.display = 'none';
+    $('mfa-actions').style.display = '';
+    if (totp && totp.length > 0) {
+        $('mfa-status').innerHTML = '<span class="badge badge-ok">✓ 已绑定</span>';
+        $('btn-unenroll-mfa').style.display = '';
+    } else {
+        $('mfa-status').innerHTML = '<span class="badge badge-wait">未绑定</span>';
+        $('btn-unenroll-mfa').style.display = 'none';
+    }
+}
+async function startEnrollMfa() {
+    const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp' });
+    if (error) return toast('绑定失败：' + error.message);
+    currentFactorId = data.id;
+    $('mfa-qr').src = data.totp.qr_code;
+    $('mfa-enroll-box').style.display = '';
+    $('mfa-actions').style.display = 'none';
+}
+async function verifyMfa() {
+    const code = $('mfa-code').value.trim();
+    if (!/^\d{6}$/.test(code)) return toast('请输入 6 位数字');
+    const { data: ch } = await sb.auth.mfa.challenge({ factorId: currentFactorId });
+    const { error } = await sb.auth.mfa.verify({ factorId: currentFactorId, challengeId: ch.id, code });
+    if (error) return toast('验证码错误：' + error.message);
+    toast('✅ MFA 绑定成功！');
+    checkMfaStatus();
+}
+function cancelMfa() { $('mfa-enroll-box').style.display = 'none'; $('mfa-actions').style.display = ''; }
+async function unenrollMfa() {
+    if (!confirm('确定解绑 MFA？解绑后账号安全性会降低。')) return;
+    const { data } = await sb.auth.mfa.listFactors();
+    if (!data.totp || !data.totp.length) return;
+    const { error } = await sb.auth.mfa.unenroll({ factorId: data.totp[0].id });
+    if (error) return toast('解绑失败：' + error.message);
+    toast('✅ 已解绑'); checkMfaStatus();
+}
+
+// ================= 申诉系统（用户） =================
+async function submitAppeal() {
+    const email = $('appeal-email').value.trim();
+    const content = $('appeal-content').value.trim();
+    const file = $('appeal-file').files[0];
+    if (!email || !content) return toast('请填写邮箱和正文');
+
+    let attachmentUrl = null;
+    if (file) {
+        const ext = file.name.split('.').pop();
+        const fileName = currentUser.id + '_' + Date.now() + '.' + ext;
+        const { error: upErr } = await sb.storage.from('appeal-attachments').upload(fileName, file);
+        if (upErr) return toast('附件上传失败：' + upErr.message);
+        const { data: urlData } = sb.storage.from('appeal-attachments').getPublicUrl(fileName);
+        attachmentUrl = urlData.publicUrl;
+    }
+
+    const res = await fetch(API_BASE + '/submit-appeal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ contact_email: email, content: content, attachment_url: attachmentUrl })
+    });
+    const d = await res.json();
+    if (d.ok) {
+        toast('✅ 申诉已提交，请等待管理员处理');
+        $('appeal-email').value = ''; $('appeal-content').value = ''; $('appeal-file').value = '';
+        loadMyAppeals();
+    } else { toast(d.msg); }
+}
+
+async function loadMyAppeals() {
+    const res = await fetch(API_BASE + '/get-my-appeals', { headers: { 'Authorization': 'Bearer ' + currentToken } });
+    const d = await res.json();
+    const list = $('my-appeals-list');
+    if (!d.ok || !d.appeals.length) { list.innerHTML = '<p class="note">暂无记录</p>'; return; }
+
+    const unacked = d.appeals.find(function (a) { return a.status === 'rejected' && !a.user_acknowledged; });
+    if (unacked) showRejectNotice(unacked);
+
+    list.innerHTML = d.appeals.map(function (a) {
+        const statusMap = { pending: '<span class="badge badge-wait">未受理</span>', processing: '<span class="badge" style="background:rgba(79,172,254,0.15);color:#4facfe;border:1px solid rgba(79,172,254,0.4)">受理中</span>', completed: '<span class="badge badge-ok">已完成</span>', rejected: '<span class="badge badge-bad">已拒绝</span>' };
+        return '<div class="appeal-item"><div class="appeal-head"><span>' + new Date(a.created_at).toLocaleString() + '</span>' + (statusMap[a.status] || '') + '</div>' +
+            '<div class="appeal-content">' + a.content.replace(/</g, '&lt;') + '</div>' +
+            (a.status === 'rejected' ? '<div style="color:#ff8080;font-size:.85em;margin-top:8px"><b>拒绝理由：</b>' + (a.reject_reason || '') + '</div>' : '') +
+            '</div>';
+    }).join('');
+}
+
+function showRejectNotice(appeal) {
+    pendingRejectId = appeal.id;
+    $('reject-date').textContent = new Date(appeal.created_at).toLocaleDateString();
+    $('reject-reason').textContent = appeal.reject_reason || '(无)';
+    $('modal-reject-notice').style.display = '';
+    $('overlay').classList.add('show');
+}
+
+async function ackReject(escalate) {
+    await fetch(API_BASE + '/ack-appeal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ id: pendingRejectId, escalate_to_owner: escalate })
+    });
+    closeModal();
+    if (escalate) toast('已直接提交给服主');
+    loadMyAppeals();
+}
+function escalateToOwner() { ackReject(true); }
+
+// ================= 申诉管理（管理员） =================
+async function loadAdminAppeals() {
+    const res = await fetch(API_BASE + '/get-appeals', { headers: { 'Authorization': 'Bearer ' + currentToken } });
+    const d = await res.json();
+    if (!d.ok) { $('admin-appeals-list').innerHTML = '<p class="note">加载失败或无权限</p>'; return; }
+    allAppeals = d.appeals || [];
+    renderAdminAppeals();
+}
+
+function filterAppeals(status, el) {
+    currentFilter = status;
+    document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+    el.classList.add('active');
+    renderAdminAppeals();
+}
+
+function renderAdminAppeals() {
+    const list = $('admin-appeals-list');
+    const filtered = currentFilter === 'all' ? allAppeals : allAppeals.filter(function (a) { return a.status === currentFilter; });
+    if (!filtered.length) { list.innerHTML = '<p class="note">暂无数据</p>'; return; }
+
+    list.innerHTML = filtered.map(function (a) {
+        const statusMap = { pending: '未受理', processing: '受理中', completed: '已完成', rejected: '已拒绝' };
+        let actions = '';
+        if (a.status === 'pending') {
+            actions = '<button class="btn-sm primary" onclick="updateAppealStatus(\'' + a.id + '\', \'processing\')">开始受理</button>' +
+                      '<button class="btn-sm danger" onclick="openRejectModal(\'' + a.id + '\')">拒绝</button>';
+        } else if (a.status === 'processing') {
+            actions = '<a class="btn-sm warn" href="mailto:' + a.contact_email + '?subject=关于您的申诉&body=您好，关于您提交的申诉..." style="color:#333">发送邮件</a>' +
+                      '<button class="btn-sm success" onclick="updateAppealStatus(\'' + a.id + '\', \'completed\')">完成表单</button>';
+        } else {
+            actions = '<button class="btn-sm danger" onclick="deleteAppeal(\'' + a.id + '\')">删除</button>';
+        }
+        return '<div class="appeal-item"><div class="appeal-head"><span><b>' + (a.user_email || '未知用户') + '</b> · ' + new Date(a.created_at).toLocaleString() + '</span><span>' + (statusMap[a.status] || '') + (a.is_owner_only ? ' 👑' : '') + '</span></div>' +
+            '<div class="appeal-content">' + a.content.replace(/</g, '&lt;') + '</div>' +
+            (a.attachment_url ? '<a href="' + a.attachment_url + '" target="_blank" style="color:#4facfe;font-size:.85em">查看附件证据</a>' : '') +
+            (a.status === 'rejected' ? '<div style="color:#ff8080;font-size:.85em;margin-top:8px"><b>拒绝理由：</b>' + (a.reject_reason || '') + '</div>' : '') +
+            '<div class="appeal-actions">' + actions + '</div></div>';
+    }).join('');
+}
+
+async function updateAppealStatus(id, status) {
+    await fetch(API_BASE + '/update-appeal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ id: id, status: status })
+    });
+    toast('状态已更新'); loadAdminAppeals();
+}
+
+function openRejectModal(id) {
+    pendingRejectId = id;
+    $('admin-reject-reason').value = '';
+    $('modal-admin-reject').style.display = '';
+    $('overlay').classList.add('show');
+}
+
+async function confirmReject() {
+    const reason = $('admin-reject-reason').value.trim();
+    if (!reason) return toast('请填写拒绝理由');
+    await fetch(API_BASE + '/reject-appeal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ id: pendingRejectId, reason: reason })
+    });
+    closeModal(); toast('已拒绝'); loadAdminAppeals();
+}
+
+async function deleteAppeal(id) {
+    if (!confirm('确定删除此表单？')) return;
+    await fetch(API_BASE + '/delete-appeal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ id: id })
+    });
+    toast('已删除'); loadAdminAppeals();
+}
+
+// ================= 原有逻辑 =================
+function refreshNotice() {
+    const parts = [];
+    if (emailUnconfirmed) parts.push('⚠️ <b>邮箱未验证</b>！7 天内未验证账号将被删除 <button class="nbtn" onclick="resendEmail()">重发验证邮件</button>');
+    if (uidPending) parts.push('⚠️ <b>官服身份未验证</b>！剩余 ' + $('uid-remain').textContent + '，逾期删号 <button class="nbtn" onclick="openUidModal()">去验证</button>');
+    if (parts.length) { $('notice').innerHTML = parts.join('<span style="opacity:.4">｜</span>'); $('notice').classList.add('show'); }
+    else { $('notice').classList.remove('show'); $('notice').innerHTML = ''; }
+}
+function applyRecord(rec) {
+    if (!rec) return;
+    $('user-uid').textContent = rec.genshin_uid || '-';
+    if (rec.verified) {
+        uidPending = false; $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
+        $('row-remain').style.display = 'none'; $('btn-open-verify').style.display = 'none';
+        if (currentUser.email_confirmed_at) { $('create-locked').style.display = 'none'; $('create-form').style.display = ''; }
+        if ($('overlay').classList.contains('show') && $('modal-verify').style.display !== 'none') { closeModal(); toast('🎉 验证成功！已实时解锁'); }
+    } else {
+        const remain = SEVEN_DAYS - (Date.now() - new Date(rec.created_at).getTime());
+        if (remain <= 0) { alert('UID 验证已过期（超 7 天），账号将被清理，请重新注册'); sb.auth.signOut(); window.location.href = 'login.html'; return; }
+        uidPending = true; $('uid-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
+        $('uid-remain').textContent = fmtRemain(remain); $('row-remain').style.display = '';
+        if (currentUser.email_confirmed_at) {
+            $('btn-open-verify').style.display = '';
+            if (!sessionStorage.getItem('uidModalShown')) { sessionStorage.setItem('uidModalShown', '1'); openUidModal(); }
+        }
+    }
+    refreshNotice();
+}
+function defaultAvatar(user) { const e = user.email.toLowerCase(); if (e === 'dogoffurina@admin.server') return '👑'; if (e.endsWith('@admin.server')) return '🛡️'; return user.email.charAt(0).toUpperCase(); }
+function paintAvatar(str, user) { const box = $('avatar'); if (str && (str.indexOf('data:') === 0 || /^https?:\/\//.test(str))) { box.innerHTML = '<img src="' + str + '" alt="">'; } else if (str) { box.innerHTML = ''; box.textContent = str; } else { box.innerHTML = ''; box.textContent = defaultAvatar(user); } }
 function renderProfile(user) {
-    const md = user.user_metadata || {};
-    const email = user.email.toLowerCase();
-    const adminMail = email.endsWith('@admin.server');
-    const isOwner = email === 'dogoffurina@admin.server';
+    const md = user.user_metadata || {}; const email = user.email.toLowerCase();
+    const adminMail = email.endsWith('@admin.server'); const isOwner = email === 'dogoffurina@admin.server';
     const nick = md.nickname || (isOwner ? '服主' : adminMail ? '管理员' : '旅行者_' + user.email.split('@')[0]);
     $('name-text').textContent = nick + (isOwner ? ' 👑' : adminMail ? ' 🛡️' : '');
-    $('user-email').textContent = user.email;
-    $('info-email').textContent = user.email;
+    $('user-email').textContent = user.email; $('info-email').textContent = user.email;
+    $('sec-current-email').textContent = user.email;
     paintAvatar(md.avatar || '', user);
 }
-
-// ===== 行内编辑 =====
 function toggleEdit() { editing ? saveProfile() : startEdit(); }
-function startEdit() {
-    editing = true; pendingAvatar = null;
-    const md = currentUser.user_metadata || {};
-    $('name-text').style.display = 'none';
-    $('nick-input').style.display = 'inline-block';
-    $('nick-input').value = md.nickname || '';
-    $('btn-edit').textContent = '保存';
-    $('btn-cancel').style.display = '';
-    $('avatar').classList.add('editing');
-    $('edit-tip').classList.add('show');
-}
-function cancelEdit() {
-    editing = false; pendingAvatar = null;
-    $('name-text').style.display = '';
-    $('nick-input').style.display = 'none';
-    $('btn-edit').textContent = '编辑';
-    $('btn-cancel').style.display = 'none';
-    $('avatar').classList.remove('editing');
-    $('edit-tip').classList.remove('show');
-    renderProfile(currentUser);
-}
-function onAvatarClick() {
-    if (!editing) { toast('点右侧「编辑」后再更换头像'); return; }
-    $('avatar-file').click();
-}
+function startEdit() { editing = true; pendingAvatar = null; const md = currentUser.user_metadata || {}; $('name-text').style.display = 'none'; $('nick-input').style.display = 'inline-block'; $('nick-input').value = md.nickname || ''; $('btn-edit').textContent = '保存'; $('btn-cancel').style.display = ''; $('avatar').classList.add('editing'); $('edit-tip').classList.add('show'); }
+function cancelEdit() { editing = false; pendingAvatar = null; $('name-text').style.display = ''; $('nick-input').style.display = 'none'; $('btn-edit').textContent = '编辑'; $('btn-cancel').style.display = 'none'; $('avatar').classList.remove('editing'); $('edit-tip').classList.remove('show'); renderProfile(currentUser); }
+function onAvatarClick() { if (!editing) { toast('点右侧「编辑」后再更换头像'); return; } $('avatar-file').click(); }
 function onAvatarPicked(ev) {
-    const f = ev.target.files[0];
-    ev.target.value = '';
-    if (!f) return;
-    if (!/^image\//.test(f.type)) { toast('请选择图片文件'); return; }
-    if (f.size > 8 * 1024 * 1024) { toast('图片不能超过 8MB'); return; }
+    const f = ev.target.files[0]; ev.target.value = ''; if (!f) return;
     const reader = new FileReader();
-    reader.onload = function () {
-        const img = new Image();
-        img.onload = function () {
-            // 压缩裁剪成 128x128，节省空间
-            const size = 128, c = document.createElement('canvas');
-            c.width = size; c.height = size;
-            const ctx = c.getContext('2d');
-            const s = Math.min(img.width, img.height);
-            ctx.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
-            pendingAvatar = c.toDataURL('image/jpeg', 0.85);
-            $('avatar').innerHTML = '<img src="' + pendingAvatar + '" alt="">';
-            toast('头像已选择，点「保存」生效');
-        };
-        img.src = reader.result;
-    };
+    reader.onload = function () { const img = new Image(); img.onload = function () { const size = 128, c = document.createElement('canvas'); c.width = size; c.height = size; const ctx = c.getContext('2d'); const s = Math.min(img.width, img.height); ctx.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size); pendingAvatar = c.toDataURL('image/jpeg', 0.85); $('avatar').innerHTML = '<img src="' + pendingAvatar + '" alt="">'; toast('头像已选择，点「保存」生效'); }; img.src = reader.result; };
     reader.readAsDataURL(f);
 }
-function resetAvatar() {
-    if (!editing) return;
-    pendingAvatar = '';
-    paintAvatar('', currentUser);
-    toast('已恢复默认头像，点「保存」生效');
-}
+function resetAvatar() { if (!editing) return; pendingAvatar = ''; paintAvatar('', currentUser); toast('已恢复默认头像，点「保存」生效'); }
 async function saveProfile() {
-    const nick = $('nick-input').value.trim();
-    if (nick && (nick.length < 2 || nick.length > 16)) { toast('昵称需为 2-16 个字符'); return; }
-    const newData = Object.assign({}, currentUser.user_metadata, { nickname: nick });
-    if (pendingAvatar !== null) newData.avatar = pendingAvatar;
-    const { data, error } = await sb.auth.updateUser({ data: newData });
-    if (error) { toast('保存失败：' + error.message); return; }
-    currentUser = data.user;
-    cancelEdit();
-    toast('✅ 资料已保存');
+    const nick = $('nick-input').value.trim(); if (nick && (nick.length < 2 || nick.length > 16)) return toast('昵称需为 2-16 个字符');
+    const newData = Object.assign({}, currentUser.user_metadata, { nickname: nick }); if (pendingAvatar !== null) newData.avatar = pendingAvatar;
+    const { data, error } = await sb.auth.updateUser({ data: newData }); if (error) return toast('保存失败：' + error.message);
+    currentUser = data.user; cancelEdit(); toast('✅ 资料已保存');
 }
 
-// ===== 初始化 =====
 (async function init() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
-    currentToken = session.access_token;
-    currentUser = session.user;
-
+    currentToken = session.access_token; currentUser = session.user;
     renderProfile(currentUser);
 
     const adminMail = currentUser.email.toLowerCase().endsWith('@admin.server');
     if (adminMail) {
         $('email-status').innerHTML = '<span class="badge badge-ok">✓ ' + (currentUser.email.toLowerCase() === 'dogoffurina@admin.server' ? '服主' : '管理员') + '</span>';
-        $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 豁免验证</span>';
-        $('user-uid').textContent = '豁免';
-        $('create-locked').style.display = 'none';
-        $('create-form').style.display = '';
+        $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 豁免验证</span>'; $('user-uid').textContent = '豁免';
+        $('create-locked').style.display = 'none'; $('create-form').style.display = '';
+        $('nav-admin').style.display = '';
+        checkMfaStatus();
+        loadMyAppeals();
         return;
     }
 
-    const notices = [];
-    if (!currentUser.email_confirmed_at) {
-        $('email-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
-        $('btn-resend').style.display = '';
-        notices.push('⚠️ <b>邮箱未验证</b>！7 天内未验证账号将被删除 <button class="nbtn" onclick="resendEmail()">重发验证邮件</button>');
-    } else {
-        $('email-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
-    }
+    emailUnconfirmed = !currentUser.email_confirmed_at;
+    if (emailUnconfirmed) { $('email-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>'; $('btn-resend').style.display = ''; }
+    else { $('email-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>'; }
 
-    try {
-        const res = await fetch(API_BASE + '/verify-status', { headers: { 'Authorization': 'Bearer ' + currentToken } });
-        const d = await res.json();
-        if (d.expired) { alert(d.msg); await sb.auth.signOut(); window.location.href = 'login.html'; return; }
-        if (d.hasRecord) {
-            $('user-uid').textContent = d.genshin_uid || '-';
-            if (d.uidVerified) {
-                $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
-                if (currentUser.email_confirmed_at) {
-                    $('create-locked').style.display = 'none';
-                    $('create-form').style.display = '';
-                }
-            } else {
-                $('uid-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
-                $('uid-remain').textContent = d.uidRemain || '-';
-                $('row-remain').style.display = '';
-                if (currentUser.email_confirmed_at) {
-                    $('btn-open-verify').style.display = '';
-                    notices.push('⚠️ <b>官服身份未验证</b>！剩余 ' + (d.uidRemain || '7天') + '，逾期删号 <button class="nbtn" onclick="openUidModal()">去验证</button>');
-                    if (!sessionStorage.getItem('uidModalShown')) {
-                        sessionStorage.setItem('uidModalShown', '1');
-                        openUidModal();
-                    }
-                }
-            }
-        }
-    } catch (e) { console.error(e); toast('后端连接失败，请稍后刷新'); }
+    const { data: rec } = await sb.from('verify_records').select('*').eq('user_id', currentUser.id).maybeSingle();
+    applyRecord(rec); refreshNotice();
+    checkMfaStatus();
+    loadMyAppeals();
 
-    if (notices.length) {
-        $('notice').innerHTML = notices.join('<span style="opacity:.4">｜</span>');
-        $('notice').classList.add('show');
-    }
+    sb.channel('verify_' + currentUser.id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'verify_records', filter: 'user_id=eq.' + currentUser.id }, function (payload) { applyRecord(payload.new); }).subscribe();
 })();
 
-async function resendEmail() {
-    const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email });
-    toast(error ? '发送失败：' + error.message : '验证邮件已重新发送！');
-}
+async function resendEmail() { const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email }); toast(error ? '发送失败：' + error.message : '验证邮件已重新发送！'); }
 function openUidModal() {
-    $('modal-verify').style.display = '';
-    $('modal-success').style.display = 'none';
-    $('modal-msg').textContent = '';
-    $('overlay').classList.add('show');
-    fetch(API_BASE + '/get-code?user_id=' + encodeURIComponent(currentUser.id))
-        .then(r => r.json())
-        .then(d => { if (d.ok && d.code) $('modal-code').textContent = d.code; })
-        .catch(() => { $('modal-msg').textContent = '获取验证码失败，请稍后重试'; $('modal-msg').className = 'err'; });
+    $('modal-verify').style.display = ''; $('modal-success').style.display = 'none'; $('modal-msg').textContent = ''; $('overlay').classList.add('show');
+    fetch(API_BASE + '/get-code?user_id=' + encodeURIComponent(currentUser.id)).then(function (r) { return r.json(); }).then(function (d) { if (d.ok && d.code) $('modal-code').textContent = d.code; });
 }
 async function doVerify() {
-    const btn = $('btn-do-verify'); btn.disabled = true;
-    $('modal-msg').textContent = '正在查询官服签名（约需几秒）...';
-    $('modal-msg').className = '';
+    const btn = $('btn-do-verify'); btn.disabled = true; $('modal-msg').textContent = '查询中...';
     try {
         const res = await fetch(API_BASE + '/verify', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
         const r = await res.json();
-        if (r.ok) {
-            sessionStorage.removeItem('uidModalShown');
-            $('modal-msg').textContent = '🎉 ' + r.msg;
-            $('modal-msg').className = 'ok';
-            setTimeout(() => location.reload(), 1500);
-        } else {
-            $('modal-msg').textContent = r.msg;
-            $('modal-msg').className = 'err';
-        }
-    } catch (e) {
-        $('modal-msg').textContent = '网络错误，请稍后重试';
-        $('modal-msg').className = 'err';
-    }
+        if (r.ok) { sessionStorage.removeItem('uidModalShown'); $('modal-msg').textContent = '🎉 ' + r.msg; $('modal-msg').className = 'ok'; setTimeout(function () { closeModal(); }, 1500); }
+        else { $('modal-msg').textContent = r.msg; $('modal-msg').className = 'err'; }
+    } catch (e) { $('modal-msg').textContent = '网络错误'; $('modal-msg').className = 'err'; }
     btn.disabled = false;
 }
 async function createGameAccount() {
-    const username = $('game-username').value.trim();
-    const uid = $('game-uid').value.trim();
-    if (!/^[A-Za-z0-9_]{2,16}$/.test(username)) { toast('用户名需为 2-16 位英文/数字/下划线'); return; }
-    const uidNum = parseInt(uid, 10);
-    if (!/^\d{1,10}$/.test(uid) || uidNum < 1 || uidNum > 1000000000) { toast('UID 需为 1~1000000000 的数字'); return; }
+    const username = $('game-username').value.trim(), uid = $('game-uid').value.trim();
+    if (!/^[A-Za-z0-9_]{2,16}$/.test(username)) return toast('用户名格式错误');
+    const uidNum = parseInt(uid, 10); if (!/^\d{1,10}$/.test(uid) || uidNum < 1 || uidNum > 1000000000) return toast('UID 格式错误');
     $('btn-create').disabled = true;
     try {
-        const res = await fetch(API_BASE + '/create-account', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
-            body: JSON.stringify({ username: username, uid: uidNum })
-        });
+        const res = await fetch(API_BASE + '/create-account', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken }, body: JSON.stringify({ username: username, uid: uidNum }) });
         const d = await res.json();
-        if (d.ok) {
-            $('r-user').textContent = username;
-            $('r-uid').textContent = uid;
-            $('r-pwd').textContent = rndPwd();
-            $('modal-verify').style.display = 'none';
-            $('modal-success').style.display = '';
-            $('overlay').classList.add('show');
-        } else { toast(d.msg || '创建失败'); }
-    } catch (e) { toast('服务器连接失败，请联系服主'); }
+        if (d.ok) { $('r-user').textContent = username; $('r-uid').textContent = uid; $('r-pwd').textContent = rndPwd(); $('modal-verify').style.display = 'none'; $('modal-success').style.display = ''; $('overlay').classList.add('show'); }
+        else { toast(d.msg); }
+    } catch (e) { toast('服务器连接失败'); }
     $('btn-create').disabled = false;
 }
 function rndPwd() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; let p = ''; for (let i = 0; i < 10; i++) p += c[Math.floor(Math.random() * c.length)]; return p; }
-function copyInfo() {
-    const t = '芙芙的狗的服务器 账号信息\n用户名：' + $('r-user').textContent + '\nUID：' + $('r-uid').textContent + '\n密码：' + $('r-pwd').textContent;
-    if (navigator.clipboard) navigator.clipboard.writeText(t);
-    else { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
-    toast('已复制，请妥善保存');
-}
+function copyInfo() { const t = '芙芙的狗的服务器 账号信息\n用户名：' + $('r-user').textContent + '\nUID：' + $('r-uid').textContent + '\n密码：' + $('r-pwd').textContent; navigator.clipboard.writeText(t); toast('已复制'); }
 function closeModal() { $('overlay').classList.remove('show'); }
-async function doLogout() {
-    sessionStorage.setItem('topAuthState', 'out');  // 下次登录重新播放飞入动画
-    await sb.auth.signOut();
-    window.location.href = 'login.html';
-}
-function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+async function doLogout() { await sb.auth.signOut(); window.location.href = 'login.html'; }
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2000); }
 </script>
 </body>
 </html>
