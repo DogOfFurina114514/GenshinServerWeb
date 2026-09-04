@@ -9,8 +9,6 @@
     html, body { height: 100%; margin: 0; }
     body { background: #0d1b24; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; color: #eaf4ff; overflow: hidden; }
     .layout { display: flex; height: 100vh; }
-
-    /* ===== 左侧导航栏 ===== */
     .sidebar { width: 230px; flex-shrink: 0; background: #12222e; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; padding: 18px 14px; gap: 12px; }
     .side-title { text-align: center; font-size: 1.15em; font-weight: bold; letter-spacing: 2px; color: #fff; padding: 14px 0; border: 1px solid rgba(79,172,254,0.5); border-radius: 14px; background: rgba(79,172,254,0.12); text-shadow: 0 0 10px rgba(79,172,254,0.6); }
     .nav { display: flex; flex-direction: column; gap: 10px; flex: 1; margin-top: 8px; }
@@ -20,24 +18,33 @@
     .side-bottom { display: flex; flex-direction: column; gap: 10px; }
     .nav-btn.logout { color: #ff8080; border-color: rgba(255,110,110,0.4); background: rgba(255,110,110,0.08); }
     .nav-btn.logout:hover { background: rgba(255,110,110,0.2); color: #fff; }
-
-    /* ===== 右侧主区域 ===== */
     .main { flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 18px 22px; overflow-y: auto; }
-    /* 通知栏：有通知才显示，没通知内容自动延伸 */
     .notice { display: none; align-items: center; gap: 12px; flex-wrap: wrap; background: rgba(255,210,0,0.12); border: 1px solid rgba(255,210,0,0.5); border-radius: 14px; padding: 12px 18px; color: #ffe9a8; font-size: .9em; }
     .notice.show { display: flex; }
     .notice b { color: #ffd200; }
     .notice .nbtn { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 8px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .85em; transition: .3s; }
     .notice .nbtn:hover { transform: translateY(-2px); }
-
     .page { flex: 1; }
     .card { background: #162833; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px 26px; }
     .card.empty { display: flex; align-items: center; justify-content: center; min-height: 300px; color: rgba(255,255,255,0.4); font-size: 1em; }
     .card-head { display: flex; align-items: center; gap: 16px; }
-    .avatar { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(45deg, #4facfe, #00f2fe); display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; color: #fff; flex-shrink: 0; box-shadow: 0 4px 14px rgba(79,172,254,0.4); }
-    .uname { font-size: 1.15em; font-weight: bold; color: #fff; word-break: break-all; }
-    .btn-edit { margin-left: auto; background: rgba(79,172,254,0.15); border: 1px solid rgba(79,172,254,0.5); color: #a0c4ff; padding: 9px 26px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: .9em; transition: .25s; }
+    .avatar { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(45deg, #4facfe, #00f2fe); display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; color: #fff; flex-shrink: 0; box-shadow: 0 4px 14px rgba(79,172,254,0.4); overflow: hidden; position: relative; }
+    .avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .avatar.editing { cursor: pointer; box-shadow: 0 0 0 3px rgba(255,210,0,0.55); }
+    .avatar.editing::after { content: '📷'; position: absolute; right: -3px; bottom: -3px; font-size: .85em; background: #12222e; border-radius: 50%; padding: 2px 5px; border: 1px solid rgba(255,210,0,0.6); }
+    .uname-wrap { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .uname { font-size: 1.15em; font-weight: bold; color: #fff; word-break: break-all; display: flex; align-items: center; gap: 10px; }
+    #nick-input { display: none; width: 240px; max-width: 60vw; padding: 7px 14px; font-size: .9em; font-weight: bold; }
+    .uemail { color: #a0c4ff; font-size: .85em; word-break: break-all; }
+    .head-btns { margin-left: auto; display: flex; gap: 10px; }
+    .btn-edit { background: rgba(79,172,254,0.15); border: 1px solid rgba(79,172,254,0.5); color: #a0c4ff; padding: 9px 26px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: .9em; transition: .25s; }
     .btn-edit:hover { background: rgba(79,172,254,0.35); color: #fff; }
+    .btn-cancel { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #cfe3ff; padding: 9px 20px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: .9em; transition: .3s; }
+    .btn-cancel:hover { background: rgba(255,255,255,0.2); }
+    .edit-tip { display: none; margin-top: 14px; color: #ffe9a8; font-size: .85em; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .edit-tip.show { display: flex; }
+    .mini-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); color: #cfe3ff; border-radius: 20px; padding: 5px 14px; font-size: .85em; cursor: pointer; font-family: inherit; transition: .2s; }
+    .mini-btn:hover { background: rgba(255,255,255,.18); }
     .info-box { margin-top: 20px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px 20px; }
     .info-title { color: #a0c4ff; font-size: .9em; margin-bottom: 6px; }
     .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: .95em; }
@@ -50,7 +57,6 @@
     .card-actions { display: flex; gap: 12px; margin-top: 14px; }
     .btn-verify { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 22px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .9em; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
     .btn-verify:hover { transform: translateY(-2px); }
-
     .card-title { color: #fff; font-size: 1.1em; font-weight: bold; margin-bottom: 16px; }
     label { color: #cfe3ff; font-size: .88em; display: block; margin: 12px 0 6px 4px; }
     input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 12px; color: #fff; padding: 12px 16px; font-size: .95em; outline: none; transition: .3s; }
@@ -60,8 +66,6 @@
     .btn-create:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(142,45,226,0.65); }
     .btn-create:disabled { opacity: .5; cursor: wait; transform: none; }
     .lock-msg { color: rgba(255,255,255,0.5); text-align: center; font-size: .9em; padding: 30px 0; }
-
-    /* ===== 弹窗 ===== */
     #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
     #overlay.show { display: flex; }
     .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); }
@@ -87,22 +91,19 @@
     .kv b { color: #fff; font-family: Consolas, monospace; font-size: .95em; }
     #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(67,233,123,0.95); color: #063; padding: 10px 24px; border-radius: 40px; transition: .3s; opacity: 0; z-index: 99; font-weight: bold; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
     @media (max-width: 760px) {
-        .layout { flex-direction: column; }
+        .layout { flex-direction: column; height: auto; min-height: 100vh; }
+        body { overflow: auto; }
         .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; align-items: center; }
         .side-title { padding: 8px 16px; }
         .nav { flex-direction: row; flex-wrap: wrap; margin-top: 0; }
         .nav-btn { width: auto; padding: 9px 14px; }
         .side-bottom { flex-direction: row; }
-        body { overflow: auto; }
-        .layout { height: auto; min-height: 100vh; }
     }
 </style>
 </head>
 <body>
 <div class="layout">
-    <!-- 左侧导航 -->
     <aside class="sidebar">
         <div class="side-title">账户中心</div>
         <div class="nav">
@@ -117,21 +118,35 @@
         </div>
     </aside>
 
-    <!-- 右侧主区域 -->
     <main class="main">
-        <!-- 通知栏：有通知才显示 -->
         <div class="notice" id="notice"></div>
 
         <!-- 个人信息页 -->
         <section class="page" id="page-profile">
             <div class="card">
                 <div class="card-head">
-                    <div class="avatar" id="avatar">?</div>
-                    <div class="uname" id="user-email">加载中...</div>
-                    <button class="btn-edit" onclick="toast('该功能暂未开放')">修改</button>
+                    <div class="avatar" id="avatar" onclick="onAvatarClick()">?</div>
+                    <div class="uname-wrap">
+                        <div class="uname">
+                            <span id="name-text">加载中...</span>
+                            <input id="nick-input" maxlength="16" placeholder="2-16 个字符">
+                        </div>
+                        <div class="uemail" id="user-email">...</div>
+                    </div>
+                    <div class="head-btns">
+                        <button class="btn-cancel" id="btn-cancel" style="display:none" onclick="cancelEdit()">取消</button>
+                        <button class="btn-edit" id="btn-edit" onclick="toggleEdit()">编辑</button>
+                    </div>
                 </div>
+
+                <div class="edit-tip" id="edit-tip">
+                    ✏️ 编辑中：点击头像上传自定义头像 · 邮箱不可修改
+                    <button class="mini-btn" onclick="resetAvatar()">恢复默认头像</button>
+                </div>
+
                 <div class="info-box">
                     <div class="info-title">账号信息</div>
+                    <div class="info-row"><span>邮箱</span><b id="info-email">-</b></div>
                     <div class="info-row"><span>邮箱状态</span><b id="email-status">检测中...</b></div>
                     <div class="info-row"><span>官服 UID</span><b id="user-uid">-</b></div>
                     <div class="info-row"><span>UID 状态</span><b id="uid-status">检测中...</b></div>
@@ -144,12 +159,10 @@
             </div>
         </section>
 
-        <!-- 安全设置页（空，待后续） -->
         <section class="page" id="page-security" hidden>
             <div class="card empty">🚧 该页面正在建设中，敬请期待</div>
         </section>
 
-        <!-- 创建服务器账号页 -->
         <section class="page" id="page-create" hidden>
             <div class="card">
                 <div class="card-title">🎮 创建服务器账号</div>
@@ -164,14 +177,14 @@
             </div>
         </section>
 
-        <!-- 更多设置页（空，待后续） -->
         <section class="page" id="page-more" hidden>
             <div class="card empty">🚧 该页面正在建设中，敬请期待</div>
         </section>
     </main>
 </div>
 
-<!-- UID 验证弹窗 -->
+<input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPicked(event)">
+
 <div id="overlay">
     <div class="modal" id="modal-verify" style="display:none">
         <h2 class="gold">⚡ 身份验证</h2>
@@ -206,22 +219,120 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ⚠️ 替换成你自己的 Publishable key（sb_publishable_ 开头）
 const SUPABASE_URL = 'https://kusbgdswjbaqpczfelnv.supabase.co';
-const SUPABASE_ANON_KEY = '在这里粘贴你的_Publishable_key';
+const SUPABASE_ANON_KEY = 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go';
 const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-api';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
 let currentToken = '';
 let currentUser = null;
+let editing = false;
+let pendingAvatar = null;   // null=未改动；''=恢复默认；dataURL=新头像
 
-// ===== 页面切换 =====
 function showPage(name, btn) {
     document.querySelectorAll('.page').forEach(p => p.hidden = true);
     $('page-' + name).hidden = false;
     document.querySelectorAll('.nav .nav-btn').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
+}
+
+// ===== 头像 / 昵称渲染 =====
+function defaultAvatar(user) {
+    const e = user.email.toLowerCase();
+    if (e === 'dogoffurina@admin.server') return '👑';
+    if (e.endsWith('@admin.server')) return '🛡️';
+    return user.email.charAt(0).toUpperCase();
+}
+function paintAvatar(str, user) {
+    const box = $('avatar');
+    if (str && (str.indexOf('data:') === 0 || /^https?:\/\//.test(str))) {
+        box.innerHTML = '<img src="' + str + '" alt="">';
+    } else if (str) {
+        box.innerHTML = ''; box.textContent = str;
+    } else {
+        box.innerHTML = ''; box.textContent = defaultAvatar(user);
+    }
+}
+function renderProfile(user) {
+    const md = user.user_metadata || {};
+    const email = user.email.toLowerCase();
+    const adminMail = email.endsWith('@admin.server');
+    const isOwner = email === 'dogoffurina@admin.server';
+    const nick = md.nickname || (isOwner ? '服主' : adminMail ? '管理员' : '旅行者_' + user.email.split('@')[0]);
+    $('name-text').textContent = nick + (isOwner ? ' 👑' : adminMail ? ' 🛡️' : '');
+    $('user-email').textContent = user.email;
+    $('info-email').textContent = user.email;
+    paintAvatar(md.avatar || '', user);
+}
+
+// ===== 行内编辑 =====
+function toggleEdit() { editing ? saveProfile() : startEdit(); }
+function startEdit() {
+    editing = true; pendingAvatar = null;
+    const md = currentUser.user_metadata || {};
+    $('name-text').style.display = 'none';
+    $('nick-input').style.display = 'inline-block';
+    $('nick-input').value = md.nickname || '';
+    $('btn-edit').textContent = '保存';
+    $('btn-cancel').style.display = '';
+    $('avatar').classList.add('editing');
+    $('edit-tip').classList.add('show');
+}
+function cancelEdit() {
+    editing = false; pendingAvatar = null;
+    $('name-text').style.display = '';
+    $('nick-input').style.display = 'none';
+    $('btn-edit').textContent = '编辑';
+    $('btn-cancel').style.display = 'none';
+    $('avatar').classList.remove('editing');
+    $('edit-tip').classList.remove('show');
+    renderProfile(currentUser);
+}
+function onAvatarClick() {
+    if (!editing) { toast('点右侧「编辑」后再更换头像'); return; }
+    $('avatar-file').click();
+}
+function onAvatarPicked(ev) {
+    const f = ev.target.files[0];
+    ev.target.value = '';
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { toast('请选择图片文件'); return; }
+    if (f.size > 8 * 1024 * 1024) { toast('图片不能超过 8MB'); return; }
+    const reader = new FileReader();
+    reader.onload = function () {
+        const img = new Image();
+        img.onload = function () {
+            // 压缩裁剪成 128x128，节省空间
+            const size = 128, c = document.createElement('canvas');
+            c.width = size; c.height = size;
+            const ctx = c.getContext('2d');
+            const s = Math.min(img.width, img.height);
+            ctx.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, size, size);
+            pendingAvatar = c.toDataURL('image/jpeg', 0.85);
+            $('avatar').innerHTML = '<img src="' + pendingAvatar + '" alt="">';
+            toast('头像已选择，点「保存」生效');
+        };
+        img.src = reader.result;
+    };
+    reader.readAsDataURL(f);
+}
+function resetAvatar() {
+    if (!editing) return;
+    pendingAvatar = '';
+    paintAvatar('', currentUser);
+    toast('已恢复默认头像，点「保存」生效');
+}
+async function saveProfile() {
+    const nick = $('nick-input').value.trim();
+    if (nick && (nick.length < 2 || nick.length > 16)) { toast('昵称需为 2-16 个字符'); return; }
+    const newData = Object.assign({}, currentUser.user_metadata, { nickname: nick });
+    if (pendingAvatar !== null) newData.avatar = pendingAvatar;
+    const { data, error } = await sb.auth.updateUser({ data: newData });
+    if (error) { toast('保存失败：' + error.message); return; }
+    currentUser = data.user;
+    cancelEdit();
+    toast('✅ 资料已保存');
 }
 
 // ===== 初始化 =====
@@ -231,16 +342,11 @@ function showPage(name, btn) {
     currentToken = session.access_token;
     currentUser = session.user;
 
+    renderProfile(currentUser);
+
     const adminMail = currentUser.email.toLowerCase().endsWith('@admin.server');
-    const isOwner = currentUser.email.toLowerCase() === 'dogoffurina@admin.server';
-
-    // 头像 + 用户名
-    $('avatar').textContent = isOwner ? '👑' : adminMail ? '🛡️' : currentUser.email.charAt(0).toUpperCase();
-    $('user-email').textContent = currentUser.email + (isOwner ? '（服主）' : adminMail ? '（管理员）' : '');
-
-    // ===== 管理员：全权限，无通知 =====
     if (adminMail) {
-        $('email-status').innerHTML = '<span class="badge badge-ok">✓ ' + (isOwner ? '服主' : '管理员') + '</span>';
+        $('email-status').innerHTML = '<span class="badge badge-ok">✓ ' + (currentUser.email.toLowerCase() === 'dogoffurina@admin.server' ? '服主' : '管理员') + '</span>';
         $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 豁免验证</span>';
         $('user-uid').textContent = '豁免';
         $('create-locked').style.display = 'none';
@@ -248,9 +354,7 @@ function showPage(name, btn) {
         return;
     }
 
-    // ===== 普通玩家 =====
     const notices = [];
-
     if (!currentUser.email_confirmed_at) {
         $('email-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>';
         $('btn-resend').style.display = '';
@@ -262,12 +366,9 @@ function showPage(name, btn) {
     try {
         const res = await fetch(API_BASE + '/verify-status', { headers: { 'Authorization': 'Bearer ' + currentToken } });
         const d = await res.json();
-
         if (d.expired) { alert(d.msg); await sb.auth.signOut(); window.location.href = 'login.html'; return; }
-
         if (d.hasRecord) {
             $('user-uid').textContent = d.genshin_uid || '-';
-
             if (d.uidVerified) {
                 $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
                 if (currentUser.email_confirmed_at) {
@@ -290,19 +391,16 @@ function showPage(name, btn) {
         }
     } catch (e) { console.error(e); toast('后端连接失败，请稍后刷新'); }
 
-    // 通知栏：有通知才显示
     if (notices.length) {
         $('notice').innerHTML = notices.join('<span style="opacity:.4">｜</span>');
         $('notice').classList.add('show');
     }
 })();
 
-// ===== 功能函数 =====
 async function resendEmail() {
     const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email });
     toast(error ? '发送失败：' + error.message : '验证邮件已重新发送！');
 }
-
 function openUidModal() {
     $('modal-verify').style.display = '';
     $('modal-success').style.display = 'none';
@@ -313,7 +411,6 @@ function openUidModal() {
         .then(d => { if (d.ok && d.code) $('modal-code').textContent = d.code; })
         .catch(() => { $('modal-msg').textContent = '获取验证码失败，请稍后重试'; $('modal-msg').className = 'err'; });
 }
-
 async function doVerify() {
     const btn = $('btn-do-verify'); btn.disabled = true;
     $('modal-msg').textContent = '正在查询官服签名（约需几秒）...';
@@ -336,14 +433,12 @@ async function doVerify() {
     }
     btn.disabled = false;
 }
-
 async function createGameAccount() {
     const username = $('game-username').value.trim();
     const uid = $('game-uid').value.trim();
     if (!/^[A-Za-z0-9_]{2,16}$/.test(username)) { toast('用户名需为 2-16 位英文/数字/下划线'); return; }
     const uidNum = parseInt(uid, 10);
     if (!/^\d{1,10}$/.test(uid) || uidNum < 1 || uidNum > 1000000000) { toast('UID 需为 1~1000000000 的数字'); return; }
-
     $('btn-create').disabled = true;
     try {
         const res = await fetch(API_BASE + '/create-account', {
@@ -359,13 +454,10 @@ async function createGameAccount() {
             $('modal-verify').style.display = 'none';
             $('modal-success').style.display = '';
             $('overlay').classList.add('show');
-        } else {
-            toast(d.msg || '创建失败');
-        }
+        } else { toast(d.msg || '创建失败'); }
     } catch (e) { toast('服务器连接失败，请联系服主'); }
     $('btn-create').disabled = false;
 }
-
 function rndPwd() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; let p = ''; for (let i = 0; i < 10; i++) p += c[Math.floor(Math.random() * c.length)]; return p; }
 function copyInfo() {
     const t = '芙芙的狗的服务器 账号信息\n用户名：' + $('r-user').textContent + '\nUID：' + $('r-uid').textContent + '\n密码：' + $('r-pwd').textContent;
@@ -374,7 +466,11 @@ function copyInfo() {
     toast('已复制，请妥善保存');
 }
 function closeModal() { $('overlay').classList.remove('show'); }
-async function doLogout() { await sb.auth.signOut(); window.location.href = 'login.html'; }
+async function doLogout() {
+    sessionStorage.setItem('topAuthState', 'out');  // 下次登录重新播放飞入动画
+    await sb.auth.signOut();
+    window.location.href = 'login.html';
+}
 function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 </script>
 </body>
