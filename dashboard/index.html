@@ -129,7 +129,7 @@
             <button class="nav-btn active" onclick="showPage('profile', this)">个人信息</button>
             <button class="nav-btn" onclick="showPage('security', this)">安全设置</button>
             <button class="nav-btn" onclick="showPage('create', this)">创建服务器账号</button>
-            <button class="nav-btn" onclick="showPage('appeal', this)">申诉中心</button>
+            <button class="nav-btn" id="nav-appeal" onclick="showPage('appeal', this)">申诉中心</button>
             <button class="nav-btn" id="nav-admin" style="display:none" onclick="showPage('admin', this)">申诉管理</button>
             <button class="nav-btn" onclick="showPage('more', this)">更多设置</button>
         </div>
@@ -200,8 +200,8 @@
                     <button class="btn-cancel" style="width:100%;margin-top:10px" onclick="cancelMfa()">取消</button>
                 </div>
                 <div id="mfa-actions" style="display:none;margin-top:12px">
-                    <button class="btn-create" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="startEnrollMfa()">绑定验证器</button>
-                    <button class="btn-create" id="btn-unenroll-mfa" style="background:linear-gradient(45deg,#ff6e6e,#ff8080);margin-top:10px" onclick="unenrollMfa()">解绑验证器</button>
+                    <button class="btn-create" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="requireReauth(startEnrollMfa)">绑定验证器</button>
+                    <button class="btn-create" id="btn-unenroll-mfa" style="background:linear-gradient(45deg,#ff6e6e,#ff8080);margin-top:10px" onclick="requireReauth(unenrollMfa)">解绑验证器</button>
                 </div>
             </div>
         </section>
@@ -221,17 +221,15 @@
             </div>
         </section>
 
-        <!-- 申诉中心 -->
+        <!-- 申诉中心（无附件） -->
         <section class="page" id="page-appeal" hidden>
             <div class="card">
                 <div class="card-title">📝 提交人工申诉</div>
-                <p class="note">当你的邮箱、UID、MFA 均不可用时，可提交表单由管理员人工处理。</p>
+                <p class="note">当你的邮箱、UID、MFA 均不可用时，可提交表单由管理员人工处理。请在正文中写明能证明账号归属的信息（如充值记录、常用登录地等）。</p>
                 <label>联系邮箱</label>
                 <input id="appeal-email" type="email" placeholder="用于接收处理结果">
                 <label>申诉正文</label>
-                <textarea id="appeal-content" placeholder="详细描述你的问题，并提供能证明你是账号主人的信息"></textarea>
-                <label>附件证据 (可选，单张图片)</label>
-                <input id="appeal-file" type="file" accept="image/*">
+                <textarea id="appeal-content" placeholder="详细描述你的问题和证据"></textarea>
                 <button class="btn-create" onclick="submitAppeal()">提交申诉</button>
             </div>
             <div class="card">
@@ -240,7 +238,7 @@
             </div>
         </section>
 
-        <!-- 申诉管理（管理员） -->
+        <!-- 申诉管理 -->
         <section class="page" id="page-admin" hidden>
             <div class="card">
                 <div class="card-title">⚖️ 申诉审批面板</div>
@@ -262,7 +260,6 @@
 <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPicked(event)">
 
 <div id="overlay">
-    <!-- 二次验证弹窗 -->
     <div class="modal" id="modal-auth" style="display:none">
         <h2 class="gold">🔐 身份验证</h2>
         <p class="sub">为了安全，进行此操作前需验证你的身份，请选择一种方式：</p>
@@ -275,7 +272,6 @@
         <p id="modal-auth-msg"></p>
     </div>
 
-    <!-- 新邮箱验证码弹窗 -->
     <div class="modal" id="modal-new-email" style="display:none">
         <h2 class="gold">📧 验证新邮箱</h2>
         <p class="sub">验证码已发送至 <b id="new-email-display"></b></p>
@@ -288,10 +284,9 @@
         <p id="modal-new-email-msg"></p>
     </div>
 
-    <!-- UID 验证弹窗 -->
     <div class="modal" id="modal-verify" style="display:none">
         <h2 class="gold">⚡ 身份验证</h2>
-        <p class="sub">请在 <b>7 天内</b>完成以下操作</p>
+        <p class="sub">请在 <b>7 天内</b>完成以下操作（每次打开本弹窗验证码都会更新）</p>
         <div class="code-box" id="modal-code">----------</div>
         <div class="steps">① 打开原神官服，进入<b>个人资料</b><br>② 将你的<b>个性签名</b>修改为上方的验证码<br>③ <b>等待 3~5 分钟</b><br>④ 点击下方「我已修改，验证」</div>
         <div class="modal-btns">
@@ -301,7 +296,6 @@
         <p id="modal-msg"></p>
     </div>
 
-    <!-- 拒绝通知弹窗 -->
     <div class="modal" id="modal-reject-notice" style="display:none">
         <h2 style="color:#ff8080">⚠️ 申诉被拒绝</h2>
         <p class="sub">管理员拒绝了你 <b id="reject-date"></b> 提交的申诉</p>
@@ -312,7 +306,6 @@
         </div>
     </div>
 
-    <!-- 管理员拒绝理由弹窗 -->
     <div class="modal" id="modal-admin-reject" style="display:none">
         <h2 style="color:#ff8080">拒绝申诉</h2>
         <label>请输入拒绝理由（将展示给用户）</label>
@@ -323,7 +316,6 @@
         </div>
     </div>
 
-    <!-- 创建成功弹窗 -->
     <div class="modal" id="modal-success" style="display:none">
         <h2 class="green">🎉 创建成功</h2>
         <div class="kv"><span>用户名</span><b id="r-user"></b></div>
@@ -361,7 +353,7 @@ function showPage(name, btn) {
     if (name === 'admin') loadAdminAppeals();
 }
 
-// ================= 二次验证（Supabase 原生 Reauthentication） =================
+// ================= 二次验证 =================
 async function requireReauth(callback) {
     const isAdmin = currentUser.email.toLowerCase().endsWith('@admin.server');
     const emailOk = !!currentUser.email_confirmed_at;
@@ -370,7 +362,6 @@ async function requireReauth(callback) {
         const { data: rec } = await sb.from('verify_records').select('verified').eq('user_id', currentUser.id).maybeSingle();
         uidOk = !!(rec && rec.verified);
     }
-    // 都未验证过 → 直接放行
     if (!emailOk && !uidOk && !isAdmin) { callback(); return; }
 
     afterAuthCallback = callback;
@@ -517,31 +508,19 @@ async function unenrollMfa() {
     toast('✅ 已解绑'); checkMfaStatus();
 }
 
-// ================= 申诉系统（用户） =================
+// ================= 申诉（无附件） =================
 async function submitAppeal() {
     const email = $('appeal-email').value.trim();
     const content = $('appeal-content').value.trim();
-    const file = $('appeal-file').files[0];
     if (!email || !content) return toast('请填写邮箱和正文');
-
-    let attachmentUrl = null;
-    if (file) {
-        const ext = file.name.split('.').pop();
-        const fileName = currentUser.id + '_' + Date.now() + '.' + ext;
-        const { error: upErr } = await sb.storage.from('appeal-attachments').upload(fileName, file);
-        if (upErr) return toast('附件上传失败：' + upErr.message);
-        const { data: urlData } = sb.storage.from('appeal-attachments').getPublicUrl(fileName);
-        attachmentUrl = urlData.publicUrl;
-    }
-
     const res = await fetch(API_BASE + '/submit-appeal', {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
-        body: JSON.stringify({ contact_email: email, content: content, attachment_url: attachmentUrl })
+        body: JSON.stringify({ contact_email: email, content: content, attachment_url: null })
     });
     const d = await res.json();
     if (d.ok) {
         toast('✅ 申诉已提交，请等待管理员处理');
-        $('appeal-email').value = ''; $('appeal-content').value = ''; $('appeal-file').value = '';
+        $('appeal-email').value = ''; $('appeal-content').value = '';
         loadMyAppeals();
     } else { toast(d.msg); }
 }
@@ -583,7 +562,7 @@ async function ackReject(escalate) {
 }
 function escalateToOwner() { ackReject(true); }
 
-// ================= 申诉管理（管理员） =================
+// ================= 申诉管理 =================
 async function loadAdminAppeals() {
     const res = await fetch(API_BASE + '/get-appeals', { headers: { 'Authorization': 'Bearer ' + currentToken } });
     const d = await res.json();
@@ -618,7 +597,6 @@ function renderAdminAppeals() {
         }
         return '<div class="appeal-item"><div class="appeal-head"><span><b>' + (a.user_email || '未知用户') + '</b> · ' + new Date(a.created_at).toLocaleString() + '</span><span>' + (statusMap[a.status] || '') + (a.is_owner_only ? ' 👑' : '') + '</span></div>' +
             '<div class="appeal-content">' + a.content.replace(/</g, '&lt;') + '</div>' +
-            (a.attachment_url ? '<a href="' + a.attachment_url + '" target="_blank" style="color:#4facfe;font-size:.85em">查看附件证据</a>' : '') +
             (a.status === 'rejected' ? '<div style="color:#ff8080;font-size:.85em;margin-top:8px"><b>拒绝理由：</b>' + (a.reject_reason || '') + '</div>' : '') +
             '<div class="appeal-actions">' + actions + '</div></div>';
     }).join('');
@@ -727,10 +705,14 @@ async function saveProfile() {
         $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 豁免验证</span>'; $('user-uid').textContent = '豁免';
         $('create-locked').style.display = 'none'; $('create-form').style.display = '';
         $('nav-admin').style.display = '';
+        $('nav-appeal').style.display = 'none';
         checkMfaStatus();
         loadMyAppeals();
         return;
     }
+
+    $('nav-admin').style.display = 'none';
+    $('nav-appeal').style.display = '';
 
     emailUnconfirmed = !currentUser.email_confirmed_at;
     if (emailUnconfirmed) { $('email-status').innerHTML = '<span class="badge badge-wait">⏳ 待验证</span>'; $('btn-resend').style.display = ''; }
