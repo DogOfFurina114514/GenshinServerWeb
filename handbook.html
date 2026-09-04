@@ -76,7 +76,6 @@
 </style>
 </head>
 <body>
-<!-- ===== 右上角登录/注册（按登录状态自动切换） ===== -->
 <style>
     .top-auth{position:fixed;top:20px;right:24px;z-index:999;display:flex;gap:12px;}
     .btn-auth{text-decoration:none;padding:10px 26px;border-radius:50px;font-size:.95em;font-weight:bold;line-height:1;transition:all .3s;font-family:'Segoe UI','Microsoft YaHei',sans-serif;}
@@ -84,19 +83,38 @@
     .btn-auth-reg:hover{background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px);}
     .btn-auth-login{color:#fff;background:linear-gradient(45deg,#4facfe,#00f2fe);box-shadow:0 4px 15px rgba(79,172,254,0.4);}
     .btn-auth-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6);}
+    @keyframes flyIn{from{transform:translateX(140px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+    .fly-1{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) backwards;}
+    .fly-2{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) .2s backwards;}
 </style>
-<div class="top-auth" id="topAuth" style="visibility:hidden">
-    <a href="dashboard/login.html?mode=register" class="btn-auth btn-auth-reg">注册</a>
-    <a href="dashboard/login.html" class="btn-auth btn-auth-login">登录</a>
-</div>
+<div class="top-auth" id="topAuth" style="visibility:hidden"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function () {
+    var pre = location.pathname.indexOf('/enter/') !== -1 ? '../' : '';
+
+    // 归一化当前页路径（根路径 / 视为 /index.html）
+    var cur = location.pathname;
+    if (cur === '/' || cur === '') cur = '/index.html';
+    if (cur.charAt(cur.length - 1) === '/') cur += 'index.html';
+
+    // 四个“站内页”：只有它们之间互切才不播放动画
+    var FOUR = ['/index.html', '/handbook.html', '/status.html', '/enter/quick_start.html'];
+    var last = sessionStorage.getItem('topauth_last') || '';
+    var internal = FOUR.indexOf(cur) !== -1 && FOUR.indexOf(last) !== -1 && last !== cur;
+    sessionStorage.setItem('topauth_last', cur);
+
     var sbx = window.supabase.createClient('https://kusbgdswjbaqpczfelnv.supabase.co', 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go');
     sbx.auth.getSession().then(function (r) {
         var box = document.getElementById('topAuth');
+        var a1 = internal ? '' : ' fly-1';   // 第一个飞的（注册 / 进入控制台）
+        var a2 = internal ? '' : ' fly-2';   // 0.2 秒后飞的（登录）
         if (r.data.session) {
-            box.innerHTML = '<a href="dashboard/index.html" class="btn-auth btn-auth-login">进入控制台</a>';
+            box.innerHTML = '<a href="' + pre + 'dashboard/index.html" class="btn-auth btn-auth-login' + a1 + '">进入控制台</a>';
+        } else {
+            box.innerHTML =
+                '<a href="' + pre + 'dashboard/login.html?mode=register" class="btn-auth btn-auth-reg' + a1 + '">注册</a>' +
+                '<a href="' + pre + 'dashboard/login.html" class="btn-auth btn-auth-login' + a2 + '">登录</a>';
         }
         box.style.visibility = 'visible';
     }).catch(function () { document.getElementById('topAuth').style.visibility = 'visible'; });
