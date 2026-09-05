@@ -44,9 +44,38 @@
     .warn-banner .warn-text b { color: #ffd200; }
     .btn-action { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 18px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .88em; white-space: nowrap; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
     .btn-action:hover { transform: translateY(-2px); }
-    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
-    #overlay.show { display: flex; }
-    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); animation: fadeIn .5s ease-out; max-height: 90vh; overflow-y: auto; }
+
+    /* ====== 弹窗动画与背景模糊优化核心 ====== */
+    #overlay { 
+        position: fixed; inset: 0; z-index: 50; 
+        display: flex; align-items: center; justify-content: center; 
+        opacity: 0; visibility: hidden; /* 用 opacity+visibility 代替 display，实现平滑淡出 */
+        transition: opacity 0.35s ease, visibility 0.35s ease;
+        will-change: opacity; /* 提示浏览器开启硬件加速 */
+    }
+    #overlay.show { opacity: 1; visibility: visible; }
+    
+    /* 把模糊效果放在独立的伪元素层，避免在透明度动画时重绘模糊导致卡顿 */
+    #overlay::before {
+        content: ''; position: absolute; inset: 0;
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        z-index: -1;
+    }
+
+    .modal { 
+        background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; 
+        padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; 
+        box-shadow: 0 0 60px rgba(79,172,254,0.35); 
+        max-height: 90vh; overflow-y: auto;
+        /* 弹窗本体的弹出/收起动画：缩放 + 位移 + 透明度 */
+        transform: scale(0.92) translateY(20px); opacity: 0;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        will-change: transform, opacity;
+    }
+    #overlay.show .modal { transform: scale(1) translateY(0); opacity: 1; }
+    /* ======================================= */
+
     .modal h2 { color: #ffd200; margin: 0 0 6px 0; font-size: 1.5em; line-height: 1; text-shadow: 0 0 12px rgba(255,210,0,0.6); }
     .modal .sub { color: #a0c4ff; font-size: .85em; margin-bottom: 20px; }
     .modal .sub b { color: #fff; }
@@ -150,7 +179,6 @@
 </div>
 
 <div id="overlay">
-    <!-- 原来的邮箱验证弹窗 -->
     <div class="modal" id="m-verify-email">
         <h2>📮 邮箱验证</h2>
         <p class="sub">验证邮件已发送至 <b id="sent-to"></b></p>
@@ -167,7 +195,6 @@
         <p id="modal-msg"></p>
     </div>
 
-    <!-- 找回账号主菜单 -->
     <div class="modal modal-recover" id="m-recover" style="display:none">
         <h2>找回账号</h2>
         <p class="recover-label">忘记信息？</p>
@@ -180,7 +207,6 @@
         <button class="btn-ghost" onclick="closeModal()">关闭</button>
     </div>
 
-    <!-- 找回密码 -->
     <div class="modal modal-recover" id="m-recover-pwd" style="display:none">
         <h2>找回密码</h2>
         <label style="text-align:left">账号邮箱</label>
@@ -190,7 +216,6 @@
         <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
     </div>
 
-    <!-- 找回邮箱 -->
     <div class="modal modal-recover" id="m-recover-email" style="display:none">
         <h2>找回邮箱</h2>
         <label style="text-align:left">官服 UID</label>
@@ -207,7 +232,6 @@
         <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
     </div>
 
-    <!-- 提交申诉（未登录） -->
     <div class="modal modal-recover" id="m-recover-appeal" style="display:none">
         <h2>提交申诉</h2>
         <label style="text-align:left">联系邮箱</label>
@@ -219,7 +243,6 @@
         <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
     </div>
 
-    <!-- 冻结账号 -->
     <div class="modal modal-recover" id="m-freeze" style="display:none">
         <h2>冻结账号</h2>
         <p class="steps" style="font-size:.82em">任选一种方式验证身份后即可冻结：</p>
@@ -233,7 +256,6 @@
         <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
     </div>
 
-    <!-- 解冻账号 -->
     <div class="modal modal-recover" id="m-unfreeze" style="display:none">
         <h2>账号已冻结 ❄️</h2>
         <p class="steps" style="font-size:.82em">为保障安全，解冻需依次验证：<b>邮箱 → UID → MFA（如有）</b></p>
@@ -286,7 +308,6 @@ async function doLogin() {
     const email = $('login-email').value.trim(), pwd = $('login-pwd').value;
     if (!email || !pwd) return msg('请填写邮箱和密码', 'err');
 
-    // 先检测是否被冻结
     try {
         const fz = await fetch(API_BASE + '/is-frozen?email=' + encodeURIComponent(email)).then(r => r.json());
         if (fz.frozen) { openUnfreeze(email); return; }
@@ -301,7 +322,6 @@ async function doLogin() {
         return msg('登录失败：' + error.message, 'err');
     }
 
-    // 检测 MFA（先检测，防止验证码刚好过期的情况在下一步处理）
     const { data: f } = await sb.auth.mfa.listFactors();
     const totp = f && f.totp && f.totp.length ? f.totp[0] : null;
     if (totp) {
@@ -357,7 +377,6 @@ async function doRegister() {
     openModal('m-verify-email');
 }
 
-// ============ 找回密码 ============
 async function sendRecoverPwd() {
     const email = $('rp-email').value.trim();
     if (!email) return setMsg('rp-msg', '请填写邮箱', 'err');
@@ -368,7 +387,6 @@ async function sendRecoverPwd() {
     setMsg('rp-msg', '✅ 找回链接已发送，请查收邮箱', 'ok');
 }
 
-// ============ 找回邮箱 ============
 async function recoverEmailStart() {
     const uid = $('re-uid').value.trim(), ne = $('re-new-email').value.trim();
     if (!uid || !ne) return setMsg('re-msg', '请填写 UID 和新邮箱', 'err');
@@ -386,7 +404,6 @@ async function recoverEmailVerify() {
     setTimeout(() => { closeModal(); showLogin(); }, 1200);
 }
 
-// ============ 匿名申诉 ============
 async function submitAnonAppeal() {
     const email = $('ra-email').value.trim(), content = $('ra-content').value.trim();
     if (!email || !content) return setMsg('ra-msg', '请填写邮箱和正文', 'err');
@@ -396,7 +413,6 @@ async function submitAnonAppeal() {
     setTimeout(closeModal, 1200);
 }
 
-// ============ 冻结（三选一） ============
 function fzMethod() { const s = document.querySelector('input[name="fz-m"]:checked'); return s ? s.value : 'email'; }
 function openFreeze() { openModal('m-freeze'); }
 function buildFreezeArea() {
@@ -470,7 +486,6 @@ async function fzDoMfa() {
     if (r.ok) setTimeout(closeModal, 1200);
 }
 
-// ============ 解冻（邮箱 → UID → MFA） ============
 function openUnfreeze(email) {
     unfreezeEmail = email;
     openModal('m-unfreeze');
@@ -526,7 +541,6 @@ async function ufFinalize(token) {
     setTimeout(() => { closeModal(); showLogin(); $('login-email').value = unfreezeEmail; }, 1500);
 }
 
-// ============ 重置密码（找回链接进入） ============
 (async function init() {
     const params = new URLSearchParams(location.search);
     if (params.get('mode') === 'recovery') {
@@ -544,7 +558,6 @@ async function ufFinalize(token) {
             `;
         }
     } else {
-        // 正常初始化：已登录则跳转
         const { data: { session } } = await sb.auth.getSession();
         if (session) window.location.href = 'index.html';
     }
