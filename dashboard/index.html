@@ -99,7 +99,7 @@
     .mb-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25) !important; }
     .mb-copy { background: linear-gradient(45deg, #43e97b, #38f9d7); }
     .mb-verify:disabled { opacity: .5; cursor: wait; transform: none; }
-    #modal-msg, #modal-auth-msg, #modal-new-email-msg { margin-top: 10px; font-size: .85em; min-height: 1.2em; }
+    #modal-msg, #modal-auth-msg, #modal-new-email-msg, #modal-input-email-msg { margin-top: 10px; font-size: .85em; min-height: 1.2em; }
     .err { color: #ff8080 !important; }
     .ok { color: #43e97b !important; }
     .kv { display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px 18px; margin: 8px 0; }
@@ -221,7 +221,7 @@
             </div>
         </section>
 
-        <!-- 申诉中心（无附件） -->
+        <!-- 申诉中心 -->
         <section class="page" id="page-appeal" hidden>
             <div class="card">
                 <div class="card-title">📝 提交人工申诉</div>
@@ -260,6 +260,7 @@
 <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPicked(event)">
 
 <div id="overlay">
+    <!-- 二次验证弹窗 -->
     <div class="modal" id="modal-auth" style="display:none">
         <h2 class="gold">🔐 身份验证</h2>
         <p class="sub">为了安全，进行此操作前需验证你的身份，请选择一种方式：</p>
@@ -272,6 +273,20 @@
         <p id="modal-auth-msg"></p>
     </div>
 
+    <!-- 输入新邮箱弹窗（网页内） -->
+    <div class="modal" id="modal-input-email" style="display:none">
+        <h2 class="gold">📧 修改邮箱</h2>
+        <p class="sub">身份验证通过！请输入你的新邮箱地址</p>
+        <label>新邮箱</label>
+        <input id="input-new-email" type="email" placeholder="new@email.com">
+        <div class="modal-btns">
+            <button class="mb-verify" onclick="confirmNewEmail()">发送验证码</button>
+            <button class="mb-close" onclick="closeModal()">取消</button>
+        </div>
+        <p id="modal-input-email-msg"></p>
+    </div>
+
+    <!-- 新邮箱验证码弹窗 -->
     <div class="modal" id="modal-new-email" style="display:none">
         <h2 class="gold">📧 验证新邮箱</h2>
         <p class="sub">验证码已发送至 <b id="new-email-display"></b></p>
@@ -284,6 +299,7 @@
         <p id="modal-new-email-msg"></p>
     </div>
 
+    <!-- UID 首次验证弹窗 -->
     <div class="modal" id="modal-verify" style="display:none">
         <h2 class="gold">⚡ 身份验证</h2>
         <p class="sub">请在 <b>7 天内</b>完成以下操作</p>
@@ -296,6 +312,7 @@
         <p id="modal-msg"></p>
     </div>
 
+    <!-- 拒绝通知弹窗 -->
     <div class="modal" id="modal-reject-notice" style="display:none">
         <h2 style="color:#ff8080">⚠️ 申诉被拒绝</h2>
         <p class="sub">管理员拒绝了你 <b id="reject-date"></b> 提交的申诉</p>
@@ -306,6 +323,7 @@
         </div>
     </div>
 
+    <!-- 管理员拒绝理由弹窗 -->
     <div class="modal" id="modal-admin-reject" style="display:none">
         <h2 style="color:#ff8080">拒绝申诉</h2>
         <label>请输入拒绝理由（将展示给用户）</label>
@@ -316,6 +334,7 @@
         </div>
     </div>
 
+    <!-- 创建成功弹窗 -->
     <div class="modal" id="modal-success" style="display:none">
         <h2 class="green">🎉 创建成功</h2>
         <div class="kv"><span>用户名</span><b id="r-user"></b></div>
@@ -387,27 +406,26 @@ function updateAuthInput() {
         area.innerHTML = '<button class="btn-sm primary" onclick="sendReauthCode()">发送 6 位验证码到 ' + currentUser.email + '</button>' +
                          '<input id="auth-code" maxlength="6" placeholder="输入 6 位验证码" style="margin-top:10px">';
     } else if (authMethod === 'uid') {
-        // 二次验证：每次轮换新码，并直接显示出来告诉你怎么改
-        area.innerHTML = '<div class="code-box" id="auth-uid-code">----------</div>' +
-                         '<p class="note" style="text-align:left;line-height:1.8">① 打开原神官服 → 个人资料 → 把<b style="color:#ffd200">个性签名</b>改成上方新验证码<br>② 等待 3~5 分钟后点「验证」</p>';
+        area.innerHTML = '<div class="code-box" id="auth-uid-code">加载中...</div>' +
+                         '<p class="note" style="text-align:left;line-height:1.8">① 打开原神官服 → 个人资料 → 把<b style="color:#ffd200">个性签名</b>改成上方新验证码<br>② 等待 3~5 分钟后点「验证」<br>③ 每次打开都会换新码，请用最新的</p>';
         fetchRotateCode();
     } else {
         area.innerHTML = '<input id="auth-code" maxlength="6" placeholder="输入 Authenticator 6 位验证码">';
     }
 }
 
-// 调用后端轮换接口，把新验证码显示在弹窗里
 async function fetchRotateCode() {
     try {
         const res = await fetch(API_BASE + '/rotate-code', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
         const d = await res.json();
         const box = $('auth-uid-code');
-        if (box) box.textContent = d.ok ? d.code : '获取失败';
+        if (box) box.textContent = d.ok ? d.code : 'Failed to fetch';
     } catch (e) {
         const box = $('auth-uid-code');
-        if (box) box.textContent = '获取失败';
+        if (box) box.textContent = 'Failed to fetch';
     }
 }
+
 async function sendReauthCode() {
     const { error } = await sb.auth.reauthenticate();
     toast(error ? '发送失败：' + error.message : '✅ 验证码已发送，请查收邮箱');
@@ -443,21 +461,38 @@ async function doAuthVerify() {
     btn.disabled = false;
 }
 
+// ================= 修改邮箱（网页内弹窗） =================
 function startChangeEmail() { requireReauth(promptNewEmail); }
-function startChangePassword() { requireReauth(doChangePassword); }
 
 function promptNewEmail() {
-    const newEmail = prompt('身份验证通过！\n请输入你的新邮箱地址：');
-    if (!newEmail || !newEmail.includes('@')) return;
-    if (newEmail.toLowerCase().endsWith('@admin.server')) { toast('管理员后缀禁止使用'); return; }
-    pendingNewEmail = newEmail.trim();
+    $('input-new-email').value = '';
+    $('modal-input-email-msg').textContent = '';
+    $('modal-input-email-msg').className = '';
+    $('modal-input-email').style.display = '';
+    $('overlay').classList.add('show');
+}
+
+function confirmNewEmail() {
+    const newEmail = $('input-new-email').value.trim();
+    if (!newEmail || !newEmail.includes('@')) {
+        $('modal-input-email-msg').textContent = '请输入有效的邮箱地址';
+        $('modal-input-email-msg').className = 'err'; return;
+    }
+    if (newEmail.toLowerCase().endsWith('@admin.server')) {
+        $('modal-input-email-msg').textContent = '管理员后缀禁止使用';
+        $('modal-input-email-msg').className = 'err'; return;
+    }
+    pendingNewEmail = newEmail;
     sb.auth.updateUser({ email: pendingNewEmail }).then(function (r) {
-        if (r.error) { toast('发起修改失败：' + r.error.message); return; }
+        if (r.error) {
+            $('modal-input-email-msg').textContent = '发起修改失败：' + r.error.message;
+            $('modal-input-email-msg').className = 'err'; return;
+        }
+        $('modal-input-email').style.display = 'none';
         $('new-email-display').textContent = pendingNewEmail;
         $('new-email-code').value = '';
-        $('modal-new-email').style.display = '';
         $('modal-new-email-msg').textContent = '';
-        $('overlay').classList.add('show');
+        $('modal-new-email').style.display = '';
     });
 }
 
@@ -471,6 +506,8 @@ async function verifyNewEmail() {
     setTimeout(function () { location.reload(); }, 1000);
 }
 
+// ================= 修改密码 =================
+function startChangePassword() { requireReauth(doChangePassword); }
 function doChangePassword() {
     const p1 = $('sec-new-pwd').value, p2 = $('sec-confirm-pwd').value;
     if (p1.length < 6) return toast('密码至少 6 位');
@@ -651,7 +688,7 @@ async function deleteAppeal(id) {
     toast('已删除'); loadAdminAppeals();
 }
 
-// ================= 原有逻辑 =================
+// ================= 个人信息 =================
 function refreshNotice() {
     const parts = [];
     if (emailUnconfirmed) parts.push('⚠️ <b>邮箱未验证</b>！7 天内未验证账号将被删除 <button class="nbtn" onclick="resendEmail()">重发验证邮件</button>');
@@ -708,6 +745,7 @@ async function saveProfile() {
     currentUser = data.user; cancelEdit(); toast('✅ 资料已保存');
 }
 
+// ================= 初始化 =================
 (async function init() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
