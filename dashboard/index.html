@@ -145,7 +145,6 @@
     <main class="main">
         <div class="notice" id="notice"></div>
 
-        <!-- 个人信息 -->
         <section class="page" id="page-profile">
             <div class="card">
                 <div class="card-head">
@@ -175,7 +174,6 @@
             </div>
         </section>
 
-        <!-- 安全设置 -->
         <section class="page" id="page-security" hidden>
             <div class="card">
                 <div class="card-title">📧 修改邮箱</div>
@@ -209,7 +207,6 @@
             </div>
         </section>
 
-        <!-- 创建服务器账号 -->
         <section class="page" id="page-create" hidden>
             <div class="card">
                 <div class="card-title">🎮 创建服务器账号</div>
@@ -224,11 +221,10 @@
             </div>
         </section>
 
-        <!-- 申诉中心 -->
         <section class="page" id="page-appeal" hidden>
             <div class="card">
                 <div class="card-title">📝 提交人工申诉</div>
-                <p class="note">当你的邮箱、UID、MFA 均不可用时，可提交表单由管理员人工处理。请在正文中写明能证明账号归属的信息（如充值记录、常用登录地等）。</p>
+                <p class="note">当你的邮箱、UID、MFA 均不可用时，可提交表单由管理员人工处理。请在正文中写明能证明账号归属的信息。</p>
                 <label>联系邮箱</label>
                 <input id="appeal-email" type="email" placeholder="用于接收处理结果">
                 <label>申诉正文</label>
@@ -241,7 +237,6 @@
             </div>
         </section>
 
-        <!-- 申诉管理 -->
         <section class="page" id="page-admin" hidden>
             <div class="card">
                 <div class="card-title">⚖️ 申诉审批面板</div>
@@ -263,7 +258,6 @@
 <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPicked(event)">
 
 <div id="overlay">
-    <!-- 二次验证弹窗 -->
     <div class="modal" id="modal-auth" style="display:none">
         <h2 class="gold">🔐 身份验证</h2>
         <p class="sub">为了安全，进行此操作前需验证你的身份，请选择一种方式：</p>
@@ -276,7 +270,6 @@
         <p id="modal-auth-msg"></p>
     </div>
 
-    <!-- 输入新邮箱弹窗（网页内） -->
     <div class="modal" id="modal-input-email" style="display:none">
         <h2 class="gold">📧 修改邮箱</h2>
         <p class="sub">身份验证通过！请输入你的新邮箱地址</p>
@@ -289,7 +282,6 @@
         <p id="modal-input-email-msg"></p>
     </div>
 
-    <!-- 新邮箱验证码弹窗 -->
     <div class="modal" id="modal-new-email" style="display:none">
         <h2 class="gold">📧 验证新邮箱</h2>
         <p class="sub">验证码已发送至 <b id="new-email-display"></b></p>
@@ -302,7 +294,6 @@
         <p id="modal-new-email-msg"></p>
     </div>
 
-    <!-- UID 首次验证弹窗 -->
     <div class="modal" id="modal-verify" style="display:none">
         <h2 class="gold">⚡ 身份验证</h2>
         <p class="sub">请在 <b>7 天内</b>完成以下操作</p>
@@ -315,7 +306,6 @@
         <p id="modal-msg"></p>
     </div>
 
-    <!-- 拒绝通知弹窗 -->
     <div class="modal" id="modal-reject-notice" style="display:none">
         <h2 style="color:#ff8080">⚠️ 申诉被拒绝</h2>
         <p class="sub">管理员拒绝了你 <b id="reject-date"></b> 提交的申诉</p>
@@ -326,7 +316,6 @@
         </div>
     </div>
 
-    <!-- 管理员拒绝理由弹窗 -->
     <div class="modal" id="modal-admin-reject" style="display:none">
         <h2 style="color:#ff8080">拒绝申诉</h2>
         <label>请输入拒绝理由（将展示给用户）</label>
@@ -337,7 +326,6 @@
         </div>
     </div>
 
-    <!-- 创建成功弹窗 -->
     <div class="modal" id="modal-success" style="display:none">
         <h2 class="green">🎉 创建成功</h2>
         <div class="kv"><span>用户名</span><b id="r-user"></b></div>
@@ -375,7 +363,6 @@ function showPage(name, btn) {
     if (name === 'admin') loadAdminAppeals();
 }
 
-// ================= 二次验证 =================
 async function requireReauth(callback) {
     const isAdmin = currentUser.email.toLowerCase().endsWith('@admin.server');
     const emailOk = !!currentUser.email_confirmed_at;
@@ -409,8 +396,8 @@ function updateAuthInput() {
         area.innerHTML = '<button class="btn-sm primary" onclick="sendReauthCode()">发送 6 位验证码到 ' + currentUser.email + '</button>' +
                          '<input id="auth-code" maxlength="6" placeholder="输入 6 位验证码" style="margin-top:10px">';
     } else if (authMethod === 'uid') {
-        area.innerHTML = '<div class="code-box" id="auth-uid-code">----------</div>' +
-                         '<p class="note" style="text-align:left;line-height:1.8">① 打开原神官服 → 个人资料 → 把<b style="color:#ffd200">个性签名</b>改成上方新验证码<br>② 等待 3~5 分钟后点「验证」<br>③ 每次打开都会换新码，请用最新的</p>';
+        area.innerHTML = '<div class="code-box" id="auth-uid-code">加载中...</div>' +
+                         '<p class="note" style="text-align:left;line-height:1.8">① 打开原神官服 → 个人资料 → 把<b style="color:#ffd200">个性签名</b>改成上方新验证码<br>② 等待 3~5 分钟后点「验证」</p>';
         fetchRotateCode();
     } else {
         area.innerHTML = '<input id="auth-code" maxlength="6" placeholder="输入 Authenticator 6 位验证码">';
@@ -422,10 +409,10 @@ async function fetchRotateCode() {
         const res = await fetch(API_BASE + '/rotate-code', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
         const d = await res.json();
         const box = $('auth-uid-code');
-        if (box) box.textContent = d.ok ? d.code : 'Failed to fetch';
+        if (box) box.textContent = d.ok ? d.code : '----------';
     } catch (e) {
         const box = $('auth-uid-code');
-        if (box) box.textContent = 'Failed to fetch';
+        if (box) box.textContent = '----------';
     }
 }
 
@@ -464,9 +451,7 @@ async function doAuthVerify() {
     btn.disabled = false;
 }
 
-// ================= 修改邮箱（网页内弹窗） =================
 function startChangeEmail() { requireReauth(promptNewEmail); }
-
 function promptNewEmail() {
     $('input-new-email').value = '';
     $('modal-input-email-msg').textContent = '';
@@ -474,7 +459,6 @@ function promptNewEmail() {
     $('modal-input-email').style.display = '';
     $('overlay').classList.add('show');
 }
-
 function confirmNewEmail() {
     const newEmail = $('input-new-email').value.trim();
     if (!newEmail || !newEmail.includes('@')) {
@@ -498,7 +482,6 @@ function confirmNewEmail() {
         $('modal-new-email').style.display = '';
     });
 }
-
 async function verifyNewEmail() {
     const code = $('new-email-code').value.trim();
     if (!/^\d{6}$/.test(code)) { $('modal-new-email-msg').textContent = '请输入 6 位数字'; $('modal-new-email-msg').className = 'err'; return; }
@@ -509,7 +492,6 @@ async function verifyNewEmail() {
     setTimeout(function () { location.reload(); }, 1000);
 }
 
-// ================= 修改密码 =================
 function startChangePassword() { requireReauth(doChangePassword); }
 function doChangePassword() {
     const p1 = $('sec-new-pwd').value, p2 = $('sec-confirm-pwd').value;
@@ -522,7 +504,6 @@ function doChangePassword() {
     });
 }
 
-// ================= MFA =================
 async function checkMfaStatus() {
     const { data } = await sb.auth.mfa.listFactors();
     const totp = data && data.totp;
@@ -563,7 +544,6 @@ async function unenrollMfa() {
     toast('✅ 已解绑'); checkMfaStatus();
 }
 
-// ================= 申诉（无附件） =================
 async function submitAppeal() {
     const email = $('appeal-email').value.trim();
     const content = $('appeal-content').value.trim();
@@ -591,11 +571,35 @@ async function loadMyAppeals() {
 
     list.innerHTML = d.appeals.map(function (a) {
         const statusMap = { pending: '<span class="badge badge-wait">未受理</span>', processing: '<span class="badge" style="background:rgba(79,172,254,0.15);color:#4facfe;border:1px solid rgba(79,172,254,0.4)">受理中</span>', completed: '<span class="badge badge-ok">已完成</span>', rejected: '<span class="badge badge-bad">已拒绝</span>' };
+        let actions = '';
+        if (a.status === 'pending') {
+            actions = '<button class="btn-sm warn" onclick="cancelAppeal(\'' + a.id + '\')">撤销申诉</button>';
+        } else if (a.status === 'completed' || a.status === 'rejected') {
+            actions = '<button class="btn-sm danger" onclick="deleteMyAppeal(\'' + a.id + '\')">删除</button>';
+        }
         return '<div class="appeal-item"><div class="appeal-head"><span>' + new Date(a.created_at).toLocaleString() + '</span>' + (statusMap[a.status] || '') + '</div>' +
             '<div class="appeal-content">' + a.content.replace(/</g, '&lt;') + '</div>' +
             (a.status === 'rejected' ? '<div style="color:#ff8080;font-size:.85em;margin-top:8px"><b>拒绝理由：</b>' + (a.reject_reason || '') + '</div>' : '') +
-            '</div>';
+            '<div class="appeal-actions">' + actions + '</div></div>';
     }).join('');
+}
+
+async function cancelAppeal(id) {
+    if (!confirm('确定撤销此申诉？撤销后该记录将被删除。')) return;
+    await fetch(API_BASE + '/cancel-appeal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ id: id })
+    });
+    toast('申诉已撤销'); loadMyAppeals();
+}
+
+async function deleteMyAppeal(id) {
+    if (!confirm('确定从你的记录中删除此申诉？')) return;
+    await fetch(API_BASE + '/delete-my-appeal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ id: id })
+    });
+    toast('已删除'); loadMyAppeals();
 }
 
 function showRejectNotice(appeal) {
@@ -617,7 +621,6 @@ async function ackReject(escalate) {
 }
 function escalateToOwner() { ackReject(true); }
 
-// ================= 申诉管理 =================
 async function loadAdminAppeals() {
     const res = await fetch(API_BASE + '/get-appeals', { headers: { 'Authorization': 'Bearer ' + currentToken } });
     const d = await res.json();
@@ -683,7 +686,7 @@ async function confirmReject() {
 }
 
 async function deleteAppeal(id) {
-    if (!confirm('确定删除此表单？')) return;
+    if (!confirm('确定从你的管理面板中删除此申诉？（用户和其他管理员仍可见）')) return;
     await fetch(API_BASE + '/delete-appeal', {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
         body: JSON.stringify({ id: id })
@@ -691,7 +694,6 @@ async function deleteAppeal(id) {
     toast('已删除'); loadAdminAppeals();
 }
 
-// ================= 个人信息 =================
 function refreshNotice() {
     const parts = [];
     if (emailUnconfirmed) parts.push('⚠️ <b>邮箱未验证</b>！7 天内未验证账号将被删除 <button class="nbtn" onclick="resendEmail()">重发验证邮件</button>');
@@ -748,7 +750,6 @@ async function saveProfile() {
     currentUser = data.user; cancelEdit(); toast('✅ 资料已保存');
 }
 
-// ================= 初始化 =================
 (async function init() {
     const { data: { session } } = await sb.auth.getSession();
     if (!session) { window.location.href = 'login.html'; return; }
