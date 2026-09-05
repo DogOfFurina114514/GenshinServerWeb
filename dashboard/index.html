@@ -475,7 +475,6 @@ async function doAuthVerify() {
                 type: 'reauthentication' 
             });
             if (error) throw error;
-        }
         } else if (authMethod === 'uid') {
             const res = await fetch(API_BASE + '/verify-secondary', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
             const r = await res.json();
