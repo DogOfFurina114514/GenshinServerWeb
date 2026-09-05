@@ -61,6 +61,7 @@
     .card-actions { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
     .btn-verify { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 22px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .9em; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
     .btn-verify:hover { transform: translateY(-2px); }
+    .btn-verify:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .card-title { color: #fff; font-size: 1.1em; font-weight: bold; margin-bottom: 16px; }
     label { color: #cfe3ff; font-size: .88em; display: block; margin: 12px 0 6px 4px; }
     input, textarea, select { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 12px; color: #fff; padding: 12px 16px; font-size: .95em; outline: none; transition: .3s; font-family: inherit; }
@@ -81,6 +82,7 @@
     .appeal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
     .btn-sm { padding: 6px 14px; border-radius: 20px; font-size: .8em; border: none; cursor: pointer; font-family: inherit; transition: .2s; text-decoration: none; }
     .btn-sm:hover { transform: translateY(-1px); }
+    .btn-sm:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .btn-sm.primary { background: #4facfe; color: #fff; }
     .btn-sm.success { background: #43e97b; color: #063; }
     .btn-sm.danger { background: #ff6e6e; color: #fff; }
@@ -98,10 +100,10 @@
     .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
     .modal-btns button { flex: 1; border: none; cursor: pointer; color: #fff; padding: 12px 0; border-radius: 40px; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; font-size: .95em; }
     .modal-btns button:hover { transform: translateY(-2px); }
+    .modal-btns button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .mb-verify { background: linear-gradient(45deg, #43e97b, #38f9d7); }
     .mb-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25) !important; }
     .mb-copy { background: linear-gradient(45deg, #43e97b, #38f9d7); }
-    .mb-verify:disabled { opacity: .5; cursor: wait; transform: none; }
     #modal-msg, #modal-auth-msg, #modal-new-email-msg, #modal-input-email-msg { margin-top: 10px; font-size: .85em; min-height: 1.2em; }
     .err { color: #ff8080 !important; }
     .ok { color: #43e97b !important; }
@@ -158,7 +160,7 @@
                         <button class="btn-edit" id="btn-edit" onclick="toggleEdit()">编辑</button>
                     </div>
                 </div>
-                <div class="edit-tip" id="edit-tip">✏️ 编辑中<button class="mini-btn" onclick="resetAvatar()">恢复默认头像</button></div>
+                <div class="edit-tip" id="edit-tip">✏️ 编辑中：点击头像上传自定义头像 · 邮箱不可修改<button class="mini-btn" onclick="resetAvatar()">恢复默认头像</button></div>
                 <div class="info-box">
                     <div class="info-title">账号信息</div>
                     <div class="info-row"><span>邮箱</span><b id="info-email">-</b></div>
@@ -276,7 +278,7 @@
         <label>新邮箱</label>
         <input id="input-new-email" type="email" placeholder="new@email.com">
         <div class="modal-btns">
-            <button class="mb-verify" onclick="confirmNewEmail()">发送验证码</button>
+            <button class="mb-verify" id="btn-confirm-new-email" onclick="confirmNewEmail()">发送验证码</button>
             <button class="mb-close" onclick="closeModal()">取消</button>
         </div>
         <p id="modal-input-email-msg"></p>
@@ -354,6 +356,26 @@ let pendingNewEmail = '', authMethod = '', pendingRejectId = '', afterAuthCallba
 let allAppeals = [], currentFilter = 'all';
 
 function fmtRemain(ms) { if (ms <= 0) return '已过期'; return Math.floor(ms / 86400000) + '天' + Math.floor((ms % 86400000) / 3600000) + '小时'; }
+
+// ★ 通用 60 秒倒计时函数
+function startCooldown(btnId, originalText, seconds) {
+    const btn = $(btnId);
+    if (!btn) return;
+    btn.disabled = true;
+    let remaining = seconds;
+    btn.textContent = remaining + '秒后可重发';
+    const timer = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+            clearInterval(timer);
+            btn.disabled = false;
+            btn.textContent = originalText;
+        } else {
+            btn.textContent = remaining + '秒后可重发';
+        }
+    }, 1000);
+}
+
 function showPage(name, btn) {
     document.querySelectorAll('.page').forEach(p => p.hidden = true);
     $('page-' + name).hidden = false;
@@ -393,7 +415,7 @@ function updateAuthInput() {
     authMethod = sel.value;
     const area = $('auth-input-area');
     if (authMethod === 'email') {
-        area.innerHTML = '<button class="btn-sm primary" onclick="sendReauthCode()">发送 6 位验证码到 ' + currentUser.email + '</button>' +
+        area.innerHTML = '<button class="btn-sm primary" id="btn-send-reauth" onclick="sendReauthCode()">发送 6 位验证码到 ' + currentUser.email + '</button>' +
                          '<input id="auth-code" maxlength="6" placeholder="输入 6 位验证码" style="margin-top:10px">';
     } else if (authMethod === 'uid') {
         area.innerHTML = '<div class="code-box" id="auth-uid-code">----------</div>' +
@@ -416,20 +438,26 @@ async function fetchRotateCode() {
     }
 }
 
+// ★ 二次验证发送验证码（带 60s 冷却）
 async function sendReauthCode() {
+    const btn = $('btn-send-reauth');
+    if (btn) { btn.disabled = true; btn.textContent = '发送中...'; }
     try {
         const { error } = await sb.auth.reauthenticate();
         if (error) {
             if (error.status === 504 || error.message.includes('timeout') || error.message.includes('Gateway')) {
-                toast('邮件发送超时');
+                toast('邮件发送超时！请检查 SMTP 配置');
             } else {
                 toast('发送失败：' + error.message);
             }
+            if (btn) { btn.disabled = false; btn.textContent = '发送 6 位验证码到 ' + currentUser.email; }
         } else {
-            toast('✅ 验证码已发送，请查收邮箱（包括垃圾箱）');
+            toast('✅ 验证码已发送，请查收邮箱');
+            if (btn) startCooldown('btn-send-reauth', '发送 6 位验证码到 ' + currentUser.email, 60);
         }
     } catch (e) {
         toast('网络异常');
+        if (btn) { btn.disabled = false; btn.textContent = '发送 6 位验证码到 ' + currentUser.email; }
     }
 }
 
@@ -471,6 +499,8 @@ function promptNewEmail() {
     $('modal-input-email').style.display = '';
     $('overlay').classList.add('show');
 }
+
+// ★ 修改邮箱发送验证码（带 60s 冷却）
 function confirmNewEmail() {
     const newEmail = $('input-new-email').value.trim();
     if (!newEmail || !newEmail.includes('@')) {
@@ -481,19 +511,28 @@ function confirmNewEmail() {
         $('modal-input-email-msg').textContent = '管理员后缀禁止使用';
         $('modal-input-email-msg').className = 'err'; return;
     }
+    const btn = $('btn-confirm-new-email');
+    if (btn) { btn.disabled = true; btn.textContent = '发送中...'; }
     pendingNewEmail = newEmail;
     sb.auth.updateUser({ email: pendingNewEmail }).then(function (r) {
         if (r.error) {
             $('modal-input-email-msg').textContent = '发起修改失败：' + r.error.message;
-            $('modal-input-email-msg').className = 'err'; return;
+            $('modal-input-email-msg').className = 'err'; 
+            if (btn) { btn.disabled = false; btn.textContent = '发送验证码'; }
+            return;
         }
-        $('modal-input-email').style.display = 'none';
-        $('new-email-display').textContent = pendingNewEmail;
-        $('new-email-code').value = '';
-        $('modal-new-email-msg').textContent = '';
-        $('modal-new-email').style.display = '';
+        toast('✅ 验证码已发送至新邮箱');
+        if (btn) startCooldown('btn-confirm-new-email', '发送验证码', 60);
+        setTimeout(function () {
+            $('modal-input-email').style.display = 'none';
+            $('new-email-display').textContent = pendingNewEmail;
+            $('new-email-code').value = '';
+            $('modal-new-email-msg').textContent = '';
+            $('modal-new-email').style.display = '';
+        }, 800);
     });
 }
+
 async function verifyNewEmail() {
     const code = $('new-email-code').value.trim();
     if (!/^\d{6}$/.test(code)) { $('modal-new-email-msg').textContent = '请输入 6 位数字'; $('modal-new-email-msg').className = 'err'; return; }
@@ -795,7 +834,20 @@ async function saveProfile() {
     sb.channel('verify_' + currentUser.id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'verify_records', filter: 'user_id=eq.' + currentUser.id }, function (payload) { applyRecord(payload.new); }).subscribe();
 })();
 
-async function resendEmail() { const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email }); toast(error ? '发送失败：' + error.message : '验证邮件已重新发送！'); }
+// ★ 个人信息页重发验证邮件（带 60s 冷却）
+async function resendEmail() { 
+    const btn = $('btn-resend');
+    if (btn) { btn.disabled = true; btn.textContent = '发送中...'; }
+    const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email }); 
+    if (error) {
+        toast('发送失败：' + error.message);
+        if (btn) { btn.disabled = false; btn.textContent = '重发验证邮件'; }
+    } else {
+        toast('✅ 验证邮件已重新发送！');
+        if (btn) startCooldown('btn-resend', '重发验证邮件', 60);
+    }
+}
+
 function openUidModal() {
     $('modal-verify').style.display = ''; $('modal-success').style.display = 'none'; $('modal-msg').textContent = ''; $('overlay').classList.add('show');
     fetch(API_BASE + '/get-code?user_id=' + encodeURIComponent(currentUser.id)).then(function (r) { return r.json(); }).then(function (d) { if (d.ok && d.code) $('modal-code').textContent = d.code; });
