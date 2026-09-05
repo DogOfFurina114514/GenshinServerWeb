@@ -203,7 +203,7 @@
                     <button class="btn-cancel" style="width:100%;margin-top:10px" onclick="cancelMfa()">取消</button>
                 </div>
                 <div id="mfa-actions" style="display:none;margin-top:12px">
-                    <button class="btn-create" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="requireReauth(startEnrollMfa)">绑定验证器</button>
+                    <button class="btn-create" id="btn-enroll-mfa" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="requireReauth(startEnrollMfa)">绑定验证器</button>
                     <button class="btn-create" id="btn-unenroll-mfa" style="background:linear-gradient(45deg,#ff6e6e,#ff8080);margin-top:10px" onclick="requireReauth(unenrollMfa)">解绑验证器</button>
                 </div>
             </div>
@@ -566,9 +566,11 @@ async function checkMfaStatus() {
     $('mfa-actions').style.display = '';
     if (totp && totp.length > 0) {
         $('mfa-status').innerHTML = '<span class="badge badge-ok">✓ 已绑定</span>';
+        $('btn-enroll-mfa').style.display = 'none';
         $('btn-unenroll-mfa').style.display = '';
     } else {
         $('mfa-status').innerHTML = '<span class="badge badge-wait">未绑定</span>';
+        $('btn-enroll-mfa').style.display = '';
         $('btn-unenroll-mfa').style.display = 'none';
     }
 }
