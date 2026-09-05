@@ -468,7 +468,7 @@ async function doAuthVerify() {
         if (authMethod === 'email') {
             const code = ($('auth-code') ? $('auth-code').value : '').trim();
             if (!/^\d{6}$/.test(code)) throw new Error('请输入 6 位数字');
-            const { error } = await sb.auth.verifyOtp({ email: currentUser.email, token: code, type: 'reauthentication' });
+            const { error } = await sb.auth.verifyOtp({ token: code, type: 'reauthentication' });
             if (error) throw error;
         } else if (authMethod === 'uid') {
             const res = await fetch(API_BASE + '/verify-secondary', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
