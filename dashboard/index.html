@@ -357,7 +357,6 @@ let allAppeals = [], currentFilter = 'all';
 
 function fmtRemain(ms) { if (ms <= 0) return '已过期'; return Math.floor(ms / 86400000) + '天' + Math.floor((ms % 86400000) / 3600000) + '小时'; }
 
-// ★ 通用 60 秒倒计时函数
 function startCooldown(btnId, originalText, seconds) {
     const btn = $(btnId);
     if (!btn) return;
@@ -438,18 +437,17 @@ async function fetchRotateCode() {
     }
 }
 
-// ★ 二次验证发送验证码（带 60s 冷却）
+// ★ 改用 signInWithOtp 发送验证码（最稳的免密 OTP 流程）
 async function sendReauthCode() {
     const btn = $('btn-send-reauth');
     if (btn) { btn.disabled = true; btn.textContent = '发送中...'; }
     try {
-        const { error } = await sb.auth.reauthenticate();
+        const { error } = await sb.auth.signInWithOtp({
+            email: currentUser.email,
+            options: { shouldCreateUser: false }
+        });
         if (error) {
-            if (error.status === 504 || error.message.includes('timeout') || error.message.includes('Gateway')) {
-                toast('邮件发送超时！请检查 SMTP 配置');
-            } else {
-                toast('发送失败：' + error.message);
-            }
+            toast('发送失败：' + error.message);
             if (btn) { btn.disabled = false; btn.textContent = '发送 6 位验证码到 ' + currentUser.email; }
         } else {
             toast('✅ 验证码已发送，请查收邮箱');
@@ -468,11 +466,11 @@ async function doAuthVerify() {
         if (authMethod === 'email') {
             const code = ($('auth-code') ? $('auth-code').value : '').trim();
             if (!/^\d{6}$/.test(code)) throw new Error('请输入 6 位纯数字');
-            console.log('准备验证:', { email: currentUser.email, token: code });
-            const { error } = await sb.auth.verifyOtp({ 
-                email: currentUser.email, 
-                token: code, 
-                type: 'reauthentication' 
+            // ★ 用 type:'email' 校验（与 signInWithOtp 配对，绝不报 invalid）
+            const { error } = await sb.auth.verifyOtp({
+                email: currentUser.email,
+                token: code,
+                type: 'email'
             });
             if (error) throw error;
         } else if (authMethod === 'uid') {
@@ -482,7 +480,9 @@ async function doAuthVerify() {
         } else {
             const code = ($('auth-code') ? $('auth-code').value : '').trim();
             const { data: factors } = await sb.auth.mfa.listFactors();
-            const { data: ch } = await sb.auth.mfa.challenge({ factorId: factors.totp[0].id });
+            if (!factors || !factors.totp || !factors.totp.length) throw new Error('未找到 MFA 验证器');
+            const { data: ch, error: chError } = await sb.auth.mfa.challenge({ factorId: factors.totp[0].id });
+            if (chError) throw chError;
             const { error } = await sb.auth.mfa.verify({ factorId: factors.totp[0].id, challengeId: ch.id, code });
             if (error) throw error;
         }
@@ -490,7 +490,7 @@ async function doAuthVerify() {
         const cb = afterAuthCallback; afterAuthCallback = null;
         if (cb) cb();
     } catch (e) {
-        $('modal-auth-msg').textContent = '验证失败：' + e.message;
+        $('modal-auth-msg').textContent = '验证失败：' + (e.message || e.error_description || '未知错误');
         $('modal-auth-msg').className = 'err';
     }
     btn.disabled = false;
@@ -505,7 +505,6 @@ function promptNewEmail() {
     $('overlay').classList.add('show');
 }
 
-// ★ 修改邮箱发送验证码（带 60s 冷却）
 function confirmNewEmail() {
     const newEmail = $('input-new-email').value.trim();
     if (!newEmail || !newEmail.includes('@')) {
@@ -522,7 +521,7 @@ function confirmNewEmail() {
     sb.auth.updateUser({ email: pendingNewEmail }).then(function (r) {
         if (r.error) {
             $('modal-input-email-msg').textContent = '发起修改失败：' + r.error.message;
-            $('modal-input-email-msg').className = 'err'; 
+            $('modal-input-email-msg').className = 'err';
             if (btn) { btn.disabled = false; btn.textContent = '发送验证码'; }
             return;
         }
@@ -839,11 +838,10 @@ async function saveProfile() {
     sb.channel('verify_' + currentUser.id).on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'verify_records', filter: 'user_id=eq.' + currentUser.id }, function (payload) { applyRecord(payload.new); }).subscribe();
 })();
 
-// ★ 个人信息页重发验证邮件（带 60s 冷却）
-async function resendEmail() { 
+async function resendEmail() {
     const btn = $('btn-resend');
     if (btn) { btn.disabled = true; btn.textContent = '发送中...'; }
-    const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email }); 
+    const { error } = await sb.auth.resend({ type: 'signup', email: currentUser.email });
     if (error) {
         toast('发送失败：' + error.message);
         if (btn) { btn.disabled = false; btn.textContent = '重发验证邮件'; }
