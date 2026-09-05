@@ -417,8 +417,20 @@ async function fetchRotateCode() {
 }
 
 async function sendReauthCode() {
-    const { error } = await sb.auth.reauthenticate();
-    toast(error ? '发送失败：' + error.message : '✅ 验证码已发送，请查收邮箱');
+    try {
+        const { error } = await sb.auth.reauthenticate();
+        if (error) {
+            if (error.status === 504 || error.message.includes('timeout') || error.message.includes('Gateway')) {
+                toast('邮件发送超时');
+            } else {
+                toast('发送失败：' + error.message);
+            }
+        } else {
+            toast('✅ 验证码已发送，请查收邮箱（包括垃圾箱）');
+        }
+    } catch (e) {
+        toast('网络异常');
+    }
 }
 
 async function doAuthVerify() {
