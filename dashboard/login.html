@@ -3,56 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>登录 - 芙芙的狗的服务器</title>
+<title>玩家登录 - 芙芙的狗的服务器</title>
 <link rel="icon" href="/icon.ico" type="image/x-icon">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
     html, body { margin: 0; min-height: 100%; }
     body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; position: relative; overflow-x: hidden; }
     .bubbles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
     .bubble { position: absolute; bottom: -100px; background: rgba(255,255,255,0.08); border-radius: 50%; box-shadow: 0 0 10px rgba(79,172,254,0.3); animation: rise 10s infinite ease-in; }
     @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: .6; } 100% { transform: translateY(-110vh) scale(1.5); opacity: 0; } }
-    .container { position: relative; z-index: 10; max-width: 420px; margin: 60px auto; padding: 36px 40px; background: rgba(255,255,255,0.08); border-radius: 24px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-    h1 { color: #fff; text-align: center; font-size: 1.5em; margin: 0 0 6px 0; letter-spacing: 2px; text-shadow: 0 0 15px rgba(79,172,254,0.8); }
-    .sub { color: #a0c4ff; text-align: center; font-size: .85em; margin: 0 0 22px 0; }
-    .tabs { display: flex; gap: 10px; margin-bottom: 18px; }
-    .tab { flex: 1; text-align: center; padding: 10px 0; border-radius: 12px; cursor: pointer; color: #a0c4ff; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); font-size: .95em; }
-    .tab.active { background: linear-gradient(45deg, #4facfe, #00f2fe); color: #fff; font-weight: bold; border-color: transparent; }
-    label { color: #cfe3ff; font-size: .85em; display: block; margin: 12px 0 6px 4px; }
-    input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 12px; color: #fff; padding: 12px 16px; font-size: .95em; outline: none; font-family: inherit; }
-    input:focus { border-color: #4facfe; box-shadow: 0 0 8px rgba(79,172,254,0.3); }
-    .row-between { display: flex; justify-content: flex-end; margin-top: 6px; }
-    .link-btn { background: none; border: none; color: #a0c4ff; font-size: .82em; cursor: pointer; padding: 2px 4px; font-family: inherit; }
-    .link-btn:hover { color: #fff; text-decoration: underline; }
-    .btn-main { width: 100%; margin-top: 18px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1em; font-weight: bold; background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45); font-family: inherit; }
-    .btn-main:disabled { opacity: .5; cursor: wait; }
-    .code-row { display: flex; gap: 8px; }
-    .code-row input { flex: 1; }
-    .code-row button { flex-shrink: 0; border: none; cursor: pointer; color: #fff; padding: 0 14px; border-radius: 12px; font-size: .8em; background: linear-gradient(45deg, #4facfe, #00f2fe); font-family: inherit; }
-    .code-row button:disabled { opacity: .5; cursor: not-allowed; }
-    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+    .container { position: relative; z-index: 10; max-width: 560px; margin: 60px auto; padding: 40px 50px; background: rgba(255,255,255,0.08); border-radius: 24px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); animation: fadeIn 1s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .back { color: #a0c4ff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: .95em; line-height: 1; }
+    .back:hover { color: #fff; }
+    .icon { display: block; flex-shrink: 0; }
+    h1 { color: #fff; text-align: center; font-size: 2em; margin: 10px 0 8px 0; text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1; }
+    .subtitle { color: #a0c4ff; text-align: center; margin: 0 0 30px 0; font-weight: 300; }
+    label { color: #cfe3ff; font-size: .9em; display: block; margin: 16px 0 8px 4px; }
+    input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.3); border: 1px solid rgba(79,172,254,0.4); border-radius: 14px; color: #fff; padding: 14px 18px; font-size: 1em; outline: none; transition: .3s; }
+    input:focus { border-color: #4facfe; box-shadow: 0 0 10px rgba(79,172,254,0.3); }
+    input::placeholder { color: rgba(160,196,255,0.4); }
+    .hint { color: rgba(255,255,255,0.4); font-size: .78em; margin: 6px 4px 0 4px; }
+    .btn-submit { width: 100%; margin-top: 24px; border: none; cursor: pointer; color: #fff; padding: 16px 0; border-radius: 50px; font-size: 1.1em; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-shadow: 0 1px 3px rgba(0,0,0,0.2); font-family: inherit; }
+    .btn-submit:hover { transform: translateY(-4px); }
+    .btn-submit:disabled { opacity: .5; cursor: wait; transform: none; }
+    .btn-login { background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45); }
+    .btn-login:hover { box-shadow: 0 8px 28px rgba(79,172,254,0.65); }
+    .btn-register { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 18px rgba(67,233,123,0.45); }
+    .btn-register:hover { box-shadow: 0 8px 28px rgba(67,233,123,0.65); }
+    .divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; color: rgba(255,255,255,0.3); font-size: .85em; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.15); }
+    #msg { text-align: center; margin-top: 16px; font-size: .9em; min-height: 1.2em; }
+    #msg.err { color: #ff8080; }
+    #msg.ok { color: #43e97b; }
+    footer { margin-top: 32px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
+    .warn-banner { display: none; align-items: center; gap: 12px; background: rgba(255,210,0,0.12); border: 1px solid rgba(255,210,0,0.5); border-radius: 16px; padding: 14px 20px; margin-bottom: 20px; }
+    .warn-banner.show { display: flex; }
+    .warn-banner .warn-text { flex: 1; color: #ffe9a8; font-size: .88em; line-height: 1.5; }
+    .warn-banner .warn-text b { color: #ffd200; }
+    .btn-action { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 18px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .88em; white-space: nowrap; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
+    .btn-action:hover { transform: translateY(-2px); }
+    #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
     #overlay.show { display: flex; }
-    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 28px 32px; max-width: 440px; width: 90%; text-align: center; max-height: 90vh; overflow-y: auto; }
-    .modal h2 { margin: 0 0 14px 0; font-size: 1.3em; color: #ffd200; }
-    .modal .hint { color: #a0c4ff; font-size: .83em; text-align: left; line-height: 1.7; margin: 10px 0; }
-    .recover-label { color: #cfe3ff; font-size: .9em; text-align: left; margin: 4px 0 10px 2px; }
-    .small-note { color: rgba(255,255,255,0.45); font-size: .78em; text-align: left; margin: 8px 0 8px 2px; }
-    .divider { height: 1px; background: rgba(255,255,255,0.15); margin: 16px 0 8px 0; }
-    .btn-outline { display: block; width: 100%; margin: 8px 0; padding: 11px 0; border-radius: 12px; background: transparent; border: 1px solid #4facfe; color: #7cc4ff; font-size: .92em; cursor: pointer; font-family: inherit; transition: .2s; }
-    .btn-outline:hover { background: rgba(79,172,254,0.15); color: #fff; }
-    .btn-solid { width: 100%; margin-top: 12px; border: none; cursor: pointer; color: #fff; padding: 12px 0; border-radius: 40px; font-weight: bold; background: linear-gradient(45deg, #43e97b, #38f9d7); font-family: inherit; }
-    .btn-solid:disabled { opacity: .5; cursor: wait; }
-    .btn-ghost { width: 100%; margin-top: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #cfe3ff; padding: 10px 0; border-radius: 40px; cursor: pointer; font-family: inherit; }
-    .code-box { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255,210,0,0.5); border-radius: 16px; padding: 14px; margin: 12px 0; font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 1.4em; color: #ffd200; letter-spacing: 4px; user-select: all; font-weight: 600; }
-    .radio-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 10px 0; }
-    .radio-group label { display: flex; align-items: center; gap: 6px; cursor: pointer; background: rgba(255,255,255,0.05); padding: 7px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: .82em; margin: 0; color: #cfe3ff; }
-    .radio-group input { width: auto; }
-    #modal-msg, .msg { margin-top: 10px; font-size: .83em; min-height: 1.2em; color: #a0c4ff; }
-    .err { color: #ff8080 !important; }
-    .ok { color: #43e97b !important; }
-    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(67,233,123,0.95); color: #063; padding: 10px 24px; border-radius: 40px; transition: .3s; opacity: 0; z-index: 99; font-weight: bold; }
-    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    [hidden] { display: none !important; }
+    .modal { background: linear-gradient(160deg, #16303c, #1d3a4a); border: 1px solid rgba(79,172,254,0.4); border-radius: 24px; padding: 40px 46px; max-width: 440px; width: 88%; text-align: center; box-shadow: 0 0 60px rgba(79,172,254,0.35); animation: fadeIn .5s ease-out; }
+    .modal h2 { color: #ffd200; margin: 0 0 6px 0; font-size: 1.5em; line-height: 1; text-shadow: 0 0 12px rgba(255,210,0,0.6); }
+    .modal .sub { color: #a0c4ff; font-size: .85em; margin-bottom: 20px; }
+    .modal .sub b { color: #fff; }
+    .modal .steps { text-align: left; color: #cfe3ff; font-size: .88em; line-height: 1.9; margin: 16px 0; }
+    .modal .steps b { color: #ffd200; }
+    .modal-btns { display: flex; gap: 12px; margin-top: 20px; }
+    .modal-btns button { flex: 1; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 40px; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; }
+    .modal-btns button:hover { transform: translateY(-3px); }
+    .mb-verify { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 14px rgba(67,233,123,0.4); }
+    .mb-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25) !important; }
+    #modal-msg { margin-top: 12px; font-size: .85em; min-height: 1.2em; }
+    #modal-msg.err { color: #ff8080; }
+    #modal-msg.ok { color: #43e97b; }
 </style>
 </head>
 <body>
@@ -62,435 +67,145 @@
     <div class="bubble" style="width:60px;height:60px;left:35%;animation-duration:12s;animation-delay:2s"></div>
     <div class="bubble" style="width:80px;height:80px;left:50%;animation-duration:15s"></div>
     <div class="bubble" style="width:35px;height:35px;left:65%;animation-duration:7s;animation-delay:3s"></div>
+    <div class="bubble" style="width:50px;height:50px;left:80%;animation-duration:10s;animation-delay:2s"></div>
 </div>
 
-<div class="container" id="auth-card">
-    <h1>芙芙的狗的服务器</h1>
-    <p class="sub">Powered by Grasscutter · 芙芙的狗 专属构建</p>
-    <div class="tabs">
-        <div class="tab active" id="tab-login" onclick="switchTab('login')">登录</div>
-        <div class="tab" id="tab-reg" onclick="switchTab('reg')">注册</div>
+<div class="container">
+    <a href="../index.html" class="back">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        返回主页
+    </a>
+    <h1>
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        玩家登录
+    </h1>
+    <p class="subtitle">登录 / 注册网站账号 · 芙芙的狗 专属</p>
+
+    <div class="warn-banner" id="email-banner">
+        <div class="warn-text">⚠️ <b>邮箱未验证</b>！请查收验证邮件并点击链接。<br><b>7 天内</b>未验证账号将被自动删除。</div>
+        <button class="btn-action" onclick="resendEmail($('login-email').value)">重发验证邮件</button>
     </div>
 
-    <!-- 登录 -->
-    <div id="form-login">
+    <div id="login-form">
         <label>邮箱</label>
-        <input id="li-email" type="email" placeholder="登录邮箱">
+        <input id="login-email" type="email" placeholder="your@email.com" autocomplete="email">
         <label>密码</label>
-        <input id="li-password" type="password" placeholder="密码" autocomplete="current-password">
-        <div class="row-between"><button class="link-btn" onclick="openModal('m-recover')">找回账号</button></div>
-        <div id="mfa-box" hidden>
-            <label>MFA 验证码</label>
-            <input id="li-mfa" maxlength="6" placeholder="输入验证器上的 6 位数字">
-        </div>
-        <button class="btn-main" id="btn-login" onclick="doLogin()">登录</button>
-        <button class="btn-main" id="btn-mfa" onclick="doLoginMfa()" hidden>验证 MFA 并登录</button>
+        <input id="login-pwd" type="password" placeholder="至少 6 位" autocomplete="current-password">
+        <button class="btn-submit btn-login" onclick="doLogin()">登 录</button>
+        <div class="divider">还没有账号？</div>
+        <button class="btn-submit btn-register" onclick="showRegister()">注册新账号</button>
     </div>
 
-    <!-- 注册 -->
-    <div id="form-reg" hidden>
+    <div id="register-form" style="display:none">
         <label>邮箱</label>
-        <input id="rg-email" type="email" placeholder="用于登录和接收验证邮件">
+        <input id="reg-email" type="email" placeholder="your@email.com" autocomplete="email">
         <label>密码</label>
-        <input id="rg-pwd" type="password" placeholder="至少 6 位">
-        <label>确认密码</label>
-        <input id="rg-pwd2" type="password" placeholder="再次输入">
-        <button class="btn-main" onclick="doRegister()">注册</button>
-        <div id="reg-code-box" hidden>
-            <label>邮箱验证码</label>
-            <div class="code-row">
-                <input id="rg-code" maxlength="6" placeholder="6 位验证码">
-                <button id="btn-rg-send" onclick="sendRegCode()">发送</button>
-            </div>
-            <button class="btn-solid" onclick="verifyReg()">完成注册</button>
-        </div>
+        <input id="reg-pwd" type="password" placeholder="至少 6 位" autocomplete="new-password">
+        <label>官服 UID</label>
+        <input id="reg-uid" type="text" maxlength="10" placeholder="1~4 开头的 9 位数字（官服）">
+        <div class="hint">用于验证身份。注册后需完成「邮箱验证 + 游戏签名验证」，任一验证 7 天内未完成将删号。</div>
+        <button class="btn-submit btn-register" onclick="doRegister()">注 册</button>
+        <div class="divider">已有账号？</div>
+        <button class="btn-submit btn-login" onclick="showLogin()">返回登录</button>
     </div>
-</div>
 
-<!-- 重置密码（找回链接点进来后显示） -->
-<div class="container" id="reset-card" hidden>
-    <h1>重置密码</h1>
-    <p class="sub">验证链接有效，请设置新密码</p>
-    <label>新密码</label>
-    <input id="rs-pwd" type="password" placeholder="至少 6 位">
-    <label>确认新密码</label>
-    <input id="rs-pwd2" type="password" placeholder="再次输入">
-    <button class="btn-main" onclick="doResetPwd()">设置新密码</button>
-    <p class="msg" id="rs-msg"></p>
+    <p id="msg"></p>
+    <footer>Powered by Grasscutter · 芙芙的狗 专属构建</footer>
 </div>
 
 <div id="overlay">
-    <!-- 找回账号主菜单 -->
-    <div class="modal" id="m-recover" hidden>
-        <h2>找回账号</h2>
-        <p class="recover-label">忘记信息？</p>
-        <button class="btn-outline" onclick="openModal('m-recover-pwd')">找回密码</button>
-        <button class="btn-outline" onclick="openModal('m-recover-email')">找回邮箱</button>
-        <button class="btn-outline" onclick="openModal('m-recover-appeal')">提交申诉</button>
-        <div class="divider"></div>
-        <p class="small-note">账号被盗？</p>
-        <button class="btn-outline" onclick="openFreeze()">冻结账号</button>
-        <button class="btn-ghost" onclick="closeModal()">关闭</button>
-    </div>
-
-    <!-- 找回密码 -->
-    <div class="modal" id="m-recover-pwd" hidden>
-        <h2>找回密码</h2>
-        <label>账号邮箱</label>
-        <input id="rp-email" type="email" placeholder="注册时使用的邮箱">
-        <button class="btn-solid" onclick="sendRecoverPwd()">发送找回链接</button>
-        <p class="msg" id="rp-msg"></p>
-        <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
-    </div>
-
-    <!-- 找回邮箱 -->
-    <div class="modal" id="m-recover-email" hidden>
-        <h2>找回邮箱</h2>
-        <label>官服 UID</label>
-        <input id="re-uid" placeholder="你绑定时的原神官服 UID">
-        <label>新邮箱</label>
-        <input id="re-new-email" type="email" placeholder="重设后的登录邮箱">
-        <button class="btn-solid" onclick="recoverEmailStart()">获取签名验证码</button>
-        <div id="re-area" hidden>
-            <div class="code-box" id="re-code">----------</div>
-            <p class="hint">① 打开原神官服 → 个人资料 → 把<b style="color:#ffd200">个性签名</b>改成上方验证码<br>② 等待 3~5 分钟后点下方按钮，邮箱即重设</p>
-            <button class="btn-solid" onclick="recoverEmailVerify()">我已设置签名，验证并重设邮箱</button>
+    <div class="modal">
+        <h2>📮 邮箱验证</h2>
+        <p class="sub">验证邮件已发送至 <b id="sent-to"></b></p>
+        <div class="steps">
+            ① 打开你的邮箱（<b>包括垃圾邮件箱</b>）<br>
+            ② 点击邮件中的验证链接<br>
+            ③ 请在 <b>7 天内</b>完成，逾期账号将被删除<br>
+            ④ 验证后回到本页登录，继续进行「官服 UID 验证」
         </div>
-        <p class="msg" id="re-msg"></p>
-        <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
-    </div>
-
-    <!-- 提交申诉（未登录） -->
-    <div class="modal" id="m-recover-appeal" hidden>
-        <h2>提交申诉</h2>
-        <label>联系邮箱</label>
-        <input id="ra-email" type="email" placeholder="用于接收处理结果">
-        <label>申诉正文</label>
-        <textarea id="ra-content" style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.3);border:1px solid rgba(79,172,254,0.4);border-radius:12px;color:#fff;padding:12px 16px;min-height:100px;font-family:inherit" placeholder="详细描述你的问题和账号归属证据"></textarea>
-        <button class="btn-solid" onclick="submitAnonAppeal()">提交申诉</button>
-        <p class="msg" id="ra-msg"></p>
-        <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
-    </div>
-
-    <!-- 冻结账号 -->
-    <div class="modal" id="m-freeze" hidden>
-        <h2>冻结账号</h2>
-        <p class="hint">任选一种方式验证身份后即可冻结（三种任意其一）：</p>
-        <div class="radio-group" id="fz-methods">
-            <label><input type="radio" name="fz-m" value="email" checked> 邮箱验证码</label>
-            <label><input type="radio" name="fz-m" value="uid"> 官服 UID</label>
-            <label><input type="radio" name="fz-m" value="mfa"> MFA</label>
+        <div class="modal-btns">
+            <button class="mb-verify" onclick="resendEmail(lastRegEmail)">重发验证邮件</button>
+            <button class="mb-close" onclick="closeModal()">我已验证，去登录</button>
         </div>
-        <div id="fz-area"></div>
-        <p class="msg" id="fz-msg"></p>
-        <button class="btn-ghost" onclick="openModal('m-recover')">返回</button>
-    </div>
-
-    <!-- 解冻账号 -->
-    <div class="modal" id="m-unfreeze" hidden>
-        <h2>账号已冻结 ❄️</h2>
-        <p class="hint">为保障安全，解冻需依次验证：<b>邮箱 → UID → MFA（如有）</b></p>
-        <div id="uf-area"></div>
-        <p class="msg" id="uf-msg"></p>
-    </div>
-
-    <!-- 注册验证码 -->
-    <div class="modal" id="m-regcode" hidden>
-        <h2>验证邮箱</h2>
-        <p class="hint">验证码已发送至 <b id="rc-email"></b></p>
-        <input id="rc-code" maxlength="6" placeholder="6 位验证码">
-        <button class="btn-solid" onclick="verifyRegCode()">完成注册</button>
-        <p class="msg" id="rc-msg"></p>
+        <p id="modal-msg"></p>
     </div>
 </div>
-<div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = 'https://kusbgdswjbaqpczfelnv.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_HQRWpFHQmyIblqhqeeoeZg_qD-3U3go';
-const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-api';
+
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
-let pendingFactorId = '', unfreezeEmail = '', regEmail = '';
+let lastRegEmail = '';
 
-function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
-function openModal(id) {
-    document.querySelectorAll('.modal').forEach(m => m.hidden = true);
-    $(id).hidden = false;
-    $('overlay').classList.add('show');
-    if (id === 'm-freeze') buildFreezeArea();
-}
-function closeModal() { $('overlay').classList.remove('show'); }
-function switchTab(t) {
-    $('tab-login').classList.toggle('active', t === 'login');
-    $('tab-reg').classList.toggle('active', t === 'reg');
-    $('form-login').hidden = t !== 'login';
-    $('form-reg').hidden = t !== 'reg';
-}
+function msg(t, c) { $('msg').textContent = t; $('msg').className = c || ''; }
+function showRegister() { $('login-form').style.display = 'none'; $('register-form').style.display = ''; $('email-banner').classList.remove('show'); msg(''); }
+function showLogin() { $('register-form').style.display = 'none'; $('login-form').style.display = ''; msg(''); }
+function closeModal() { $('overlay').classList.remove('show'); showLogin(); }
 
-// ============ 登录（含 MFA + 冻结检测） ============
-async function doLogin() {
-    const email = $('li-email').value.trim(), pwd = $('li-password').value;
-    if (!email || !pwd) return toast('请填写邮箱和密码');
-    // 先检测是否被冻结
-    try {
-        const fz = await fetch(API_BASE + '/is-frozen?email=' + encodeURIComponent(email)).then(r => r.json());
-        if (fz.frozen) { openUnfreeze(email); return; }
-    } catch (e) {}
-    const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd });
-    if (error) return toast('登录失败：' + error.message);
-    // 检测 MFA（先检测，防止验证码刚好过期的情况在下一步处理）
-    const { data: f } = await sb.auth.mfa.listFactors();
-    const totp = f && f.totp && f.totp.length ? f.totp[0] : null;
-    if (totp) {
-        pendingFactorId = totp.id;
-        $('mfa-box').hidden = false;
-        $('btn-login').hidden = true;
-        $('btn-mfa').hidden = false;
-        return;
-    }
-    location.href = 'index.html';
-}
+if (new URLSearchParams(location.search).get('mode') === 'register') showRegister();
 
-async function doLoginMfa() {
-    const code = $('li-mfa').value.trim();
-    if (!/^\d{6}$/.test(code)) return toast('请输入 6 位 MFA 验证码');
-    let ch = await sb.auth.mfa.challenge({ factorId: pendingFactorId });
-    let v = await sb.auth.mfa.verify({ factorId: pendingFactorId, challengeId: ch.data.id, code });
-    if (v.error && /expired|invalid/i.test(v.error.message)) {
-        // 防刚好过期：自动重新 challenge 重试一次
-        ch = await sb.auth.mfa.challenge({ factorId: pendingFactorId });
-        v = await sb.auth.mfa.verify({ factorId: pendingFactorId, challengeId: ch.data.id, code });
-    }
-    if (v.error) return toast('MFA 验证失败：' + v.error.message);
-    location.href = 'index.html';
-}
-
-// ============ 注册 ============
-async function doRegister() {
-    regEmail = $('rg-email').value.trim();
-    const p1 = $('rg-pwd').value, p2 = $('rg-pwd2').value;
-    if (!regEmail || !regEmail.includes('@')) return toast('请填写有效邮箱');
-    if (regEmail.toLowerCase().endsWith('@admin.server')) return toast('管理员邮箱只能由服主后台创建');
-    if (p1.length < 6) return toast('密码至少 6 位');
-    if (p1 !== p2) return toast('两次密码不一致');
-    const { error } = await sb.auth.signUp({ email: regEmail, password: p1 });
-    if (error) return toast('注册失败：' + error.message);
-    $('reg-code-box').hidden = false;
-    sendRegCode();
-}
-async function sendRegCode() {
-    const btn = $('btn-rg-send'); btn.disabled = true;
-    const { error } = await sb.auth.resend({ type: 'signup', email: regEmail });
-    toast(error ? '发送失败：' + error.message : '✅ 验证码已发送');
-    let s = 60; btn.textContent = s + 's';
-    const t = setInterval(() => { s--; if (s <= 0) { clearInterval(t); btn.disabled = false; btn.textContent = '发送'; } else btn.textContent = s + 's'; }, 1000);
-}
-async function verifyReg() {
-    const code = $('rg-code').value.trim();
-    if (!/^\d{6}$/.test(code)) return toast('请输入 6 位数字');
-    const { error } = await sb.auth.verifyOtp({ email: regEmail, token: code, type: 'signup' });
-    if (error) return toast('验证失败：' + error.message);
-    toast(' 注册成功，请登录');
-    switchTab('login');
-    $('li-email').value = regEmail;
-}
-
-// ============ 找回密码 ============
-async function sendRecoverPwd() {
-    const email = $('rp-email').value.trim();
-    if (!email) return setMsg('rp-msg', '请填写邮箱', 'err');
-    const { error } = await sb.auth.resetPasswordForEmail(email, {
-        redirectTo: location.origin + '/dashboard/login.html?mode=recovery'
-    });
-    if (error) return setMsg('rp-msg', '发送失败：' + error.message, 'err');
-    setMsg('rp-msg', '✅ 找回链接已发送，请查收邮箱（含垃圾箱）', 'ok');
-}
-
-// ============ 找回邮箱 ============
-async function recoverEmailStart() {
-    const uid = $('re-uid').value.trim(), ne = $('re-new-email').value.trim();
-    if (!uid || !ne) return setMsg('re-msg', '请填写 UID 和新邮箱', 'err');
-    const r = await fetch(API_BASE + '/recover-email-start', { method: 'POST', body: JSON.stringify({ uid: uid, new_email: ne }) }).then(x => x.json());
-    if (!r.ok) return setMsg('re-msg', r.msg, 'err');
-    $('re-code').textContent = r.code;
-    $('re-area').hidden = false;
-    setMsg('re-msg', '', '');
-}
-async function recoverEmailVerify() {
-    const uid = $('re-uid').value.trim();
-    const r = await fetch(API_BASE + '/recover-email-verify', { method: 'POST', body: JSON.stringify({ uid: uid }) }).then(x => x.json());
-    if (!r.ok) return setMsg('re-msg', r.msg, 'err');
-    setMsg('re-msg', '✅ ' + r.msg, 'ok');
-    setTimeout(() => { closeModal(); switchTab('login'); }, 1200);
-}
-
-// ============ 匿名申诉 ============
-async function submitAnonAppeal() {
-    const email = $('ra-email').value.trim(), content = $('ra-content').value.trim();
-    if (!email || !content) return setMsg('ra-msg', '请填写邮箱和正文', 'err');
-    const r = await fetch(API_BASE + '/submit-appeal', { method: 'POST', body: JSON.stringify({ contact_email: email, content: content }) }).then(x => x.json());
-    if (!r.ok) return setMsg('ra-msg', r.msg, 'err');
-    setMsg('ra-msg', '✅ 申诉已提交，请等待管理员处理', 'ok');
-    setTimeout(closeModal, 1200);
-}
-
-// ============ 冻结（三选一） ============
-function fzMethod() { const s = document.querySelector('input[name="fz-m"]:checked'); return s ? s.value : 'email'; }
-function openFreeze() { openModal('m-freeze'); }
-function buildFreezeArea() {
-    $('fz-msg').textContent = '';
-    const m = fzMethod();
-    const area = $('fz-area');
-    if (m === 'email') {
-        area.innerHTML = '<label>账号邮箱</label><input id="fz-email" type="email">' +
-            '<div class="code-row" style="margin-top:10px"><input id="fz-code" maxlength="6" placeholder="6 位验证码"><button id="btn-fz-send" onclick="fzSendEmail()">发送</button></div>' +
-            '<button class="btn-solid" onclick="fzDoEmail()">验证并冻结</button>';
-    } else if (m === 'uid') {
-        area.innerHTML = '<label>官服 UID</label><input id="fz-uid">' +
-            '<button class="btn-solid" onclick="fzGetUidCode()">获取签名验证码</button>' +
-            '<div id="fz-uid-area" hidden><div class="code-box" id="fz-uid-code">----------</div>' +
-            '<p class="hint">把官服个性签名改成上方验证码，等 3~5 分钟后点：</p>' +
-            '<button class="btn-solid" onclick="fzDoUid()">验证并冻结</button></div>';
+async function resendEmail(email) {
+    if (!email) { $('modal-msg').textContent = '请先填写邮箱'; $('modal-msg').className = 'err'; return; }
+    const { error } = await sb.auth.resend({ type: 'signup', email: email.trim() });
+    if (error) {
+        $('modal-msg').textContent = '发送失败：' + error.message; $('modal-msg').className = 'err';
     } else {
-        area.innerHTML = '<p class="small-note">MFA 验证需先通过邮箱验证码建立临时会话</p>' +
-            '<label>账号邮箱</label><input id="fz-email" type="email">' +
-            '<div class="code-row" style="margin-top:10px"><input id="fz-code" maxlength="6" placeholder="邮箱验证码"><button id="btn-fz-send" onclick="fzSendEmail()">发送</button></div>' +
-            '<button class="btn-solid" onclick="fzEmailSession()">建立临时会话</button>' +
-            '<div id="fz-mfa-area" hidden><label>MFA 验证码</label><input id="fz-mfa" maxlength="6">' +
-            '<button class="btn-solid" onclick="fzDoMfa()">验证并冻结</button></div>';
+        $('modal-msg').textContent = '✅ 验证邮件已重新发送！'; $('modal-msg').className = 'ok';
+        msg('✅ 验证邮件已重新发送，请查收', 'ok');
     }
 }
-document.addEventListener('change', e => { if (e.target.name === 'fz-m') buildFreezeArea(); });
 
-async function fzSendEmail() {
-    const email = $('fz-email').value.trim();
-    const { error } = await sb.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false } });
-    toast(error ? '发送失败：' + error.message : '✅ 验证码已发送');
-}
-async function fzDoEmail() {
-    const email = $('fz-email').value.trim(), code = $('fz-code').value.trim();
-    const { error } = await sb.auth.verifyOtp({ email: email, token: code, type: 'email' });
-    if (error) return setMsg('fz-msg', '验证失败：' + error.message, 'err');
-    const r = await fetch(API_BASE + '/freeze', { method: 'POST', headers: { 'Authorization': 'Bearer ' + (await sb.auth.getSession()).data.session.access_token } }).then(x => x.json());
-    setMsg('fz-msg', r.ok ? '✅ ' + r.msg : r.msg, r.ok ? 'ok' : 'err');
-    if (r.ok) setTimeout(closeModal, 1200);
-}
-async function fzGetUidCode() {
-    const uid = $('fz-uid').value.trim();
-    const r = await fetch(API_BASE + '/rotate-code-by-uid', { method: 'POST', body: JSON.stringify({ uid: uid }) }).then(x => x.json());
-    if (!r.ok) return setMsg('fz-msg', r.msg, 'err');
-    $('fz-uid-code').textContent = r.code;
-    $('fz-uid-area').hidden = false;
-}
-async function fzDoUid() {
-    const uid = $('fz-uid').value.trim();
-    const r = await fetch(API_BASE + '/freeze-by-uid', { method: 'POST', body: JSON.stringify({ uid: uid }) }).then(x => x.json());
-    setMsg('fz-msg', r.ok ? '✅ ' + r.msg : r.msg, r.ok ? 'ok' : 'err');
-    if (r.ok) setTimeout(closeModal, 1200);
-}
-async function fzEmailSession() {
-    const email = $('fz-email').value.trim(), code = $('fz-code').value.trim();
-    const { error } = await sb.auth.verifyOtp({ email: email, token: code, type: 'email' });
-    if (error) return setMsg('fz-msg', '验证失败：' + error.message, 'err');
-    $('fz-mfa-area').hidden = false;
-    setMsg('fz-msg', '临时会话已建立，请输入 MFA 验证码', 'ok');
-}
-async function fzDoMfa() {
-    const code = $('fz-mfa').value.trim();
-    const { data: f } = await sb.auth.mfa.listFactors();
-    if (!f || !f.totp || !f.totp.length) return setMsg('fz-msg', '该账号未绑定 MFA', 'err');
-    const ch = await sb.auth.mfa.challenge({ factorId: f.totp[0].id });
-    const v = await sb.auth.mfa.verify({ factorId: f.totp[0].id, challengeId: ch.data.id, code });
-    if (v.error) return setMsg('fz-msg', 'MFA 验证失败：' + v.error.message, 'err');
-    const token = (await sb.auth.getSession()).data.session.access_token;
-    const r = await fetch(API_BASE + '/freeze', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } }).then(x => x.json());
-    setMsg('fz-msg', r.ok ? '✅ ' + r.msg : r.msg, r.ok ? 'ok' : 'err');
-    if (r.ok) setTimeout(closeModal, 1200);
-}
+async function doLogin() {
+    const email = $('login-email').value.trim(), pwd = $('login-pwd').value;
+    if (!email || !pwd) return msg('请填写邮箱和密码', 'err');
 
-// ============ 解冻（邮箱 → UID → MFA） ============
-function openUnfreeze(email) {
-    unfreezeEmail = email;
-    openModal('m-unfreeze');
-    $('uf-area').innerHTML = '<label>第 1 步 · 邮箱验证码</label>' +
-        '<div class="code-row"><input id="uf-code" maxlength="6" placeholder="6 位验证码"><button onclick="ufSendEmail()">发送</button></div>' +
-        '<button class="btn-solid" onclick="ufVerifyEmail()">验证邮箱</button>';
-    $('uf-msg').textContent = '';
-}
-async function ufSendEmail() {
-    const { error } = await sb.auth.signInWithOtp({ email: unfreezeEmail, options: { shouldCreateUser: false } });
-    toast(error ? '发送失败：' + error.message : '✅ 验证码已发送');
-}
-async function ufVerifyEmail() {
-    const code = $('uf-code').value.trim();
-    const { error } = await sb.auth.verifyOtp({ email: unfreezeEmail, token: code, type: 'email' });
-    if (error) return setMsg('uf-msg', '邮箱验证失败：' + error.message, 'err');
-    // 第 2 步：UID
-    const token = (await sb.auth.getSession()).data.session.access_token;
-    const r = await fetch(API_BASE + '/rotate-code', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } }).then(x => x.json());
-    if (!r.ok) return setMsg('uf-msg', r.msg, 'err');
-    $('uf-area').innerHTML = '<p class="ok" style="font-size:.85em">✓ 邮箱已验证</p><label>第 2 步 · 官服 UID 签名</label>' +
-        '<div class="code-box">' + r.code + '</div>' +
-        '<p class="hint">把官服个性签名改成上方验证码，等 3~5 分钟后点：</p>' +
-        '<button class="btn-solid" onclick="ufCheckUid()">验证 UID</button>';
-}
-async function ufCheckUid() {
-    const token = (await sb.auth.getSession()).data.session.access_token;
-    // 第 3 步：MFA（如有）
-    const { data: f } = await sb.auth.mfa.listFactors();
-    if (f && f.totp && f.totp.length) {
-        $('uf-area').innerHTML = '<p class="ok" style="font-size:.85em">✓ 邮箱已验证 ✓ UID 已提交</p><label>第 3 步 · MFA 验证码</label>' +
-            '<input id="uf-mfa" maxlength="6" placeholder="6 位 MFA 验证码">' +
-            '<button class="btn-solid" onclick="ufDoMfa()">验证 MFA 并解冻</button>';
-        return;
-    }
-    await ufFinalize(token);
-}
-async function ufDoMfa() {
-    const code = $('uf-mfa').value.trim();
-    const { data: f } = await sb.auth.mfa.listFactors();
-    const ch = await sb.auth.mfa.challenge({ factorId: f.totp[0].id });
-    let v = await sb.auth.mfa.verify({ factorId: f.totp[0].id, challengeId: ch.data.id, code });
-    if (v.error && /expired|invalid/i.test(v.error.message)) {
-        const ch2 = await sb.auth.mfa.challenge({ factorId: f.totp[0].id });
-        v = await sb.auth.mfa.verify({ factorId: f.totp[0].id, challengeId: ch2.data.id, code });
-    }
-    if (v.error) return setMsg('uf-msg', 'MFA 验证失败：' + v.error.message, 'err');
-    const token = (await sb.auth.getSession()).data.session.access_token;
-    await ufFinalize(token);
-}
-async function ufFinalize(token) {
-    const r = await fetch(API_BASE + '/unfreeze', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } }).then(x => x.json());
-    if (!r.ok) return setMsg('uf-msg', r.msg, 'err');
-    setMsg('uf-msg', '✅ ' + r.msg, 'ok');
-    setTimeout(() => { closeModal(); switchTab('login'); $('li-email').value = unfreezeEmail; }, 1500);
-}
-
-// ============ 重置密码（找回链接进入） ============
-async function doResetPwd() {
-    const p1 = $('rs-pwd').value, p2 = $('rs-pwd2').value;
-    if (p1.length < 6) return setMsg('rs-msg', '密码至少 6 位', 'err');
-    if (p1 !== p2) return setMsg('rs-msg', '两次密码不一致', 'err');
-    const { error } = await sb.auth.updateUser({ password: p1 });
-    if (error) return setMsg('rs-msg', '设置失败：' + error.message, 'err');
-    setMsg('rs-msg', '✅ 密码已重置，请返回登录', 'ok');
-    setTimeout(async () => { await sb.auth.signOut(); $('reset-card').hidden = true; $('auth-card').hidden = false; }, 1200);
-}
-
-function setMsg(id, text, cls) { const el = $(id); el.textContent = text; el.className = 'msg ' + (cls || ''); }
-
-// ============ 初始化 ============
-(async function init() {
-    const params = new URLSearchParams(location.search);
-    if (params.get('mode') === 'recovery') {
-        const { data: { session } } = await sb.auth.getSession();
-        if (session) {
-            $('auth-card').hidden = true;
-            $('reset-card').hidden = false;
+    const { error } = await sb.auth.signInWithPassword({ email, password: pwd });
+    if (error) {
+        if (String(error.message).toLowerCase().includes('not confirmed')) {
+            $('email-banner').classList.add('show');
+            return msg('邮箱未验证，请先去邮箱点击验证链接', 'err');
         }
+        return msg('登录失败：' + error.message, 'err');
     }
+    window.location.href = 'index.html';
+}
+
+async function doRegister() {
+    const email = $('reg-email').value.trim(), pwd = $('reg-pwd').value, uid = $('reg-uid').value.trim();
+    if (!email || !pwd) return msg('请填写邮箱和密码', 'err');
+    if (email.toLowerCase().endsWith('@admin.server')) return msg('管理员后缀邮箱禁止公开注册，请联系服主', 'err');
+    if (pwd.length < 6) return msg('密码至少 6 位', 'err');
+    if (!/^[1-4]\d{8}$/.test(uid)) return msg('官服 UID 应为 1~4 开头的 9 位数字', 'err');
+
+    msg('正在注册并发送验证邮件...', '');
+    const { data, error } = await sb.auth.signUp({
+        email: email,
+        password: pwd,
+        options: { data: { genshin_uid: uid } }
+    });
+
+    if (error) {
+        if (String(error.message).toLowerCase().includes('database')) {
+            return msg('该官服 UID 已被其他账号占用', 'err');
+        }
+        return msg('注册失败：' + error.message, 'err');
+    }
+    if (data.user && (!data.user.identities || data.user.identities.length === 0)) {
+        return msg('该邮箱已被注册，请直接登录', 'err');
+    }
+
+    lastRegEmail = email;
+    $('sent-to').textContent = email;
+    $('modal-msg').textContent = '';
+    $('overlay').classList.add('show');
+}
+
+(async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) window.location.href = 'index.html';
 })();
 </script>
 </body>
