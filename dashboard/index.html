@@ -409,7 +409,7 @@ function updateAuthInput() {
         area.innerHTML = '<button class="btn-sm primary" onclick="sendReauthCode()">发送 6 位验证码到 ' + currentUser.email + '</button>' +
                          '<input id="auth-code" maxlength="6" placeholder="输入 6 位验证码" style="margin-top:10px">';
     } else if (authMethod === 'uid') {
-        area.innerHTML = '<div class="code-box" id="auth-uid-code">加载中...</div>' +
+        area.innerHTML = '<div class="code-box" id="auth-uid-code">----------</div>' +
                          '<p class="note" style="text-align:left;line-height:1.8">① 打开原神官服 → 个人资料 → 把<b style="color:#ffd200">个性签名</b>改成上方新验证码<br>② 等待 3~5 分钟后点「验证」<br>③ 每次打开都会换新码，请用最新的</p>';
         fetchRotateCode();
     } else {
