@@ -1,0 +1,299 @@
+/* ============================================================
+   GenshinServerWeb 手机端 UI
+   —— 由 js/mobile.js 识别浏览器 UA 后给 <html> 打上 mobile 类才生效；
+   所有规则都以 html.mobile 为前缀，桌面端完全不受影响。
+   视觉完全沿用原有设计风格：深海渐变 + 玻璃拟态卡片 +
+   渐变胶囊按钮 + 发光标题。
+   ============================================================ */
+
+/* ---------- 通用：玻璃卡片收窄（所有页面共用 .container） ---------- */
+html.mobile .container {
+  width: 92%;
+  max-width: none;
+  padding: 22px 16px;
+  border-radius: 18px;
+  margin: 16px auto;
+}
+html.mobile .back { font-size: .9em; }
+html.mobile h1 { font-size: 1.5em; letter-spacing: 1px; }
+html.mobile .subtitle { font-size: .95em; margin-bottom: 18px; }
+html.mobile footer { font-size: .78em; margin-top: 24px; }
+
+/* 小屏/手机：允许上下滚动（覆盖桌面 overflow:hidden），并隐藏滚动条 */
+html.mobile, html.mobile body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;            /* Firefox */
+  -ms-overflow-style: none;         /* 旧 Edge/IE */
+}
+html.mobile ::-webkit-scrollbar { display: none; }   /* Chrome/Safari/Edge */
+html.mobile body { align-items: flex-start; }
+
+/* ---------- 通用：右上角 登录/注册 浮动按钮 ---------- */
+html.mobile .top-auth { top: 10px; right: 12px; gap: 8px; }
+html.mobile .top-auth .btn-auth {
+  padding: 9px 16px !important;   /* 覆盖 body 内联样式块的 .btn-auth */
+  font-size: 14px !important;     /* 与缩小后的按钮大小匹配 */
+  line-height: 1 !important;
+  white-space: nowrap;
+}
+
+/* 有右上角按钮的页面：内容整体下移，避免与 注册/登录 按钮重叠 */
+html.mobile:has(.top-auth) .container { margin-top: 66px; }
+
+/* ---------- 通用：弹窗（dashboard/login 共用 · 底部上滑改为居中缩小） ---------- */
+html.mobile .modal {
+  padding: 24px 16px;
+  width: 93%;
+  border-radius: 20px;
+  max-height: 92vh;
+}
+html.mobile .modal h2 { font-size: 1.25em; }
+html.mobile .modal-btns { flex-direction: column; gap: 10px; }
+html.mobile .modal-btns button { padding: 13px 0; font-size: .93em; }
+html.mobile .modal .code-box { font-size: 1.3em; letter-spacing: 3px; padding: 13px; }
+html.mobile .modal-recover .btn-outline { font-size: .9em; }
+html.mobile .radio-group { gap: 8px; }
+html.mobile .radio-group label { font-size: .8em; padding: 7px 10px; }
+
+/* 输入框统一 16px，防止 iOS 聚焦自动放大 */
+html.mobile input,
+html.mobile textarea,
+html.mobile select { font-size: 16px; }
+
+/* ============================================================
+   首页 index.html / 404.html（居中大卡片）
+   ============================================================ */
+html.mobile h1 { line-height: 1.25; }
+html.mobile .subtitle { min-height: 1.2em; }
+html.mobile .big-buttons { gap: 14px; margin-bottom: 22px; }
+html.mobile .btn-big {
+  padding: 15px 18px;
+  font-size: 1.12em;
+  border-radius: 40px;
+  justify-content: center;
+  gap: 8px;
+}
+html.mobile .buttons { gap: 12px; }
+html.mobile .btn {
+  padding: 12px 18px;
+  font-size: .98em;
+  border-radius: 40px;
+  gap: 8px;
+}
+html.mobile .code { font-size: 4.2em; letter-spacing: 6px; }
+html.mobile .container h1 { font-size: 1.55em; }
+
+/* ============================================================
+   enter/quick_start.html 进入服务器（教程步骤）
+   ============================================================ */
+html.mobile .container { margin: 14px auto; }
+html.mobile .step { padding: 15px 14px; margin-bottom: 14px; border-radius: 14px; }
+html.mobile .step-head { gap: 10px; margin-bottom: 10px; }
+html.mobile .step-head .num { width: 30px; height: 30px; font-size: .9em; }
+html.mobile .step-head h2 { font-size: 1.05em; }
+html.mobile .step p { font-size: .9em; margin: 5px 0; }
+html.mobile .btn-center { margin: 14px 0; }
+html.mobile .btn-big-dl {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 14px;
+  font-size: 1.02em;
+  border-radius: 40px;
+  gap: 8px;
+  text-align: center;
+}
+html.mobile .tips { padding: 14px 14px 14px 14px; margin-top: 18px; border-radius: 14px; }
+html.mobile .tips h3 { font-size: 1em; }
+html.mobile .tips li { font-size: .86em; margin: 5px 0; }
+html.mobile .container h1 { font-size: 1.45em; }
+
+/* ============================================================
+   handbook.html 指令手册（搜索 + ID 列表）
+   ============================================================ */
+html.mobile .container h1 { font-size: 1.45em; }
+html.mobile .sec-title { font-size: 1.08em; margin: 26px 0 14px 0; }
+html.mobile .cmd-grid { grid-template-columns: 1fr; gap: 10px; }
+html.mobile .cmd { padding: 12px 13px; border-radius: 12px; }
+html.mobile .cmd code { font-size: .92em; }
+html.mobile .cmd p { font-size: .84em; }
+html.mobile .search-bar { flex-direction: column; gap: 10px; }
+html.mobile .search-bar select,
+html.mobile .search-bar input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: 40px;
+}
+html.mobile .chips { gap: 8px; margin: 12px 0 4px 0; }
+html.mobile .chip { padding: 6px 12px; font-size: .82em; }
+html.mobile #count { font-size: .72em; }
+html.mobile #results { max-height: 62vh; padding-right: 4px; }
+html.mobile .row { gap: 8px; padding: 10px 10px; }
+html.mobile .rid { min-width: 58px; font-size: .82em; }
+html.mobile .rname { font-size: .85em; word-break: break-word; }
+html.mobile .rsec { display: none; }
+html.mobile .copy { padding: 4px 10px; font-size: .76em; }
+
+/* ============================================================
+   status.html 服务器状态
+   ============================================================ */
+html.mobile .container { margin: 14px auto; }
+html.mobile .container h1 { font-size: 1.4em; }
+html.mobile .rt { font-size: .78em; margin-bottom: 14px; }
+html.mobile .banner { font-size: 1em; padding: 14px 12px; }
+html.mobile .srow { padding: 12px 12px; gap: 10px; margin: 8px 0; }
+html.mobile .sname { font-size: .88em; }
+html.mobile .srow b { font-size: .85em; }
+html.mobile .btn-refresh { margin-top: 16px; padding: 13px 0; font-size: 1em; }
+html.mobile .note { font-size: .76em; margin-top: 12px; }
+
+/* ============================================================
+   dashboard/login.html 玩家登录（表单 + 多层弹窗）
+   ============================================================ */
+html.mobile .container { margin: 14px auto; }
+html.mobile .container h1 { font-size: 1.4em; }
+html.mobile .container .subtitle { margin-bottom: 16px; }
+html.mobile label { font-size: .88em; }
+html.mobile input, html.mobile textarea {
+  padding: 13px 14px;
+  border-radius: 12px;
+}
+html.mobile .btn-submit { padding: 14px 0; font-size: 1.02em; border-radius: 40px; }
+html.mobile .divider { margin: 18px 0; font-size: .82em; }
+html.mobile .row-between { margin: 8px 2px 0 0; }
+html.mobile .warn-banner {
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+}
+html.mobile .warn-banner .warn-text { font-size: .85em; }
+html.mobile .warn-banner .btn-action { padding: 9px 14px; font-size: .84em; }
+html.mobile .code-row { gap: 8px; }
+html.mobile .code-row button { padding: 0 12px; font-size: .82em; }
+html.mobile .steps { font-size: .84em; line-height: 1.8; }
+
+/* ============================================================
+   dashboard/index.html 账户中心
+   （手机端：汉堡菜单 + 左侧抽屉；桌面端保持原侧边栏）
+   ============================================================ */
+html.mobile .layout {
+  flex-direction: column;
+  height: auto;
+  min-height: 100vh;
+}
+html.mobile .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  max-width: 78vw;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 18px 14px;
+  overflow-y: auto;
+  background: #12222e;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none;
+  z-index: 100;
+  transform: translateX(-105%);
+  transition: transform .28s cubic-bezier(.25, .8, .25, 1);
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.45);
+}
+html.mobile .sidebar.open { transform: none; }
+html.mobile .side-title { padding: 14px 0; }
+html.mobile .nav { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 8px; padding: 0; }
+html.mobile .nav-btn {
+  width: 100%;
+  padding: 13px 0;
+  font-size: .95em;
+  border-radius: 14px;
+  white-space: normal;
+  text-align: center;
+}
+html.mobile .side-bottom { flex-direction: column; align-items: stretch; gap: 10px; margin-left: 0; padding: 0; }
+html.mobile .side-bottom .nav-btn { padding: 13px 0; font-size: .95em; }
+
+/* 手机端顶栏（汉堡菜单入口） */
+html.mobile .m-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -12px -12px 10px -12px;
+  padding: 10px 14px;
+  background: rgba(18, 34, 46, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+html.mobile .m-topbar-title {
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 1.05em;
+}
+html.mobile .m-menu {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(79, 172, 254, 0.5);
+  background: rgba(79, 172, 254, 0.12);
+  color: #fff;
+  font-size: 1.1em;
+  line-height: 1;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+html.mobile .m-menu:active { background: rgba(79, 172, 254, 0.3); }
+
+/* 抽屉背景遮罩 */
+html.mobile .m-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.55);
+}
+html.mobile .main { padding: 12px 12px; gap: 10px; }
+html.mobile .info-box { padding: 12px 14px; margin-top: 14px; }
+html.mobile .card {
+  padding: 16px 14px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+html.mobile .card.empty { min-height: 200px; }
+html.mobile .card-head { flex-wrap: wrap; gap: 12px; }
+html.mobile .avatar { width: 48px; height: 48px; font-size: 1.2em; }
+html.mobile .uname { font-size: 1.05em; }
+html.mobile .head-btns { gap: 8px; }
+html.mobile .btn-edit { padding: 8px 20px; font-size: .85em; }
+html.mobile .btn-cancel { padding: 8px 16px; font-size: .85em; }
+html.mobile .card-title { font-size: 1.02em; margin-bottom: 12px; }
+html.mobile input, html.mobile textarea, html.mobile select { padding: 11px 13px; border-radius: 10px; }
+html.mobile .btn-create { padding: 12px 0; font-size: 1em; border-radius: 40px; }
+html.mobile .btn-verify { padding: 9px 18px; font-size: .86em; }
+html.mobile .lock-msg { font-size: .86em; padding: 20px 0; }
+html.mobile .note { font-size: .76em; }
+html.mobile .info-row { font-size: .9em; padding: 9px 0; }
+html.mobile .info-row b { font-size: .95em; }
+html.mobile .notice { gap: 10px; font-size: .85em; padding: 10px 12px; border-radius: 12px; }
+html.mobile .notice .nbtn { padding: 7px 14px; font-size: .82em; }
+html.mobile .tabs { gap: 8px; padding-bottom: 8px; }
+html.mobile .tab { padding: 7px 13px; font-size: .86em; }
+html.mobile .appeal-item { padding: 12px; }
+html.mobile .appeal-head { flex-wrap: wrap; gap: 6px; font-size: .85em; }
+html.mobile .appeal-content { font-size: .87em; margin: 8px 0; }
+html.mobile .btn-sm { padding: 6px 12px; font-size: .76em; }
+html.mobile .kv { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 14px; }
+html.mobile .kv b { word-break: break-all; font-size: .88em; }
+html.mobile #mfa-qr { width: min(180px, 52vw); height: auto; }
+html.mobile #modal-success .code-box, html.mobile #modal-verify .code-box { font-size: 1.2em; }
+html.mobile .radio-group { margin: 8px 0; }
+html.mobile .radio-group label { margin: 0; }

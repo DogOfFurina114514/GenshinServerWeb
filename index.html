@@ -45,10 +45,9 @@
         }
         .subtitle {
             color: #a0c4ff; margin-bottom: 35px; font-size: 1.2em; font-weight: 300;
-            min-height: 1.5em; cursor: pointer; user-select: none;
+            min-height: 1.5em; user-select: none;
             transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
         }
-        .subtitle:hover { color: #fff; text-shadow: 0 0 8px rgba(79, 172, 254, 0.6); }
         .subtitle.fade-out { opacity: 0; transform: translateY(-10px); }
 
         .big-buttons { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; margin-bottom: 35px; }
@@ -61,11 +60,11 @@
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
         .btn-enter { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 18px rgba(67, 233, 123, 0.45); }
-        .btn-enter:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(67, 233, 123, 0.65); }
+        html:not(.mobile) .btn-enter:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(67, 233, 123, 0.65); }
         .btn-book { background: linear-gradient(45deg, #ffd200, #f7971e); box-shadow: 0 4px 18px rgba(255, 210, 0, 0.45); }
-        .btn-book:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(255, 210, 0, 0.65); }
+        html:not(.mobile) .btn-book:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(255, 210, 0, 0.65); }
         .btn-status { background: linear-gradient(45deg, #8e2de2, #a970ff); box-shadow: 0 4px 18px rgba(142, 45, 226, 0.45); }
-        .btn-status:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(142, 45, 226, 0.65); }
+        html:not(.mobile) .btn-status:hover { transform: translateY(-5px); box-shadow: 0 8px 28px rgba(142, 45, 226, 0.65); }
 
         .buttons { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; }
         .btn {
@@ -76,20 +75,23 @@
         }
         .icon { display: block; flex-shrink: 0; }
         .btn-bili { background: linear-gradient(45deg, #fb7299, #f45a85); box-shadow: 0 4px 15px rgba(251, 114, 153, 0.4); }
-        .btn-bili:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(251, 114, 153, 0.6); }
+        html:not(.mobile) .btn-bili:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(251, 114, 153, 0.6); }
         .btn-mail { background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4); }
-        .btn-mail:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6); }
+        html:not(.mobile) .btn-mail:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6); }
         footer { margin-top: 40px; color: rgba(255, 255, 255, 0.3); font-size: 0.85em; }
     </style>
+    <!-- 手机端 UI：窗口大小/比例自动识别（桌面端无影响） -->
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="js/mobile.js"></script>
 </head>
 <body>
 	<style>
 	    .top-auth{position:fixed;top:20px;right:24px;z-index:999;display:flex;gap:12px;}
 	    .btn-auth{text-decoration:none;padding:10px 26px;border-radius:50px;font-size:.95em;font-weight:bold;line-height:1;transition:all .3s;font-family:'Segoe UI','Microsoft YaHei',sans-serif;}
 	    .btn-auth-reg{color:#4facfe;border:2px solid #4facfe;background:rgba(79,172,254,0.08);}
-	    .btn-auth-reg:hover{background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px);}
+	    html:not(.mobile) .btn-auth-reg:hover{ background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px); }
 	    .btn-auth-login{color:#fff;background:linear-gradient(45deg,#4facfe,#00f2fe);box-shadow:0 4px 15px rgba(79,172,254,0.4);}
-	    .btn-auth-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6);}
+	    html:not(.mobile) .btn-auth-login:hover{ transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6); }
 	    @keyframes flyIn{from{transform:translateX(140px);opacity:0;}to{transform:translateX(0);opacity:1;}}
 	    .fly-1{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) backwards;}
 	    .fly-2{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) .2s backwards;}
@@ -141,7 +143,7 @@
 
     <div class="container">
         <h1>欢迎来到芙芙的狗的服务器</h1>
-        <p class="subtitle" id="hitokoto" title="点击切换一言">正在连接世界树...</p>
+        <p class="subtitle" id="hitokoto">正在连接世界树...</p>
 
         <div class="big-buttons">
             <a href="enter/quick_start.html" class="btn-big btn-enter">
@@ -230,7 +232,6 @@
 		}
 
 		function resetTimer() { clearInterval(timer); timer = setInterval(showQuote, 5000); }
-		el.addEventListener('click', () => { showQuote(); resetTimer(); });
 
 		(async () => {
 			const text = await getQuote();

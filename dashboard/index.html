@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>账户中心 - 芙芙的狗的服务器</title>
-<link rel="icon" href="/icon.ico" type="image/x-icon">
+<link rel="icon" href="../icon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,17 +16,18 @@
     .side-title { text-align: center; font-size: 1.15em; font-weight: bold; letter-spacing: 2px; color: #fff; padding: 14px 0; border: 1px solid rgba(79,172,254,0.5); border-radius: 14px; background: rgba(79,172,254,0.12); text-shadow: 0 0 10px rgba(79,172,254,0.6); }
     .nav { display: flex; flex-direction: column; gap: 10px; flex: 1; margin-top: 8px; }
     .nav-btn { display: block; width: 100%; text-align: center; text-decoration: none; color: #cfe3ff; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 13px 0; font-size: .95em; font-family: inherit; cursor: pointer; transition: .25s; }
-    .nav-btn:hover { background: rgba(79,172,254,0.18); color: #fff; transform: translateY(-2px); }
+    html:not(.mobile) .nav-btn:hover { background: rgba(79,172,254,0.18); color: #fff; transform: translateY(-2px); }
     .nav-btn.active { background: linear-gradient(45deg, #4facfe, #00f2fe); color: #fff; font-weight: bold; border-color: transparent; box-shadow: 0 4px 14px rgba(79,172,254,0.4); }
+    html:not(.mobile) .nav-btn.active:hover { background: linear-gradient(45deg, #4facfe, #00f2fe); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(79,172,254,0.4); }
     .side-bottom { display: flex; flex-direction: column; gap: 10px; }
     .nav-btn.logout { color: #ff8080; border-color: rgba(255,110,110,0.4); background: rgba(255,110,110,0.08); }
-    .nav-btn.logout:hover { background: rgba(255,110,110,0.2); color: #fff; }
+    html:not(.mobile) .nav-btn.logout:hover { background: rgba(255,110,110,0.2); color: #fff; }
     .main { flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 18px 22px; overflow-y: auto; }
     .notice { display: none; align-items: center; gap: 12px; flex-wrap: wrap; background: rgba(255,210,0,0.12); border: 1px solid rgba(255,210,0,0.5); border-radius: 14px; padding: 12px 18px; color: #ffe9a8; font-size: .9em; }
     .notice.show { display: flex; }
     .notice b { color: #ffd200; }
     .notice .nbtn { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 8px 16px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .85em; transition: .3s; }
-    .notice .nbtn:hover { transform: translateY(-2px); }
+    html:not(.mobile) .notice .nbtn:hover { transform: translateY(-2px); }
     .page { flex: 1; }
     .card { background: #162833; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 24px 26px; margin-bottom: 16px; }
     .card.empty { display: flex; align-items: center; justify-content: center; min-height: 300px; color: rgba(255,255,255,0.4); font-size: 1em; }
@@ -41,13 +42,13 @@
     .uemail { color: #a0c4ff; font-size: .85em; word-break: break-all; }
     .head-btns { margin-left: auto; display: flex; gap: 10px; }
     .btn-edit { background: rgba(79,172,254,0.15); border: 1px solid rgba(79,172,254,0.5); color: #a0c4ff; padding: 9px 26px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: .9em; transition: .25s; }
-    .btn-edit:hover { background: rgba(79,172,254,0.35); color: #fff; }
+    html:not(.mobile) .btn-edit:hover { background: rgba(79,172,254,0.35); color: #fff; }
     .btn-cancel { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #cfe3ff; padding: 9px 20px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: .9em; transition: .3s; }
-    .btn-cancel:hover { background: rgba(255,255,255,0.2); }
+    html:not(.mobile) .btn-cancel:hover { background: rgba(255,255,255,0.2); }
     .edit-tip { display: none; margin-top: 14px; color: #ffe9a8; font-size: .85em; align-items: center; gap: 12px; flex-wrap: wrap; }
     .edit-tip.show { display: flex; }
     .mini-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); color: #cfe3ff; border-radius: 20px; padding: 5px 14px; font-size: .85em; cursor: pointer; font-family: inherit; transition: .2s; }
-    .mini-btn:hover { background: rgba(255,255,255,.18); }
+    html:not(.mobile) .mini-btn:hover { background: rgba(255,255,255,.18); }
     .info-box { margin-top: 20px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px 20px; }
     .info-title { color: #a0c4ff; font-size: .9em; margin-bottom: 6px; }
     .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: .95em; }
@@ -60,7 +61,7 @@
     .badge-bad { background: rgba(255,110,110,0.15); color: #ff8080; border: 1px solid rgba(255,110,110,0.4); }
     .card-actions { display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
     .btn-verify { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 22px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .9em; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
-    .btn-verify:hover { transform: translateY(-2px); }
+    html:not(.mobile) .btn-verify:hover { transform: translateY(-2px); }
     .btn-verify:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .card-title { color: #fff; font-size: 1.1em; font-weight: bold; margin-bottom: 16px; }
     label { color: #cfe3ff; font-size: .88em; display: block; margin: 12px 0 6px 4px; }
@@ -69,7 +70,7 @@
     input::placeholder, textarea::placeholder { color: rgba(160,196,255,0.4); }
     textarea { min-height: 100px; resize: vertical; }
     .btn-create { width: 100%; margin-top: 18px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; background: linear-gradient(45deg, #8e2de2, #a970ff); box-shadow: 0 4px 18px rgba(142,45,226,0.45); transition: all 0.3s; font-family: inherit; }
-    .btn-create:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(142,45,226,0.65); }
+    html:not(.mobile) .btn-create:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(142,45,226,0.65); }
     .btn-create:disabled { opacity: .5; cursor: wait; transform: none; }
     .lock-msg { color: rgba(255,255,255,0.5); text-align: center; font-size: .9em; padding: 30px 0; }
     .note { color: rgba(255,255,255,0.4); font-size: .8em; margin-top: 8px; }
@@ -81,7 +82,7 @@
     .appeal-content { color: #cfe3ff; font-size: .9em; margin: 10px 0; white-space: pre-wrap; }
     .appeal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
     .btn-sm { padding: 6px 14px; border-radius: 20px; font-size: .8em; border: none; cursor: pointer; font-family: inherit; transition: .2s; text-decoration: none; }
-    .btn-sm:hover { transform: translateY(-1px); }
+    html:not(.mobile) .btn-sm:hover { transform: translateY(-1px); }
     .btn-sm:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .btn-sm.primary { background: #4facfe; color: #fff; }
     .btn-sm.success { background: #43e97b; color: #063; }
@@ -99,7 +100,7 @@
     .modal .steps b { color: #ffd200; }
     .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
     .modal-btns button { flex: 1; border: none; cursor: pointer; color: #fff; padding: 12px 0; border-radius: 40px; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; font-size: .95em; }
-    .modal-btns button:hover { transform: translateY(-2px); }
+    html:not(.mobile) .modal-btns button:hover { transform: translateY(-2px); }
     .modal-btns button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .mb-verify { background: linear-gradient(45deg, #43e97b, #38f9d7); }
     .mb-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25) !important; }
@@ -115,6 +116,8 @@
     .radio-group { display: flex; gap: 12px; margin: 10px 0; flex-wrap: wrap; justify-content: center; }
     .radio-group label { display: flex; align-items: center; gap: 6px; cursor: pointer; background: rgba(255,255,255,0.05); padding: 8px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: .85em; margin: 0; }
     .radio-group input { width: auto; margin: 0; }
+    /* 手机端顶栏（汉堡菜单）：默认隐藏，仅 html.mobile 下由 mobile.css 显示 */
+    .m-topbar { display: none; }
     @media (max-width: 760px) {
         .layout { flex-direction: column; height: auto; min-height: 100vh; }
         body { overflow: auto; }
@@ -125,10 +128,13 @@
         .side-bottom { flex-direction: row; }
     }
 </style>
+    <!-- 手机端 UI：窗口大小/比例自动识别（桌面端无影响） -->
+    <link rel="stylesheet" href="../css/mobile.css">
+    <script src="../js/mobile.js"></script>
 </head>
 <body>
 <div class="layout">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="side-title">账户中心</div>
         <div class="nav">
             <button class="nav-btn active" onclick="showPage('profile', this)">个人信息</button>
@@ -145,6 +151,11 @@
     </aside>
 
     <main class="main">
+        <!-- 手机端顶栏：汉堡菜单（仅 html.mobile 显示） -->
+        <header class="m-topbar">
+            <button class="m-menu" id="mMenuBtn" type="button" aria-label="打开菜单">☰</button>
+            <span class="m-topbar-title" id="mTopbarTitle">账户中心</span>
+        </header>
         <div class="notice" id="notice"></div>
 
         <section class="page" id="page-profile">
@@ -181,7 +192,7 @@
                 <div class="card-title">📧 修改邮箱</div>
                 <div class="info-row" style="padding:0;border:none;margin-bottom:10px"><span>当前邮箱</span><b id="sec-current-email">-</b></div>
                 <button class="btn-create" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="startChangeEmail()">开始修改邮箱</button>
-                <div class="note">已验证的账号需先通过「邮箱验证码 / UID / MFA」二次验证；修改后新邮箱需输入验证码确认。</div>
+                <div class="note">已验证的账号需先通过「邮箱验证码 / UID / MFA」验证；修改后新邮箱需输入验证码确认。</div>
             </div>
             <div class="card">
                 <div class="card-title">🔑 修改密码</div>
@@ -256,6 +267,41 @@
         <section class="page" id="page-more" hidden><div class="card empty">🚧 该页面正在建设中</div></section>
     </main>
 </div>
+
+<!-- 手机端侧边抽屉背景遮罩（仅 html.mobile 显示） -->
+<div class="m-backdrop" id="mBackdrop" hidden></div>
+
+<script>
+// 手机端：汉堡菜单 → 侧边抽屉（独立脚本，不依赖 Supabase CDN，CDN 故障也能用）
+(function () {
+    function openDrawer() {
+        var sb = document.getElementById('sidebar'), bd = document.getElementById('mBackdrop');
+        if (!sb || !bd) return;
+        sb.classList.add('open');
+        bd.hidden = false;
+    }
+    function closeDrawer() {
+        var sb = document.getElementById('sidebar'), bd = document.getElementById('mBackdrop');
+        if (!sb || !bd) return;
+        sb.classList.remove('open');
+        bd.hidden = true;
+    }
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('#mMenuBtn')) { openDrawer(); return; }
+        if (e.target && e.target.id === 'mBackdrop') { closeDrawer(); return; }
+        // 点在抽屉内部导航项上：交由 showPage 关闭（开抽屉后点击其他区域不关）
+        if (e.target && e.target.closest && e.target.closest('.sidebar')) { /* 不在此处关闭 */ }
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
+    window.__closeDrawer = closeDrawer;
+    // 初始标题 = 当前选中的标签
+    (function () {
+        var active = document.querySelector('.nav .nav-btn.active');
+        var titleEl = document.getElementById('mTopbarTitle');
+        if (titleEl && active) titleEl.textContent = active.textContent.trim();
+    })();
+})();
+</script>
 
 <input type="file" id="avatar-file" accept="image/*" style="display:none" onchange="onAvatarPicked(event)">
 
@@ -351,7 +397,7 @@ const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
 let currentToken = '', currentUser = null, editing = false, pendingAvatar = null;
-let emailUnconfirmed = false, uidPending = false, currentFactorId = '';
+let emailUnconfirmed = false, uidPending = false, currentFactorId = '', pendingTotpSecret = '';
 let pendingNewEmail = '', authMethod = '', pendingRejectId = '', afterAuthCallback = null;
 let allAppeals = [], currentFilter = 'all';
 
@@ -376,6 +422,10 @@ function startCooldown(btnId, originalText, seconds) {
 }
 
 function showPage(name, btn) {
+    if (window.__closeDrawer) window.__closeDrawer();
+    // 顶栏标题跟随选中的标签
+    const titleEl = $('mTopbarTitle');
+    if (titleEl && btn) titleEl.textContent = btn.textContent.trim();
     document.querySelectorAll('.page').forEach(p => p.hidden = true);
     $('page-' + name).hidden = false;
     document.querySelectorAll('.nav .nav-btn').forEach(b => b.classList.remove('active'));
@@ -383,6 +433,8 @@ function showPage(name, btn) {
     if (name === 'appeal') loadMyAppeals();
     if (name === 'admin') loadAdminAppeals();
 }
+
+// 手机端：汉堡菜单打开侧边抽屉（已在页面中部独立脚本中定义 window.__closeDrawer / 委托监听）
 
 async function requireReauth(callback) {
     const isAdmin = currentUser.email.toLowerCase().endsWith('@admin.server');
@@ -578,6 +630,11 @@ async function startEnrollMfa() {
     const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp' });
     if (error) return toast('绑定失败：' + error.message);
     currentFactorId = data.id;
+    pendingTotpSecret = '';
+    try {
+        const m = String(data.totp.qr_code || '').match(/secret=([A-Z2-7]+)/i);
+        if (m) pendingTotpSecret = m[1];
+    } catch (e) {}
     $('mfa-qr').src = data.totp.qr_code;
     $('mfa-enroll-box').style.display = '';
     $('mfa-actions').style.display = 'none';
@@ -588,6 +645,17 @@ async function verifyMfa() {
     const { data: ch } = await sb.auth.mfa.challenge({ factorId: currentFactorId });
     const { error } = await sb.auth.mfa.verify({ factorId: currentFactorId, challengeId: ch.id, code });
     if (error) return toast('验证码错误：' + error.message);
+    // 把密钥登记到服务端（供「仅 MFA 验证码」登录使用）
+    if (pendingTotpSecret) {
+        try {
+            await fetch(API_BASE + '/save-totp-secret', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+                body: JSON.stringify({ secret: pendingTotpSecret, code: code }),
+            });
+        } catch (e) {}
+        pendingTotpSecret = '';
+    }
     toast('✅ MFA 绑定成功！');
     checkMfaStatus();
 }

@@ -36,7 +36,7 @@
         h1 { color: #fff; font-size: 1.8em; margin: 10px 0 15px 0; text-shadow: 0 0 15px rgba(79, 172, 254, 0.8); letter-spacing: 2px; }
         .subtitle {
             color: #a0c4ff; margin-bottom: 40px; font-size: 1.1em; font-weight: 300; min-height: 1.5em;
-            cursor: pointer; user-select: none; transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            user-select: none; transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
         }
         .subtitle.fade-out { opacity: 0; transform: translateY(-10px); }
         .btn {
@@ -46,10 +46,14 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
         }
-        .btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6); }
+        html:not(.mobile) .btn:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6); }
         .icon { display: block; flex-shrink: 0; }
         footer { margin-top: 40px; color: rgba(255, 255, 255, 0.3); font-size: 0.85em; }
     </style>
+    <!-- 手机端 UI：窗口大小/比例自动识别（桌面端无影响）
+         404 页可能被任意深度的路径命中，使用绝对路径引用 -->
+    <link rel="stylesheet" href="/css/mobile.css">
+    <script src="/js/mobile.js"></script>
 </head>
 <body>
     <div class="bubbles">
@@ -65,7 +69,7 @@
     <div class="container">
         <p class="code">404</p>
         <h1>页面迷失在深海了</h1>
-        <p class="subtitle" id="msg" title="点击换一句">「你寻找的页面，已沉入海底。」</p>
+        <p class="subtitle" id="msg">「你寻找的页面，已沉入海底。」</p>
 
         <a href="/index.html" class="btn">
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -111,7 +115,6 @@
         }
 
         function resetTimer() { clearInterval(timer); timer = setInterval(show, 5000); }
-        el.addEventListener('click', () => { show(); resetTimer(); });
         
         show(); 
         resetTimer();

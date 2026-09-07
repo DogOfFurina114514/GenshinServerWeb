@@ -27,7 +27,7 @@
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .back { color: #a0c4ff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: .95em; line-height: 1; }
-    .back:hover { color: #fff; }
+    html:not(.mobile) .back:hover { color: #fff; }
     .icon { display: block; flex-shrink: 0; }
     h1 {
         color: #fff; text-align: center; font-size: 2.2em; margin: 10px 0 8px 0;
@@ -53,7 +53,7 @@
     input::placeholder { color: rgba(160,196,255,0.5); }
     .chips { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 6px 0; }
     .chip { cursor: pointer; padding: 6px 14px; border-radius: 30px; background: rgba(79,172,254,0.15); border: 1px solid rgba(79,172,254,0.4); color: #a0c4ff; font-size: .85em; line-height: 1; }
-    .chip:hover { background: rgba(79,172,254,0.35); color: #fff; }
+    html:not(.mobile) .chip:hover { background: rgba(79,172,254,0.35); color: #fff; }
     #count { color: rgba(255,255,255,0.4); font-size: .8em; margin: 8px 0; }
     #results { max-height: 480px; overflow-y: auto; padding-right: 6px; }
     #results::-webkit-scrollbar { width: 6px; }
@@ -64,7 +64,7 @@
     .rname { color: #eaf4ff; flex: 1; font-size: .9em; }
     .rsec { color: rgba(255,255,255,0.35); font-size: .75em; }
     .copy { cursor: pointer; background: rgba(67,233,123,0.2); border: 1px solid rgba(67,233,123,0.5); color: #43e97b; border-radius: 20px; padding: 5px 14px; font-size: .8em; line-height: 1; flex-shrink: 0; }
-    .copy:hover { background: rgba(67,233,123,0.4); color: #fff; }
+    html:not(.mobile) .copy:hover { background: rgba(67,233,123,0.4); color: #fff; }
     .empty { color: rgba(255,255,255,0.4); text-align: center; padding: 30px 0; }
     footer { margin-top: 40px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
     #toast {
@@ -74,15 +74,18 @@
     }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 </style>
+    <!-- 手机端 UI：窗口大小/比例自动识别（桌面端无影响） -->
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="js/mobile.js"></script>
 </head>
 <body>
 <style>
     .top-auth{position:fixed;top:20px;right:24px;z-index:999;display:flex;gap:12px;}
     .btn-auth{text-decoration:none;padding:10px 26px;border-radius:50px;font-size:.95em;font-weight:bold;line-height:1;transition:all .3s;font-family:'Segoe UI','Microsoft YaHei',sans-serif;}
     .btn-auth-reg{color:#4facfe;border:2px solid #4facfe;background:rgba(79,172,254,0.08);}
-    .btn-auth-reg:hover{background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px);}
+    html:not(.mobile) .btn-auth-reg:hover{ background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px); }
     .btn-auth-login{color:#fff;background:linear-gradient(45deg,#4facfe,#00f2fe);box-shadow:0 4px 15px rgba(79,172,254,0.4);}
-    .btn-auth-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6);}
+    html:not(.mobile) .btn-auth-login:hover{ transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6); }
     @keyframes flyIn{from{transform:translateX(140px);opacity:0;}to{transform:translateX(0);opacity:1;}}
     .fly-1{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) backwards;}
     .fly-2{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) .2s backwards;}

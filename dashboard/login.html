@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>玩家登录 - 芙芙的狗的服务器</title>
-<link rel="icon" href="/icon.ico" type="image/x-icon">
+<link rel="icon" href="../icon.ico" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
     html, body { margin: 0; min-height: 100%; }
@@ -15,7 +15,7 @@
     .container { position: relative; z-index: 10; max-width: 560px; margin: 60px auto; padding: 40px 50px; background: rgba(255,255,255,0.08); border-radius: 24px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); animation: fadeIn 1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .back { color: #a0c4ff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: .95em; line-height: 1; }
-    .back:hover { color: #fff; }
+    html:not(.mobile) .back:hover { color: #fff; }
     .icon { display: block; flex-shrink: 0; }
     h1 { color: #fff; text-align: center; font-size: 2em; margin: 10px 0 8px 0; text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1; }
     .subtitle { color: #a0c4ff; text-align: center; margin: 0 0 30px 0; font-weight: 300; }
@@ -26,12 +26,12 @@
     textarea { min-height: 100px; resize: vertical; }
     .hint { color: rgba(255,255,255,0.4); font-size: .78em; margin: 6px 4px 0 4px; }
     .btn-submit { width: 100%; margin-top: 24px; border: none; cursor: pointer; color: #fff; padding: 16px 0; border-radius: 50px; font-size: 1.1em; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-shadow: 0 1px 3px rgba(0,0,0,0.2); font-family: inherit; }
-    .btn-submit:hover { transform: translateY(-4px); }
+    html:not(.mobile) .btn-submit:hover { transform: translateY(-4px); }
     .btn-submit:disabled { opacity: .5; cursor: wait; transform: none; }
     .btn-login { background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45); }
-    .btn-login:hover { box-shadow: 0 8px 28px rgba(79,172,254,0.65); }
+    html:not(.mobile) .btn-login:hover { box-shadow: 0 8px 28px rgba(79,172,254,0.65); }
     .btn-register { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 18px rgba(67,233,123,0.45); }
-    .btn-register:hover { box-shadow: 0 8px 28px rgba(67,233,123,0.65); }
+    html:not(.mobile) .btn-register:hover { box-shadow: 0 8px 28px rgba(67,233,123,0.65); }
     .divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; color: rgba(255,255,255,0.3); font-size: .85em; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.15); }
     #msg { text-align: center; margin-top: 16px; font-size: .9em; min-height: 1.2em; }
@@ -43,7 +43,7 @@
     .warn-banner .warn-text { flex: 1; color: #ffe9a8; font-size: .88em; line-height: 1.5; }
     .warn-banner .warn-text b { color: #ffd200; }
     .btn-action { background: linear-gradient(45deg, #ffd200, #f7971e); color: #fff; border: none; padding: 10px 18px; border-radius: 30px; font-weight: bold; cursor: pointer; font-family: inherit; font-size: .88em; white-space: nowrap; transition: .3s; box-shadow: 0 4px 14px rgba(255,210,0,0.4); }
-    .btn-action:hover { transform: translateY(-2px); }
+    html:not(.mobile) .btn-action:hover { transform: translateY(-2px); }
 
     /* ====== 弹窗动画与背景模糊优化核心 ====== */
     #overlay { 
@@ -83,7 +83,7 @@
     .modal .steps b { color: #ffd200; }
     .modal-btns { display: flex; gap: 12px; margin-top: 20px; }
     .modal-btns button { flex: 1; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 40px; font-weight: bold; line-height: 1; font-family: inherit; transition: .3s; }
-    .modal-btns button:hover { transform: translateY(-3px); }
+    html:not(.mobile) .modal-btns button:hover { transform: translateY(-3px); }
     .mb-verify { background: linear-gradient(45deg, #43e97b, #38f9d7); box-shadow: 0 4px 14px rgba(67,233,123,0.4); }
     .mb-close { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25) !important; }
     #modal-msg { margin-top: 12px; font-size: .85em; min-height: 1.2em; }
@@ -93,14 +93,14 @@
     /* 新增：找回账号相关样式 */
     .row-between { display: flex; justify-content: flex-end; margin: 6px 4px 0 0; }
     .link-btn { background: none; border: none; color: #a0c4ff; font-size: .82em; cursor: pointer; padding: 2px 4px; font-family: inherit; }
-    .link-btn:hover { color: #fff; text-decoration: underline; }
+    html:not(.mobile) .link-btn:hover { color: #fff; text-decoration: underline; }
     
     .modal-recover .btn-outline { display: block; width: 100%; margin: 8px 0; padding: 11px 0; border-radius: 14px; background: transparent; border: 1px solid #4facfe; color: #7cc4ff; font-size: .92em; cursor: pointer; font-family: inherit; transition: .2s; text-align: center; }
-    .modal-recover .btn-outline:hover { background: rgba(79,172,254,0.15); color: #fff; }
+    html:not(.mobile) .modal-recover .btn-outline:hover { background: rgba(79,172,254,0.15); color: #fff; }
     .modal-recover .btn-ghost { width: 100%; margin-top: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #cfe3ff; padding: 12px 0; border-radius: 40px; cursor: pointer; font-family: inherit; transition: .2s; }
-    .modal-recover .btn-ghost:hover { background: rgba(255,255,255,0.15); }
+    html:not(.mobile) .modal-recover .btn-ghost:hover { background: rgba(255,255,255,0.15); }
     .modal-recover .btn-solid { width: 100%; margin-top: 14px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 40px; font-weight: bold; background: linear-gradient(45deg, #43e97b, #38f9d7); font-family: inherit; transition: .3s; }
-    .modal-recover .btn-solid:hover { transform: translateY(-2px); }
+    html:not(.mobile) .modal-recover .btn-solid:hover { transform: translateY(-2px); }
     .recover-label { color: #cfe3ff; font-size: .9em; text-align: left; margin: 4px 0 10px 2px; }
     .small-note { color: rgba(255,255,255,0.45); font-size: .78em; text-align: left; margin: 12px 0 8px 2px; }
     .code-box { background: rgba(0,0,0,0.4); border: 2px dashed rgba(255,210,0,0.5); border-radius: 16px; padding: 14px; margin: 12px 0; font-family: 'IBM Plex Mono', Consolas, monospace; font-size: 1.4em; color: #ffd200; letter-spacing: 4px; user-select: all; font-weight: 600; }
@@ -115,6 +115,9 @@
     .msg.err { color: #ff8080 !important; }
     .msg.ok { color: #43e97b !important; }
 </style>
+    <!-- 手机端 UI：窗口大小/比例自动识别（桌面端无影响） -->
+    <link rel="stylesheet" href="../css/mobile.css">
+    <script src="../js/mobile.js"></script>
 </head>
 <body>
 <div class="bubbles">
@@ -146,16 +149,10 @@
         <label>邮箱</label>
         <input id="login-email" type="email" placeholder="your@email.com" autocomplete="email">
         <label>密码</label>
-        <input id="login-pwd" type="password" placeholder="至少 6 位" autocomplete="current-password">
+        <input id="login-pwd" type="password" placeholder="密码或验证器 6 位数字" autocomplete="current-password">
         <div class="row-between"><button class="link-btn" onclick="openModal('m-recover')">找回账号</button></div>
-        
-        <div id="mfa-box" style="display:none">
-            <label>MFA 验证码</label>
-            <input id="li-mfa" maxlength="6" placeholder="输入验证器上的 6 位数字">
-        </div>
 
         <button class="btn-submit btn-login" id="btn-login" onclick="doLogin()">登 录</button>
-        <button class="btn-submit btn-login" id="btn-mfa" onclick="doLoginMfa()" style="display:none">验证 MFA 并登录</button>
         
         <div class="divider">还没有账号？</div>
         <button class="btn-submit btn-register" onclick="showRegister()">注册新账号</button>
@@ -272,7 +269,7 @@ const API_BASE = 'https://kusbgdswjbaqpczfelnv.supabase.co/functions/v1/genshin-
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
-let lastRegEmail = '', pendingFactorId = '', unfreezeEmail = '';
+let lastRegEmail = '', unfreezeEmail = '';
 
 function msg(t, c) { $('msg').textContent = t; $('msg').className = c || ''; }
 function setMsg(id, text, cls) { const el = $(id); el.textContent = text; el.className = 'msg ' + (cls || ''); }
@@ -313,38 +310,35 @@ async function doLogin() {
         if (fz.frozen) { openUnfreeze(email); return; }
     } catch (e) {}
 
+    // —— 优先尝试密码登录 ——
     const { error } = await sb.auth.signInWithPassword({ email, password: pwd });
-    if (error) {
-        if (String(error.message).toLowerCase().includes('not confirmed')) {
-            $('email-banner').classList.add('show');
-            return msg('邮箱未验证，请先去邮箱点击验证链接', 'err');
-        }
-        return msg('登录失败：' + error.message, 'err');
+    if (!error) { window.location.href = 'index.html'; return; }
+
+    // 邮箱未验证时给出明确提示（这种情况必然没有 MFA）
+    if (String(error.message).toLowerCase().includes('not confirmed')) {
+        $('email-banner').classList.add('show');
+        return msg('邮箱未验证，请先去邮箱点击验证链接', 'err');
     }
 
-    const { data: f } = await sb.auth.mfa.listFactors();
-    const totp = f && f.totp && f.totp.length ? f.totp[0] : null;
-    if (totp) {
-        pendingFactorId = totp.id;
-        $('mfa-box').style.display = '';
-        $('btn-login').style.display = 'none';
-        $('btn-mfa').style.display = '';
-        return;
+    // —— 密码登录失败：输入的是 6 位数字则尝试「仅 MFA 验证码」登录 ——
+    if (/^\d{6}$/.test(pwd)) {
+        try {
+            const r = await fetch(API_BASE + '/login-mfa', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, code: pwd }),
+            }).then(x => x.json());
+            if (r.ok && r.token_hash) {
+                const v = await sb.auth.verifyOtp({ type: 'magiclink', token_hash: r.token_hash });
+                if (!v.error) { window.location.href = 'index.html'; return; }
+                return msg('获取登录会话失败：' + v.error.message, 'err');
+            }
+            if (r.ok && r.action_link) { window.location.href = r.action_link; return; }
+            return msg(r.msg || '密码或验证码错误', 'err');
+        } catch (e) { return msg('登录失败，请稍后重试', 'err'); }
     }
-    window.location.href = 'index.html';
-}
 
-async function doLoginMfa() {
-    const code = $('li-mfa').value.trim();
-    if (!/^\d{6}$/.test(code)) return msg('请输入 6 位 MFA 验证码', 'err');
-    let ch = await sb.auth.mfa.challenge({ factorId: pendingFactorId });
-    let v = await sb.auth.mfa.verify({ factorId: pendingFactorId, challengeId: ch.data.id, code });
-    if (v.error && /expired|invalid/i.test(v.error.message)) {
-        ch = await sb.auth.mfa.challenge({ factorId: pendingFactorId });
-        v = await sb.auth.mfa.verify({ factorId: pendingFactorId, challengeId: ch.data.id, code });
-    }
-    if (v.error) return msg('MFA 验证失败：' + v.error.message, 'err');
-    window.location.href = 'index.html';
+    return msg('登录失败：' + error.message, 'err');
 }
 
 async function doRegister() {

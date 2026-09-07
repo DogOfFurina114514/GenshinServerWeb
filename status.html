@@ -14,7 +14,7 @@
     .container { position: relative; z-index: 10; max-width: 640px; margin: 60px auto; padding: 40px 50px; background: rgba(255,255,255,0.08); border-radius: 24px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4); animation: fadeIn 1s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .back { color: #a0c4ff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: .95em; line-height: 1; }
-    .back:hover { color: #fff; }
+    html:not(.mobile) .back:hover { color: #fff; }
     h1 { color: #fff; text-align: center; font-size: 2em; margin: 10px 0 8px 0; text-shadow: 0 0 15px rgba(79,172,254,0.8); letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 14px; line-height: 1; }
     .subtitle { color: #a0c4ff; text-align: center; margin: 0 0 28px 0; font-weight: 300; }
     .rt { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: .85em; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
@@ -32,20 +32,23 @@
     .sname { color: #eaf4ff; flex: 1; font-size: .95em; }
     .srow b { color: #a0c4ff; font-family: Consolas, monospace; font-size: .9em; }
     .btn-refresh { width: 100%; margin-top: 22px; border: none; cursor: pointer; color: #fff; padding: 14px 0; border-radius: 50px; font-size: 1.05em; font-weight: bold; line-height: 1; display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(45deg, #4facfe, #00f2fe); box-shadow: 0 4px 18px rgba(79,172,254,0.45); transition: .3s; font-family: inherit; }
-    .btn-refresh:hover { transform: translateY(-3px); }
+    html:not(.mobile) .btn-refresh:hover { transform: translateY(-3px); }
     .btn-refresh:disabled { opacity: .5; cursor: wait; transform: none; }
     .note { color: rgba(255,255,255,0.4); font-size: .8em; text-align: center; margin-top: 16px; }
     footer { margin-top: 32px; color: rgba(255,255,255,0.3); font-size: .85em; text-align: center; }
 </style>
+    <!-- 手机端 UI：窗口大小/比例自动识别（桌面端无影响） -->
+    <link rel="stylesheet" href="css/mobile.css">
+    <script src="js/mobile.js"></script>
 </head>
 <body>
 <style>
     .top-auth{position:fixed;top:20px;right:24px;z-index:999;display:flex;gap:12px;}
     .btn-auth{text-decoration:none;padding:10px 26px;border-radius:50px;font-size:.95em;font-weight:bold;line-height:1;transition:all .3s;font-family:'Segoe UI','Microsoft YaHei',sans-serif;}
     .btn-auth-reg{color:#4facfe;border:2px solid #4facfe;background:rgba(79,172,254,0.08);}
-    .btn-auth-reg:hover{background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px);}
+    html:not(.mobile) .btn-auth-reg:hover{ background:rgba(79,172,254,0.25);color:#fff;transform:translateY(-2px); }
     .btn-auth-login{color:#fff;background:linear-gradient(45deg,#4facfe,#00f2fe);box-shadow:0 4px 15px rgba(79,172,254,0.4);}
-    .btn-auth-login:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6);}
+    html:not(.mobile) .btn-auth-login:hover{ transform:translateY(-2px);box-shadow:0 8px 25px rgba(79,172,254,0.6); }
     @keyframes flyIn{from{transform:translateX(140px);opacity:0;}to{transform:translateX(0);opacity:1;}}
     .fly-1{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) backwards;}
     .fly-2{animation:flyIn .6s cubic-bezier(.2,.8,.25,1) .2s backwards;}
