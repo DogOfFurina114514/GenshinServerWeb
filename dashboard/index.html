@@ -660,16 +660,12 @@ async function verifyMfa() {
     checkMfaStatus();
 }
 function cancelMfa() { $('mfa-enroll-box').style.display = 'none'; $('mfa-actions').style.display = ''; }
-function unenrollMfa() { requireReauth(doUnenrollMfa, true); }
+function unenrollMfa() { requireReauth(doUnenrollMfa); }
 async function doUnenrollMfa() {
-    const { data } = await sb.auth.mfa.listFactors();
-    if (!data.totp || !data.totp.length) return toast('未找到验证器');
-    const { error } = await sb.auth.mfa.unenroll({ factorId: data.totp[0].id });
-    if (error) return toast('解绑失败：' + error.message);
-    // 同步清理服务端登记的密钥
-    try {
-        await fetch(API_BASE + '/clear-totp-secret', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
-    } catch (e) {}
+    // 二次验证通过后由服务端（admin 接口）解绑，不受 AAL2 限制
+    const r = await fetch(API_BASE + '/unenroll-mfa', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
+    const d = await r.json().catch(() => ({}));
+    if (!d.ok) return toast(d.msg || '解绑失败');
     toast('✅ 已解绑'); checkMfaStatus();
 }
 
