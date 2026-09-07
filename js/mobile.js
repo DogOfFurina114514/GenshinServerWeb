@@ -20,3 +20,10 @@
   window.addEventListener('orientationchange', apply);
   apply();
 })();
+
+/* 禁止浏览器刷新时恢复滚动位置，并在加载完成后回到顶部
+   —— 避免异步内容（一言/登录态等）布局变化导致刷新后主窗口位置漂移 */
+(function () {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+})();
