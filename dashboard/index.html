@@ -436,7 +436,7 @@ function showPage(name, btn) {
 
 // 手机端：汉堡菜单打开侧边抽屉（已在页面中部独立脚本中定义 window.__closeDrawer / 委托监听）
 
-async function requireReauth(callback) {
+async function requireReauth(callback, forceMfa) {
     const isAdmin = currentUser.email.toLowerCase().endsWith('@admin.server');
     const emailOk = !!currentUser.email_confirmed_at;
     let uidOk = false;
@@ -444,14 +444,14 @@ async function requireReauth(callback) {
         const { data: rec } = await sb.from('verify_records').select('verified').eq('user_id', currentUser.id).maybeSingle();
         uidOk = !!(rec && rec.verified);
     }
-    if (!emailOk && !uidOk && !isAdmin) { callback(); return; }
+    if (!forceMfa && !emailOk && !uidOk && !isAdmin) { callback(); return; }
 
     afterAuthCallback = callback;
     let html = '';
-    if (emailOk) html += '<label><input type="radio" name="auth-m" value="email" checked> 邮箱验证码</label>';
-    if (uidOk) html += '<label><input type="radio" name="auth-m" value="uid"> 官服 UID 验证</label>';
+    if (!forceMfa && emailOk) html += '<label><input type="radio" name="auth-m" value="email" checked> 邮箱验证码</label>';
+    if (!forceMfa && uidOk) html += '<label><input type="radio" name="auth-m" value="uid"> 官服 UID 验证</label>';
     const { data: mfaData } = await sb.auth.mfa.listFactors();
-    if (mfaData && mfaData.totp && mfaData.totp.length) html += '<label><input type="radio" name="auth-m" value="mfa"> MFA 验证码</label>';
+    if (mfaData && mfaData.totp && mfaData.totp.length) html += '<label><input type="radio" name="auth-m" value="mfa"' + (forceMfa ? ' checked' : '') + '> MFA 验证码</label>';
     $('auth-methods').innerHTML = html;
     document.querySelectorAll('input[name="auth-m"]').forEach(r => r.addEventListener('change', updateAuthInput));
     updateAuthInput();
@@ -660,12 +660,16 @@ async function verifyMfa() {
     checkMfaStatus();
 }
 function cancelMfa() { $('mfa-enroll-box').style.display = 'none'; $('mfa-actions').style.display = ''; }
-async function unenrollMfa() {
-    if (!confirm('确定解绑 MFA？解绑后账号安全性会降低。')) return;
+function unenrollMfa() { requireReauth(doUnenrollMfa, true); }
+async function doUnenrollMfa() {
     const { data } = await sb.auth.mfa.listFactors();
-    if (!data.totp || !data.totp.length) return;
+    if (!data.totp || !data.totp.length) return toast('未找到验证器');
     const { error } = await sb.auth.mfa.unenroll({ factorId: data.totp[0].id });
     if (error) return toast('解绑失败：' + error.message);
+    // 同步清理服务端登记的密钥
+    try {
+        await fetch(API_BASE + '/clear-totp-secret', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
+    } catch (e) {}
     toast('✅ 已解绑'); checkMfaStatus();
 }
 
