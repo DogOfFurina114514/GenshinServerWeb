@@ -6,6 +6,10 @@
    渐变胶囊按钮 + 发光标题。
    ============================================================ */
 
+/* ===== 全端隐藏滚动条（桌面/手机都隐藏，滚动功能保留） ===== */
+html, body { scrollbar-width: none; -ms-overflow-style: none; }
+*::-webkit-scrollbar { display: none; }
+
 /* ---------- 通用：玻璃卡片收窄（所有页面共用 .container） ---------- */
 html.mobile .container {
   width: 92%;

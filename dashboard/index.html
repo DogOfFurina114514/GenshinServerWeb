@@ -856,6 +856,17 @@ const AV_CROWN = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
 const AV_SHIELD = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>';
 const escHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
 
+// ===== 消息文案里的 emoji → 自绘 SVG（跨设备一致） =====
+const MSG_EMOJI_SVG = {
+  '✅': '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>',
+  '⚠️': '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+  '🎉': '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275z"/></svg>'
+};
+function iconifyM(t) {
+  return String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c))
+    .replace(/✅|⚠️|🎉/g, e => MSG_EMOJI_SVG[e] || '');
+}
+
 function defaultAvatar(user) { const e = user.email.toLowerCase(); if (e === 'dogoffurina@admin.server') return '👑'; if (e.endsWith('@admin.server')) return '🛡️'; return user.email.charAt(0).toUpperCase(); }
 function paintAvatar(str, user) {
     const box = $('avatar');
@@ -969,7 +980,7 @@ function rndPwd() { const c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz2
 function copyInfo() { const t = '芙芙的狗的服务器 账号信息\n用户名：' + $('r-user').textContent + '\nUID：' + $('r-uid').textContent + '\n密码：' + $('r-pwd').textContent; navigator.clipboard.writeText(t); toast('已复制'); }
 function closeModal() { $('overlay').classList.remove('show'); }
 async function doLogout() { await sb.auth.signOut(); window.location.href = 'login.html'; }
-function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2000); }
+function toast(m) { const t = $('toast'); t.innerHTML = iconifyM(m); t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2000); }
 </script>
 </body>
 </html>
