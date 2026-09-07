@@ -84,7 +84,8 @@
         color: #ffe9a8;
         font-size: .9em;
     }
-    .mobile-notice .mn-text { flex: 1; line-height: 1.6; }
+    .mobile-notice .mn-text { flex: 1; line-height: 1.6; display: flex; align-items: center; gap: 8px; }
+    .mobile-notice .mn-icon { flex-shrink: 0; }
     .mobile-notice .mn-btn {
         flex-shrink: 0;
         background: linear-gradient(45deg, #ffd200, #f7971e);
@@ -163,7 +164,7 @@
 <div class="container">
     <!-- 手机端专用提示横幅（桌面端不在 DOM 显示区域隐藏） -->
     <div class="mobile-notice" id="mobileNotice">
-        <div class="mn-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> 检测到手机端访问，网页版教程不支持手机版，如需游玩手机版请与服主联系</div>
+        <div class="mn-text"><svg class="mn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>检测到手机端访问，网页版教程不支持手机版，如需游玩手机版请与服主联系</span></div>
         <a class="mn-btn" href="mailto:wu__20111229@outlook.com?subject=%E5%85%B3%E4%BA%8E%E6%89%8B%E6%9C%BA%E7%AB%AF%E7%A7%81%E6%9C%8D">联系服主</a>
     </div>
 
