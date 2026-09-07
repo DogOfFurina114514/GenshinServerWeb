@@ -246,8 +246,9 @@ html.mobile .m-menu {
   border: 1px solid rgba(79, 172, 254, 0.5);
   background: rgba(79, 172, 254, 0.12);
   color: #fff;
-  font-size: 1.1em;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   font-family: inherit;
   flex-shrink: 0;

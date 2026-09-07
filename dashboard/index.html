@@ -35,7 +35,10 @@
     .avatar { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(45deg, #4facfe, #00f2fe); display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; color: #fff; flex-shrink: 0; box-shadow: 0 4px 14px rgba(79,172,254,0.4); overflow: hidden; position: relative; }
     .avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
     .avatar.editing { cursor: pointer; box-shadow: 0 0 0 3px rgba(255,210,0,0.55); }
-    .avatar.editing::after { content: '📷'; position: absolute; right: -3px; bottom: -3px; font-size: .85em; background: #12222e; border-radius: 50%; padding: 2px 5px; border: 1px solid rgba(255,210,0,0.6); }
+    .avatar.editing::after { content: ''; position: absolute; right: -3px; bottom: -3px; width: 24px; height: 24px; background: #12222e url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffd200' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z'/><circle cx='12' cy='13' r='3'/></svg>") center/15px no-repeat; border-radius: 50%; border: 1px solid rgba(255,210,0,0.6); }
+    /* 自绘 SVG 图标对齐 */
+    .card-title svg, .modal h2 svg, .lock-msg svg, .card.empty svg { width: 18px; height: 18px; vertical-align: -3px; margin-right: 8px; }
+    .appeal-actions svg, .appeal-head svg { width: 12px; height: 12px; vertical-align: -1px; }
     .uname-wrap { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
     .uname { font-size: 1.15em; font-weight: bold; color: #fff; word-break: break-all; display: flex; align-items: center; gap: 10px; }
     #nick-input { display: none; width: 240px; max-width: 60vw; padding: 7px 14px; font-size: .9em; font-weight: bold; }
@@ -153,7 +156,7 @@
     <main class="main">
         <!-- 手机端顶栏：汉堡菜单（仅 html.mobile 显示） -->
         <header class="m-topbar">
-            <button class="m-menu" id="mMenuBtn" type="button" aria-label="打开菜单">☰</button>
+            <button class="m-menu" id="mMenuBtn" type="button" aria-label="打开菜单"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg></button>
             <span class="m-topbar-title" id="mTopbarTitle">账户中心</span>
         </header>
         <div class="notice" id="notice"></div>
@@ -171,7 +174,7 @@
                         <button class="btn-edit" id="btn-edit" onclick="toggleEdit()">编辑</button>
                     </div>
                 </div>
-                <div class="edit-tip" id="edit-tip">✏️ 编辑中：点击头像上传自定义头像 · 邮箱不可修改<button class="mini-btn" onclick="resetAvatar()">恢复默认头像</button></div>
+                <div class="edit-tip" id="edit-tip"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg> 编辑中：点击头像上传自定义头像 · 邮箱不可修改<button class="mini-btn" onclick="resetAvatar()">恢复默认头像</button></div>
                 <div class="info-box">
                     <div class="info-title">账号信息</div>
                     <div class="info-row"><span>邮箱</span><b id="info-email">-</b></div>
@@ -189,13 +192,13 @@
 
         <section class="page" id="page-security" hidden>
             <div class="card">
-                <div class="card-title">📧 修改邮箱</div>
+                <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> 修改邮箱</div>
                 <div class="info-row" style="padding:0;border:none;margin-bottom:10px"><span>当前邮箱</span><b id="sec-current-email">-</b></div>
                 <button class="btn-create" style="background:linear-gradient(45deg,#4facfe,#00f2fe)" onclick="startChangeEmail()">开始修改邮箱</button>
                 <div class="note">已验证的账号需先通过「邮箱验证码 / UID / MFA」验证；修改后新邮箱需输入验证码确认。</div>
             </div>
             <div class="card">
-                <div class="card-title">🔑 修改密码</div>
+                <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5 3 3L22 7l-3-3"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg> 修改密码</div>
                 <label>新密码</label>
                 <input id="sec-new-pwd" type="password" placeholder="至少 6 位" autocomplete="new-password">
                 <label>确认新密码</label>
@@ -203,7 +206,7 @@
                 <button class="btn-create" style="background:linear-gradient(45deg,#43e97b,#38f9d7)" onclick="startChangePassword()">修改密码</button>
             </div>
             <div class="card">
-                <div class="card-title">🛡️ 两步验证 (MFA)</div>
+                <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> 两步验证 (MFA)</div>
                 <div class="info-row" style="padding:0;border:none;margin-bottom:10px"><span>当前状态</span><b id="mfa-status">检测中...</b></div>
                 <div id="mfa-enroll-box" style="display:none">
                     <p style="color:#a0c4ff;font-size:.9em;margin:10px 0">使用 Authenticator 扫描下方二维码：</p>
@@ -222,8 +225,8 @@
 
         <section class="page" id="page-create" hidden>
             <div class="card">
-                <div class="card-title">🎮 创建服务器账号</div>
-                <div id="create-locked" class="lock-msg">🔒 完成「邮箱 + 官服 UID」双重验证后解锁此功能</div>
+                <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg> 创建服务器账号</div>
+                <div id="create-locked" class="lock-msg"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 完成「邮箱 + 官服 UID」双重验证后解锁此功能</div>
                 <div id="create-form" style="display:none">
                     <label>游戏用户名</label>
                     <input id="game-username" maxlength="16" placeholder="2-16 位英文 / 数字 / 下划线">
@@ -236,7 +239,7 @@
 
         <section class="page" id="page-appeal" hidden>
             <div class="card">
-                <div class="card-title">📝 提交人工申诉</div>
+                <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> 提交人工申诉</div>
                 <p class="note">当你的邮箱、UID、MFA 均不可用时，可提交表单由管理员人工处理。请在正文中写明能证明账号归属的信息。</p>
                 <label>联系邮箱</label>
                 <input id="appeal-email" type="email" placeholder="用于接收处理结果">
@@ -245,14 +248,14 @@
                 <button class="btn-create" onclick="submitAppeal()">提交申诉</button>
             </div>
             <div class="card">
-                <div class="card-title">📋 我的申诉记录</div>
+                <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> 我的申诉记录</div>
                 <div id="my-appeals-list"><p class="note">暂无记录</p></div>
             </div>
         </section>
 
         <section class="page" id="page-admin" hidden>
             <div class="card">
-                <div class="card-title">⚖️ 申诉审批面板</div>
+                <div class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> 申诉审批面板</div>
                 <div class="tabs">
                     <div class="tab active" onclick="filterAppeals('all', this)">全部</div>
                     <div class="tab" onclick="filterAppeals('pending', this)">未受理</div>
@@ -264,7 +267,7 @@
             </div>
         </section>
 
-        <section class="page" id="page-more" hidden><div class="card empty">🚧 该页面正在建设中</div></section>
+        <section class="page" id="page-more" hidden><div class="card empty"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="8" rx="1"/><path d="M17 14v7"/><path d="M7 14v7"/><path d="M17 3v3"/><path d="M7 3v3"/><path d="M10 14 2.3 6.3"/><path d="m14 6 7.7 7.7"/><path d="m8 6 8 8"/></svg> 该页面正在建设中</div></section>
     </main>
 </div>
 
@@ -307,7 +310,7 @@
 
 <div id="overlay">
     <div class="modal" id="modal-auth" style="display:none">
-        <h2 class="gold">🔐 身份验证</h2>
+        <h2 class="gold"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 身份验证</h2>
         <p class="sub">为了安全，进行此操作前需验证你的身份，请选择一种方式：</p>
         <div class="radio-group" id="auth-methods"></div>
         <div id="auth-input-area" style="margin-top:16px"></div>
@@ -319,7 +322,7 @@
     </div>
 
     <div class="modal" id="modal-input-email" style="display:none">
-        <h2 class="gold">📧 修改邮箱</h2>
+        <h2 class="gold"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> 修改邮箱</h2>
         <p class="sub">身份验证通过！请输入你的新邮箱地址</p>
         <label>新邮箱</label>
         <input id="input-new-email" type="email" placeholder="new@email.com">
@@ -331,7 +334,7 @@
     </div>
 
     <div class="modal" id="modal-new-email" style="display:none">
-        <h2 class="gold">📧 验证新邮箱</h2>
+        <h2 class="gold"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> 验证新邮箱</h2>
         <p class="sub">验证码已发送至 <b id="new-email-display"></b></p>
         <label>输入 6 位验证码</label>
         <input id="new-email-code" maxlength="6" placeholder="123456">
@@ -343,7 +346,7 @@
     </div>
 
     <div class="modal" id="modal-verify" style="display:none">
-        <h2 class="gold">⚡ 身份验证</h2>
+        <h2 class="gold"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> 身份验证</h2>
         <p class="sub">请在 <b>7 天内</b>完成以下操作</p>
         <div class="code-box" id="modal-code">----------</div>
         <div class="steps">① 打开原神官服，进入<b>个人资料</b><br>② 将你的<b>个性签名</b>修改为上方的验证码<br>③ <b>等待 3~5 分钟</b><br>④ 点击下方「我已修改，验证」</div>
@@ -355,7 +358,7 @@
     </div>
 
     <div class="modal" id="modal-reject-notice" style="display:none">
-        <h2 style="color:#ff8080">⚠️ 申诉被拒绝</h2>
+        <h2 style="color:#ff8080"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> 申诉被拒绝</h2>
         <p class="sub">管理员拒绝了你 <b id="reject-date"></b> 提交的申诉</p>
         <div style="background:rgba(255,110,110,0.1);padding:12px;border-radius:12px;text-align:left;color:#ff8080;margin:16px 0"><b>拒绝理由：</b><br><span id="reject-reason"></span></div>
         <div class="modal-btns">
@@ -375,7 +378,7 @@
     </div>
 
     <div class="modal" id="modal-success" style="display:none">
-        <h2 class="green">🎉 创建成功</h2>
+        <h2 class="green"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> 创建成功</h2>
         <div class="kv"><span>用户名</span><b id="r-user"></b></div>
         <div class="kv"><span>UID</span><b id="r-uid"></b></div>
         <div class="kv"><span>密码</span><b id="r-pwd"></b></div>
@@ -778,7 +781,7 @@ function renderAdminAppeals() {
         } else {
             actions = '<button class="btn-sm danger" onclick="deleteAppeal(\'' + a.id + '\')">删除</button>';
         }
-        return '<div class="appeal-item"><div class="appeal-head"><span><b>' + (a.user_email || '未知用户') + '</b> · ' + new Date(a.created_at).toLocaleString() + '</span><span>' + (statusMap[a.status] || '') + (a.is_owner_only ? ' 👑' : '') + '</span></div>' +
+        return '<div class="appeal-item"><div class="appeal-head"><span><b>' + (a.user_email || '未知用户') + '</b> · ' + new Date(a.created_at).toLocaleString() + '</span><span>' + (statusMap[a.status] || '') + (a.is_owner_only ? ' <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-left:3px"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>' : '') + '</span></div>' +
             '<div class="appeal-content">' + a.content.replace(/</g, '&lt;') + '</div>' +
             (a.status === 'rejected' ? '<div style="color:#ff8080;font-size:.85em;margin-top:8px"><b>拒绝理由：</b>' + (a.reject_reason || '') + '</div>' : '') +
             '<div class="appeal-actions">' + actions + '</div></div>';
@@ -821,8 +824,8 @@ async function deleteAppeal(id) {
 
 function refreshNotice() {
     const parts = [];
-    if (emailUnconfirmed) parts.push('⚠️ <b>邮箱未验证</b>！7 天内未验证账号将被删除 <button class="nbtn" onclick="resendEmail()">重发验证邮件</button>');
-    if (uidPending) parts.push('⚠️ <b>官服身份未验证</b>！剩余 ' + $('uid-remain').textContent + '，逾期删号 <button class="nbtn" onclick="openUidModal()">去验证</button>');
+    if (emailUnconfirmed) parts.push('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> <b>邮箱未验证</b>！7 天内未验证账号将被删除 <button class="nbtn" onclick="resendEmail()">重发验证邮件</button>');
+    if (uidPending) parts.push('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> <b>官服身份未验证</b>！剩余 ' + $('uid-remain').textContent + '，逾期删号 <button class="nbtn" onclick="openUidModal()">去验证</button>');
     if (parts.length) { $('notice').innerHTML = parts.join('<span style="opacity:.4">｜</span>'); $('notice').classList.add('show'); }
     else { $('notice').classList.remove('show'); $('notice').innerHTML = ''; }
 }
@@ -833,7 +836,7 @@ function applyRecord(rec) {
         uidPending = false; $('uid-status').innerHTML = '<span class="badge badge-ok">✓ 已验证</span>';
         $('row-remain').style.display = 'none'; $('btn-open-verify').style.display = 'none';
         if (currentUser.email_confirmed_at) { $('create-locked').style.display = 'none'; $('create-form').style.display = ''; }
-        if ($('overlay').classList.contains('show') && $('modal-verify').style.display !== 'none') { closeModal(); toast('🎉 验证成功！已实时解锁'); }
+        if ($('overlay').classList.contains('show') && $('modal-verify').style.display !== 'none') { closeModal(); toast('验证成功！已实时解锁'); }
     } else {
         const remain = SEVEN_DAYS - (Date.now() - new Date(rec.created_at).getTime());
         if (remain <= 0) { alert('UID 验证已过期（超 7 天），账号将被清理，请重新注册'); sb.auth.signOut(); window.location.href = 'login.html'; return; }
@@ -846,13 +849,27 @@ function applyRecord(rec) {
     }
     refreshNotice();
 }
+// ===== 自绘 SVG 图标（控制台统一，跨设备一致） =====
+const TITLE_CROWN = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-left:4px"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>';
+const TITLE_SHIELD = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-left:4px"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>';
+const AV_CROWN = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg>';
+const AV_SHIELD = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>';
+const escHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
 function defaultAvatar(user) { const e = user.email.toLowerCase(); if (e === 'dogoffurina@admin.server') return '👑'; if (e.endsWith('@admin.server')) return '🛡️'; return user.email.charAt(0).toUpperCase(); }
-function paintAvatar(str, user) { const box = $('avatar'); if (str && (str.indexOf('data:') === 0 || /^https?:\/\//.test(str))) { box.innerHTML = '<img src="' + str + '" alt="">'; } else if (str) { box.innerHTML = ''; box.textContent = str; } else { box.innerHTML = ''; box.textContent = defaultAvatar(user); } }
+function paintAvatar(str, user) {
+    const box = $('avatar');
+    if (str && (str.indexOf('data:') === 0 || /^https?:\/\//.test(str))) { box.innerHTML = '<img src="' + str + '" alt="">'; return; }
+    if (!str) str = defaultAvatar(user);
+    if (str === '👑') { box.innerHTML = AV_CROWN; return; }
+    if (str === '🛡️') { box.innerHTML = AV_SHIELD; return; }
+    box.innerHTML = ''; box.textContent = str;
+}
 function renderProfile(user) {
     const md = user.user_metadata || {}; const email = user.email.toLowerCase();
     const adminMail = email.endsWith('@admin.server'); const isOwner = email === 'dogoffurina@admin.server';
     const nick = md.nickname || (isOwner ? '服主' : adminMail ? '管理员' : '旅行者_' + user.email.split('@')[0]);
-    $('name-text').textContent = nick + (isOwner ? ' 👑' : adminMail ? ' 🛡️' : '');
+    $('name-text').innerHTML = escHtml(nick) + (isOwner ? ' ' + TITLE_CROWN : adminMail ? ' ' + TITLE_SHIELD : '');
     $('user-email').textContent = user.email; $('info-email').textContent = user.email;
     $('sec-current-email').textContent = user.email;
     paintAvatar(md.avatar || '', user);
@@ -930,7 +947,7 @@ async function doVerify() {
     try {
         const res = await fetch(API_BASE + '/verify', { method: 'POST', headers: { 'Authorization': 'Bearer ' + currentToken } });
         const r = await res.json();
-        if (r.ok) { sessionStorage.removeItem('uidModalShown'); $('modal-msg').textContent = '🎉 ' + r.msg; $('modal-msg').className = 'ok'; setTimeout(function () { closeModal(); }, 1500); }
+        if (r.ok) { sessionStorage.removeItem('uidModalShown'); $('modal-msg').textContent = r.msg; $('modal-msg').className = 'ok'; setTimeout(function () { closeModal(); }, 1500); }
         else { $('modal-msg').textContent = r.msg; $('modal-msg').className = 'err'; }
     } catch (e) { $('modal-msg').textContent = '网络错误'; $('modal-msg').className = 'err'; }
     btn.disabled = false;
